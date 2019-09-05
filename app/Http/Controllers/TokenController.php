@@ -6,11 +6,13 @@ use App\Exceptions\AlreadyUsedTokenException;
 use App\Exceptions\TokenExpiredException;
 use App\Order;
 use App\Token;
+use App\TokenForm;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Kris\LaravelFormBuilder\FormBuilder;
 
 class TokenController extends Controller
 {
@@ -19,10 +21,17 @@ class TokenController extends Controller
 		$user = Auth::user();
 
 		if ($user->admin) {
-			return Token::with(['user'])->get();
+			$tokens = Token::with(['user'])->get();
 		} else {
-			return $user->tokens()->with(['user'])->get();
+			$tokens = $user->tokens()->with(['user'])->get();
 		}
+
+		return view('tokens.index', compact('tokens'));
+	}
+
+	public function show(Token $token)
+	{
+		return view('tokens.show', compact('token'));
 	}
 
 	public function use(Token $token)
@@ -49,13 +58,29 @@ class TokenController extends Controller
 
 		$token->save();
 
-		return $token;
+		flash()->success('Token registrado com sucesso!');
+
+		return redirect()->route('orders.show', $order);
+	}
+
+	public function create(FormBuilder $builder)
+	{
+		$form = $builder->create(TokenForm::class, [
+			'method' => 'POST',
+			'url'    => route('tokens.store'),
+		]);
+
+		return view('form', [
+			'title'       => 'Criando novo token',
+			'form'        => $form,
+			'submit_text' => 'Criar',
+		]);
 	}
 
 	public function store(Request $request)
 	{
 		$validation = Validator::make($request->all(), [
-			'id'      => 'required|alpha_num',
+			'id'         => 'required|alpha_num',
 			'duration'   => 'required|numeric',
 			'expires_at' => 'after:now',
 		]);
@@ -66,7 +91,7 @@ class TokenController extends Controller
 
 		$token = Token::create($request->all());
 
-		return $token;
+		return redirect()->route('tokens.show', $token);
 	}
 
 	public function update(Request $request, Token $token)

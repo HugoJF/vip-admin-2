@@ -3,11 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Classes\PaymentSystem;
+use App\Events\OrderActivated;
 use App\Exceptions\InvalidDurationException;
+use App\Exceptions\OrderAlreadyActivated;
+use App\Exceptions\OrderCanceled;
+use App\Exceptions\OrderNotPaidException;
+use App\Forms\OrderForm;
 use App\Order;
+use App\Services\OrderService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Kris\LaravelFormBuilder\FormBuilder;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class OrderController extends Controller
 {
@@ -28,23 +36,31 @@ class OrderController extends Controller
 			$query = $user->orders()->with(['user']);
 		}
 
-		return $query->latest()->get();
+		$orders = $query->latest()->get();
+
+		return view('orders.index', compact('orders'));
 	}
 
-	/**
-	 * @param Request $request
-	 *
-	 * @return bool|mixed
-	 * @throws InvalidDurationException
-	 */
-	public function store(Request $request)
+	public function create(OrderService $service, $duration)
 	{
-		$durations = [14 => 500, 30 => 800, 60 => 1600];
+		if (!$service->validateDuration($duration)) {
+			flash()->error('Duração do pedido inválida!');
 
-		$duration = intval($request->input('duration'));
+			return back();
+		}
 
-		if (!array_key_exists($duration, $durations))
-			throw new InvalidDurationException("{$duration} days is not a valid duration");
+		return view('orders.create', compact('duration'));
+	}
+
+	public function store(OrderService $service, Request $request, $duration)
+	{
+		if (!$service->validateDuration($duration)) {
+			flash()->error('Duração do pedido inválida!');
+
+			return back();
+		}
+
+		$info = config('vip-admin.durations');
 
 		$user = Auth::user();
 		$order = Order::make();
@@ -57,7 +73,7 @@ class OrderController extends Controller
 		$details['reason'] = "VIP de ${duration} dias nos servidores de_nerdTV";
 		$details['return_url'] = url("/orders/{$order->id}");
 		$details['cancel_url'] = url("/orders/{$order->id}");
-		$details['preset_amount'] = $durations[ $duration ];
+		$details['preset_amount'] = $info[ $duration ]['price'];
 		$details['reason'] = 'VIP servidores de_nerdTV';
 		$details['product_name_singular'] = 'dia';
 		$details['product_name_plural'] = 'dias';
@@ -73,27 +89,68 @@ class OrderController extends Controller
 		$details['max_units'] = 90;
 
 		$res = $this->paymentSystem->createOrder($details);
-
+		if($res->status !== 201) {
+			// TODO: figure a better exception
+			dd($res);
+		}
+		$res = $res->content;
 		$order->reference = $res->id;
 		$order->save();
 
-		return $order;
+		return redirect($res->init_point);
 	}
 
+	public function edit(FormBuilder $builder, Order $order)
+	{
+		$form = $builder->create(OrderForm::class, [
+			'method' => 'PATCH',
+			'url'    => route('orders.update', $order),
+			'model'  => $order,
+		]);
+
+		return view('form', [
+			'title'       => 'Updating order',
+			'form'        => $form,
+			'submit_text' => 'Update',
+		]);
+	}
+
+	/**
+	 * @param Order $order
+	 *
+	 * @return \Illuminate\Http\RedirectResponse
+	 * @throws OrderAlreadyActivated
+	 * @throws OrderCanceled
+	 * @throws OrderNotPaidException
+	 */
 	public function activate(Order $order)
 	{
-		if (isset($order->starts_at))
-			throw new \Exception('Order is already activated');
+		if ($order->canceled)
+			throw new OrderCanceled();
+
+		if ($order->activated)
+			throw new OrderAlreadyActivated();
 
 		if (!$order->paid)
-			throw new \Exception('Order is not paid');
+			throw new OrderNotPaidException();
 
-		$order->starts_at = Carbon::now();
-		$order->ends_at = Carbon::now()->addDays($order->duration);
+		$user = $order->user;
+
+		$lastOrder = $user->orders()->where('canceled', false)->whereNotNull('ends_at')->orderBy('ends_at', 'DESC')->first();
+
+		$basePoint = $lastOrder->ends_at;
+
+		$order->starts_at = $basePoint;
+		$order->ends_at = $basePoint->addDays($order->duration);
 
 		$order->save();
 
-		return $order;
+		event(new OrderActivated($order));
+
+		flash()->success('Pedido ativado com sucesso!');
+
+		//TODO: update to show
+		return redirect()->route('orders.index');
 	}
 
 	public function show(Order $order)
@@ -102,15 +159,18 @@ class OrderController extends Controller
 
 		$order->save();
 
-		return $order;
+		return redirect()->route('orders.index');
 	}
 
 	public function update(Request $request, Order $order)
 	{
-		$order->fill($request->all());
+		// TODO: improve with validator?
+		$order->fill($request->all() + ['paid' => false, 'canceled' => false]);
 
 		$order->save();
 
-		return $order;
+		flash()->success('Order was updated!');
+
+		return redirect()->route('orders.index');
 	}
 }

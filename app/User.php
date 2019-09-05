@@ -2,43 +2,63 @@
 
 namespace App;
 
+use App\Alerts\AgreedToTerms;
+use App\Alerts\MissingAffiliateCode;
+use App\Alerts\MissingEmailAlert;
+use App\Alerts\MissingTradeLinkAlert;
+use App\Alerts\OrderPendingActivationAlert;
+use Carbon\Carbon;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Nicolaslopezj\Searchable\SearchableTrait;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
 	use Notifiable;
+	use SearchableTrait;
 
-	/**
-	 * The attributes that are mass assignable.
-	 *
-	 * @var array
-	 */
-	protected $fillable = [
-		'name', 'tradelink', 'email', 'password', 'username', 'avatar',
+	protected $searchable = [
+		'columns' => [
+			'users.steamid'        => 75,
+			'users.email'          => 50,
+			'users.affiliate_code' => 30,
+			'users.name'           => 25,
+			'users.username'       => 25,
+			'users.tradelink'      => 10,
+		],
 	];
 
-	/**
-	 * The attributes that should be hidden for arrays.
-	 *
-	 * @var array
-	 */
+	protected $fillable = [
+		'name',
+		'tradelink',
+		'email',
+		'password',
+		'username',
+		'avatar',
+		'terms',
+		'affiliate_code',
+	];
+
 	protected $hidden = [
 		'password', 'remember_token',
 	];
 
-	/**
-	 * The attributes that should be cast to native types.
-	 *
-	 * @var array
-	 */
 	protected $casts = [
 		'admin'             => 'boolean',
+		'terms'             => 'boolean',
 		'email_verified_at' => 'datetime',
+		'referred_at'       => 'datetime:c',
 		'created_at'        => 'datetime:c',
 		'updated_at'        => 'datetime:c',
+	];
+
+	protected $alerts = [
+		AgreedToTerms::class,
+		MissingTradeLinkAlert::class,
+		MissingEmailAlert::class,
+		OrderPendingActivationAlert::class,
+		MissingAffiliateCode::class,
 	];
 
 	public function tokens()
@@ -49,6 +69,52 @@ class User extends Authenticatable implements JWTSubject
 	public function orders()
 	{
 		return $this->hasMany(Order::class);
+	}
+
+	public function referrer()
+	{
+		return $this->belongsTo(User::class);
+	}
+
+	public function referees()
+	{
+		return $this->hasMany(User::class, 'referrer_id');
+	}
+
+	public function currentVip()
+	{
+		$paidOrders = $this->orders()->wherePaid(true)->whereCanceled(false)->get();
+
+		if ($paidOrders->count() === 0)
+			return false;
+
+		$durations = $paidOrders->map(function ($order) {
+			if (!$order->activated || !$order->paid)
+				return 0;
+
+			// +1 because 23h = 0 days
+			return $order->ends_at->diffInDays(Carbon::now()) + 1;
+		});
+
+		return $durations->max();
+	}
+
+	public function getAlerts()
+	{
+		$messages = [];
+
+		foreach ($this->alerts as $alert) {
+			$a = new $alert($this);
+
+			if ($a->triggered())
+				$messages[ $alert ] = [
+					'message' => $a->getMessage(),
+					'level'   => $a->getLevel(),
+					'url'     => $a->getUrl(),
+				];
+		}
+
+		return collect($messages);
 	}
 
 	/**

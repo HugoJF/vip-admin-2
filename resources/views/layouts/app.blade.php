@@ -12,42 +12,47 @@
     <!-- Bootstrap core CSS -->
     <link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
+    <!-- TempusDominus -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css"/>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-
 </head>
 <body>
 
 <nav class="navbar-z flex items-center flex-no-wrap flex-col md:flex-row items-stretch justify-center sticky top-0 left-0 right-0 bg-gray-800 p-0">
-    <a class="px-6 py-3 text-gray-400 text-lg no-underline w-1/5 mr-0" href="#">Servidores de_nerdTV</a>
+    <a class="px-6 py-3 text-gray-400 text-lg no-underline w-1/5 mr-0" href="{{ route('home') }}">Servidores de_nerdTV</a>
     <div class="flex items-stretch flex-grow text-gray-400">
         {!! Form::open(['url' => route('search'), 'method' => 'GET', 'class' => 'flex items-stretch w-100']) !!}
-        <input name="term" class="trans-fast py-2 px-5 w-100 bg-transparent outline-none focus:border-b focus:border-gray-500 focus:shadow-inner focus:bg-gray-200 focus:text-gray-700" type="text" placeholder="Search" aria-label="Search">
+        <input autocomplete="off" name="term" class="trans-fast py-2 px-5 w-100 bg-transparent outline-none focus:border-b focus:border-gray-500 focus:shadow-inner focus:bg-gray-200 focus:text-gray-700" type="text" placeholder="Search" aria-label="Search">
         {!! Form::close() !!}
     </div>
     <ul class="navbar-nav flex-shrink">
         <li class="h-full flex items-stretch text-nowrap">
             @auth
-                <a href="{{ route('servers.region') }}" class="trans p-3 no-underline text-gray-400 hover:bg-gray-700">
-                    <span class="mr-1 inline text-gray-400" data-feather="plus"></span>
-                    <span>Criar servidor</span>
-                </a>
+                {{--<a href="{{ route('servers.region') }}" class="trans p-3 no-underline text-gray-400 hover:bg-gray-700">--}}
+                {{--<span class="mr-1 inline text-gray-400" data-feather="plus"></span>--}}
+                {{--<span>Criar servidor</span>--}}
+                {{--</a>--}}
             @endauth
             <a href="{{ route('faq') }}" class="trans p-3 no-underline text-gray-400 hover:bg-gray-700">
                 <span class="mr-1 inline text-gray-400" data-feather="help-circle"></span>
                 <span>FAQ</span>
             </a>
             @auth
-                <a href="#" class="trans p-3 no-underline text-gray-400 hover:bg-gray-700">
+                <a href="{{ route('settings') }}" class="trans p-3 no-underline text-gray-400 hover:bg-gray-700">
                     <span class="mr-1 inline text-gray-400" data-feather="settings"></span>
                     <span>Configurações</span>
                 </a>
-                <a href="{{ route('logout') }}" class="trans p-3 no-underline text-gray-400 hover:bg-gray-700">
+                <a href="{{ route('auth.logout') }}" class="trans p-3 no-underline text-gray-400 hover:bg-gray-700">
                     <span class="mr-1 inline text-gray-400" data-feather="log-out"></span>
                     <span>Logout</span>
                 </a>
             @else
-                <a href="#" class="trans p-3 no-underline text-gray-400 hover:bg-gray-700">
+                <a href="{{ route('auth.redirect') }}" class="trans p-3 no-underline text-gray-400 hover:bg-gray-700">
                     <span class="mr-1 inline text-gray-400" data-feather="log-in"></span>
                     <span>Login</span>
                 </a>
@@ -60,18 +65,50 @@
     <main class="flex flex-wrap">
         <nav class="w-1/5 light sidebar bg-gray-900">
             <div class="sidebar-sticky p-4 pt-8">
-                <div class="flex flex-col px-24 mt-4 mb-4 items-center">
-                    <div class="top-0 self-center p-4 justify-center items-center bg-white rounded-full shadow sm:flex">
-                        <img class="h-28 w-28 rounded-full" src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/45/45be9bd313395f74762c1a5118aee58eb99b4688_full.jpg"/>
-                    </div>
+                <div class="flex flex-col px-20 mt-4 mb-4 items-center">
                     @auth
-                        <a href="{{ route('orders.create') }}" class="flex items-center mt-3 font-semibold text-gray-200 no-underline">
-                            <span class="m-0 mr-2 inline hover:text-white cursor-pointer" data-feather="plus-circle"></span>
-                            <span class="mr-1 text-base font-light">R$</span>
-                            <span>{{ round(Auth::user()->balance / 100, 2) }}</span>
-                        </a>
+                        <div class="top-0 self-center p-4 justify-center items-center bg-white rounded-full shadow sm:flex">
+                            <img class="h-28 w-28 rounded-full" src="{{ auth()->user()->avatar }}"/>
+                        </div>
+                        <div class="flex flex-col items-center mt-4">
+                            @php
+                                $vip = auth()->user()->currentVip();
+                            @endphp
+                            <div class="flex items-center justify-around">
+                                @if($vip > 14)
+                                    <span class="badge badge-success">{{ $vip }} dias restantes</span>
+                                    <h3>{{ collect(['💥', '🤩', '😍', '😏', '🤗', '😎'])->random() }}</h3>
+                                @elseif($vip > 0)
+                                    <span class="badge badge-warning">{{ $vip }} dias restantes</span>
+                                    <h3>{{ collect(['😁', '🙂', '😬', '👌', '🤔'])->random() }}</h3>
+                                @else
+                                    <span class="badge badge-danger">Sem VIP</span>
+                                    <h3>{{ collect(['☹', '😭', '😡', '🙄'])->random() }}</h3>
+                                @endif
+                            </div>
+                            <!-- TODO: add VIP status and remaining duration -->
+                        </div>
                     @endauth
                 </div>
+                
+                @auth
+                    @php
+                        $alerts = auth()->user()->getAlerts();
+                    @endphp
+                    
+                    @if($alerts->count() !== 0)
+                        <h6 class="flex justify-between items-center px-3 mt-8 mb-4 uppercase font-normal tracking-wider text-gray-700">
+                            <span>Alertas</span>
+                            <span class="ml-4 mt-px flex-grow border-b border-dashed border-gray-800"></span>
+                        </h6>
+                        
+                        <ul class="flex flex-col items-center">
+                            @foreach ($alerts as $alert)
+                                <li><a href="{{ $alert['url'] }}" class="badge badge-{{ $alert['level'] }}">{{ $alert['message'] }}</a></li>
+                            @endforeach
+                        </ul>
+                    @endif
+                @endauth
                 
                 <h6 class="flex justify-between items-center px-3 mt-8 mb-4 uppercase font-normal tracking-wider text-gray-700">
                     <span>Menu</span>
@@ -80,6 +117,7 @@
                 
                 <!-- Home -->
                 <ul class="pl-0 mb-0 flex flex-col text-sm">
+                    <!-- Home -->
                     <li class="flex justify-between my-2 ml-3">
                         <a href="{{ route('home') }}" class="flex items-center text-gray-500 no-underline text-base group">
                             <span class="group-hover:text-white" data-feather="home"></span>
@@ -90,29 +128,7 @@
                         </a>
                     </li>
                     
-                    <!-- Servidores -->
-                    <li class="flex justify-between my-2 ml-3">
-                        <a href="{{ route('servers.index') }}" class="flex items-center text-gray-500 no-underline text-base group">
-                            <span class="group-hover:text-white" data-feather="cpu"></span>
-                            <span class="group-hover:text-gray-400">Servidores</span>
-                        </a>
-                        <a class="group no-underline" href="#">
-                            <span class="group-hover:text-white" data-feather="help-circle"></span>
-                        </a>
-                    </li>
-                    
-                    <!-- Transações -->
-                    <li class="flex justify-between my-2 ml-3">
-                        <a href="{{ route('transactions.index') }}" class="flex items-center text-gray-500 no-underline text-base group">
-                            <span class="group-hover:text-white" data-feather="credit-card"></span>
-                            <span class="group-hover:text-gray-400">Transações</span>
-                        </a>
-                        <a class="group no-underline" href="#">
-                            <span class="group-hover:text-white" data-feather="help-circle"></span>
-                        </a>
-                    </li>
-                    
-                    <!-- Pedidos -->
+                    <!-- Orders -->
                     <li class="flex justify-between my-2 ml-3">
                         <a href="{{ route('orders.index') }}" class="flex items-center text-gray-500 no-underline text-base group">
                             <span class="group-hover:text-white" data-feather="shopping-cart"></span>
@@ -123,44 +139,34 @@
                         </a>
                     </li>
                     
-                    <!-- Equipes -->
+                    <!-- Tokens -->
                     <li class="flex justify-between my-2 ml-3">
-                        <a href="{{ route('teams.index') }}" class="flex flex-grow items-center text-gray-500 no-underline text-base group">
-                            <span class="group-hover:text-white" data-feather="users"></span>
-                            <span class="group-hover:text-gray-400">Equipes</span>
-                        </a>
-                        <a class="group no-underline" href="#">
-                            <span class="group-hover:text-white" data-feather="help-circle"></span>
-                        </a>
-                    </li>
-                    
-                    <!-- Coupons -->
-                    <li class="flex justify-between my-2 ml-3">
-                        <a href="{{ route('coupons.index') }}" class="flex flex-grow items-center text-gray-500 no-underline text-base group">
+                        <a href="{{ route('tokens.index') }}" class="flex items-center text-gray-500 no-underline text-base group">
                             <span class="group-hover:text-white" data-feather="gift"></span>
-                            <span class="group-hover:text-gray-400">Coupons</span>
+                            <span class="group-hover:text-gray-400">Tokens</span>
                         </a>
                         <a class="group no-underline" href="#">
                             <span class="group-hover:text-white" data-feather="help-circle"></span>
                         </a>
                     </li>
                     
-                    <!-- API -->
+                    <!-- Usuários -->
                     <li class="flex justify-between my-2 ml-3">
-                        <a href="{{ route('api-keys.index') }}" class="flex flex-grow items-center text-gray-500 no-underline text-base group">
-                            <span class="group-hover:text-white" data-feather="key"></span>
-                            <span class="group-hover:text-gray-400">API Keys</span>
+                        <a href="{{ route('users.index') }}" class="flex items-center text-gray-500 no-underline text-base group">
+                            <span class="group-hover:text-white" data-feather="users"></span>
+                            <span class="group-hover:text-gray-400">Usuários</span>
                         </a>
                         <a class="group no-underline" href="#">
                             <span class="group-hover:text-white" data-feather="help-circle"></span>
                         </a>
                     </li>
+                    </li>
                     
-                    <!-- Admin -->
+                    <!-- Afiliados -->
                     <li class="flex justify-between my-2 ml-3">
-                        <a href="{{ route('admins.dashboard') }}" class="flex flex-grow items-center text-gray-500 no-underline text-base group">
-                            <span class="group-hover:text-white" data-feather="briefcase"></span>
-                            <span class="group-hover:text-gray-400">Administrative</span>
+                        <a href="{{ route('affiliates.index') }}" class="flex items-center text-gray-500 no-underline text-base group">
+                            <span class="group-hover:text-white" data-feather="share-2"></span>
+                            <span class="group-hover:text-gray-400">Afiliados</span>
                         </a>
                         <a class="group no-underline" href="#">
                             <span class="group-hover:text-white" data-feather="help-circle"></span>
@@ -204,6 +210,12 @@
                             Suporte
                         </a>
                     </li>
+                    <li class="my-2 ml-3 group">
+                        <a class="flex items-center text-gray-500 no-underline text-sm group-hover:text-gray-400" href="#">
+                            <span class="mr-1 w-4 h-4" data-feather="chevron-right"></span>
+                            Termos de uso
+                        </a>
+                    </li>
                 </ul>
             
             </div>
@@ -219,7 +231,7 @@
                 -->
                 {{ Breadcrumbs::render() }}
             </div>
-            <div class="text-gray-800 p-8 shadow-inner">
+            <div class="text-gray-800 p-8">
                 @include('flash::message')
                 
                 @yield('content')
@@ -230,6 +242,9 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://getbootstrap.com/docs/4.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+
 <script>
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
@@ -245,6 +260,7 @@
         feather.replace();
     }())
 </script>
-<script src="{{ mix('/js/app.js') }}"></script>
+@stack('scripts')
+{{-- TODO: add this? <script src="{{ mix('/js/app.js') }}"></script>--}}
 </body>
 </html>

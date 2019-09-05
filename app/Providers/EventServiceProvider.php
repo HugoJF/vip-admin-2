@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use App\Events\ManualServerSynchronization;
 use App\Events\OrderActivated;
+use App\Events\OrderExpired;
 use App\Events\OrderPaid;
+use App\Listeners\GenerateAffiliateToken;
 use App\Listeners\GenerateOrderActivation;
 use App\Listeners\SynchronizeServer;
 use Illuminate\Support\Facades\Event;
@@ -19,13 +22,20 @@ class EventServiceProvider extends ServiceProvider
 	 * @var array
 	 */
 	protected $listen = [
-		Registered::class     => [
+		Registered::class                  => [
 			SendEmailVerificationNotification::class,
 		],
-		OrderPaid::class      => [
+		OrderPaid::class                   => [
 			GenerateOrderActivation::class,
+			GenerateAffiliateToken::class,
 		],
-		OrderActivated::class => [
+		OrderActivated::class              => [
+			SynchronizeServer::class,
+		],
+		OrderExpired::class                => [
+			SynchronizeServer::class,
+		],
+		ManualServerSynchronization::class => [
 			SynchronizeServer::class,
 		],
 	];

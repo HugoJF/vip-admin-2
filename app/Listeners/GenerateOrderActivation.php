@@ -33,6 +33,7 @@ class GenerateOrderActivation
 
     	// Only active order is auto-activation is enabled
     	if($order->auto_activates) {
+    		// TODO: this does not exists anymore
     		$order->activate();
     		$order->save();
 

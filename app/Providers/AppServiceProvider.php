@@ -6,6 +6,8 @@ use App\Observers\OrderObserver;
 use App\Order;
 use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Schema;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,6 +28,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+		Schema::defaultStringLength(191);
+
 		Order::observe(OrderObserver::class);
     }
 }

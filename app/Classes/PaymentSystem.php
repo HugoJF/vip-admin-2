@@ -38,7 +38,7 @@ class PaymentSystem
 		if ($data)
 			$result = $result->withData($data);
 
-		$result = $result->asJson();
+		$result = $result->asJson()->withHeader('Accept: application/json')->returnResponseObject();
 
 		if ($post) {
 			$response = $result->post();

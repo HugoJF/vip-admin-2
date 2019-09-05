@@ -13,7 +13,6 @@ $factory->define(Order::class, function (Faker $faker) {
 	$start = Carbon::now()->subDays(15)->addDays($faker->numberBetween(0, 30));
 	$end = $start->clone()->addDays($duration);
 
-	$uploaded = $faker->boolean(80);
 	$paid = $faker->boolean(80);
 	$canceled = $faker->boolean(80);
 
@@ -24,7 +23,6 @@ $factory->define(Order::class, function (Faker $faker) {
 		'duration'  => $duration,
 		'starts_at' => $start,
 		'ends_at'   => $end,
-		'uploaded'  => $uploaded,
 		'paid'      => $paid,
 		'canceled'  => $canceled,
 		'user_id'   => $userId,

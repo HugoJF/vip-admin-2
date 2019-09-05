@@ -2,53 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Classes\SteamID;
 use App\User;
-use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Invisnik\LaravelSteamAuth\SteamAuth;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
 	protected $steam;
+
+	protected $redirectURL = '/';
 
 	public function __construct(SteamAuth $steam)
 	{
 		$this->steam = $steam;
 	}
 
-	public function index()
+	public function redirectToSteam()
 	{
-		if (Auth::check()) {
-			return [
-				'authed' => true,
-				'user'   => Auth::user(),
-			];
-		} else {
-			return [
-				'authed'   => false,
-				'redirect' => $this->steam->getAuthUrl(),
-			];
-		}
+		return $this->steam->redirect();
 	}
 
-	public function refresh()
-	{
-		$user = Auth::user();
-
-		$return = $this->index();
-		$return['token'] = JWTAuth::fromUser($user);
-
-		return $return;
-	}
-
-	/**
-	 * @return array
-	 * @throws \Exception
-	 * @throws \GuzzleHttp\Exception\GuzzleException
-	 */
-	public function store()
+	public function handle()
 	{
 		if ($this->steam->validate()) {
 			$info = $this->steam->getUserInfo();
@@ -56,29 +32,17 @@ class AuthController extends Controller
 			if (!is_null($info)) {
 				$user = $this->findOrNewUser($info);
 
-				$token = JWTAuth::fromUser($user);
-			} else {
-				throw new \Exception('Failed to communicate with Steam servers.');
+				Auth::login($user, true);
+
+				return redirect($this->redirectURL); // redirect to site
 			}
-		} else {
-			throw new \Exception('Failed to authenticate user');
 		}
 
-		if (isset($token)) {
-			return [
-				'authed' => true,
-				'user'   => $user,
-				'token'  => $token,
-			];
-		} else {
-			return [
-				'authed' => false,
-			];
-		}
+		return $this->redirectToSteam();
 	}
 
 	/**
-	 * Getting user by info or created if not exists.
+	 * Getting user by info or created if not exists
 	 *
 	 * @param $info
 	 *
@@ -86,8 +50,7 @@ class AuthController extends Controller
 	 */
 	protected function findOrNewUser($info)
 	{
-		$steamId = SteamID::normalizeSteamID($info->steamID64);
-		$user = User::where('steamid', $steamId)->first();
+		$user = User::where('steamid', $info->steamID64)->first();
 
 		if (!is_null($user)) {
 			return $user;
@@ -97,8 +60,17 @@ class AuthController extends Controller
 			'username' => $info->personaname,
 			'avatar'   => $info->avatarfull,
 		]);
+		$user->steamid = $info->steamID64;
 
-		$user->steamid = $steamId;
+		if (Cookie::has('affiliate')) {
+			$affiliate = User::find(Cookie::get('affiliate'));
+
+			if ($affiliate) {
+				$user->referrer_id = $affiliate->id;
+				$user->referred_at = Carbon::now();
+			}
+		}
+
 		$user->save();
 
 		return $user;

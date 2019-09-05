@@ -8,17 +8,6 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Nicolaslopezj\Searchable\SearchableTrait;
 
-/**
- * @property string  reference
- * @property integer duration
- * @property integer recheck_attempts
- * @property boolean auto_activates
- * @property Carbon  created_at
- * @property Carbon  updated_at
- * @property Carbon  starts_at
- * @property Carbon  ends_at
- * @property string  id
- */
 class Order extends Model
 {
 	use SearchableTrait;
@@ -37,7 +26,6 @@ class Order extends Model
 			'orders.duration'      => 20,
 			'orders.paid'          => 10,
 			'orders.canceled'      => 10,
-			'orders.uploaded'      => 10,
 			'orders.auto_activate' => 10,
 			'users.email'          => 30,
 			'users.steamid'        => 20,
@@ -76,12 +64,9 @@ class Order extends Model
 		return $this->hasOne(Token::class);
 	}
 
-	public function activate()
+	public function getActivatedAttribute()
 	{
-		$now = Carbon::now();
-
-		$this->starts_at = $now;
-		$this->ends_at = $now->clone()->addDays($this->duration);
+		return $this->starts_at && $this->ends_at;
 	}
 
 	public function recheck()
@@ -90,14 +75,27 @@ class Order extends Model
 
 		$this->recheck_attempts = $this->recheck_attempts + 1;
 
-		if ($this->reference)
-			$payment = $paymentSystem->getOrder($this->reference);
+		if (!$this->reference)
+			return;
 
-		// TODO: what happens when this order is manually set to paid? How to recheck? Activated?
-		if ($this->paid || (isset($payment) && $payment->paid)) {
+		$payment = $paymentSystem->getOrder($this->reference);
+
+		if (!in_array($payment->status, [200, 201]))
+			return;
+
+		$payment = $payment->content;
+
+		if (!isset($payment))
+			return;
+
+		if ($payment->paid_units)
+			$this->duration = $payment->paid_units;
+
+		if ($payment->paid)
 			$this->paid = true;
+
+		if (!$this->getOriginal('paid') && $this->paid)
 			event(new OrderPaid($this));
-		}
 
 		$this->touch();
 		$this->save();

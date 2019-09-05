@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\AgreedWithTerms;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Tymon\JWTAuth\Http\Middleware\Authenticate;
 use Tymon\JWTAuth\Http\Middleware\Check;
@@ -66,6 +67,7 @@ class Kernel extends HttpKernel
 		'guest'         => \App\Http\Middleware\RedirectIfAuthenticated::class,
 		'signed'        => \Illuminate\Routing\Middleware\ValidateSignature::class,
 		'throttle'      => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+		'terms'         => AgreedWithTerms::class,
 		'verified'      => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 	];
 
