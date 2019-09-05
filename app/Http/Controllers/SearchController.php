@@ -11,12 +11,11 @@ class SearchController extends Controller
 	public function search(SearchService $service, Request $request)
 	{
 		$user = Auth::user();
-		$admin = $user->admin;
 
 		$term = $request->input('term');
 
-		$users = $service->searchUsers($admin, $term);
-		$orders = $service->searchOrders($admin, $term);
+		$users = $service->searchUsers($user, $term);
+		$orders = $service->searchOrders($user, $term);
 
 		return view('search', compact('term', 'users', 'orders'));
 	}

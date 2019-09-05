@@ -9,6 +9,7 @@
 namespace App\Services;
 
 use App\User;
+use Carbon\Carbon;
 
 class UserService
 {
@@ -16,6 +17,9 @@ class UserService
 	{
 		$lastOrder = $user->orders()->where('canceled', false)->whereNotNull('ends_at')->orderBy('ends_at', 'DESC')->first();
 
-		return $lastOrder->ends_at;
+		if ($lastOrder)
+			return $lastOrder->ends_at;
+		else
+			return Carbon::now();
 	}
 }

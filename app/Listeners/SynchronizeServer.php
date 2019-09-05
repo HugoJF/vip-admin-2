@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Classes\SteamID;
 use App\Order;
 use Carbon\Carbon;
 use Illuminate\Queue\InteractsWithQueue;
@@ -40,7 +41,7 @@ class SynchronizeServer implements ShouldQueue
 	{
 		// Map SteamID => Username to remove duplicates
 		$orders = $pendingOrders->mapWithKeys(function ($order) {
-			return [$order->user->steamid => $order->user->username];
+			return [$this->toSteamId2($order->user->steamid) => $order->user->username];
 		});
 
 		// Query current orders in database
@@ -69,7 +70,14 @@ class SynchronizeServer implements ShouldQueue
 
 		// Delete expires orders
 		foreach ($expiredOrders as $id) {
-			DB::connection('sm_admins')->table('sm_admins')->where('identity', $id->identity)->delete();
+			DB::connection('sm_admins')->table('sm_admins')->where('identity', $this->toSteamId2($id->identity))->delete();
 		}
+	}
+
+	public function toSteamId2($steamid)
+	{
+		$id = new \SteamID($steamid);
+
+		return $id->RenderSteam2();
 	}
 }

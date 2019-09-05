@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Search results for <code>{{ $term }}</code></h1>
+    <h1>Resultados da busca por <code>{{ $term }}</code></h1>
     
     @if(isset($users))
         <br/>

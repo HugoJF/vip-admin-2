@@ -24,7 +24,7 @@ Route::get('a/{code}', 'UserController@affiliate')->name('affiliate');
 
 Route::get('auth/redirect', 'AuthController@redirectToSteam')->name('auth.redirect');
 Route::get('auth/handle', 'AuthController@handle')->name('auth.handle');
-Route::get('auth/logout', function () {})->name('auth.logout');
+Route::get('auth/logout', 'AuthController@logout')->name('auth.logout');
 
 Route::middleware(['auth'])->group(function () {
 	Route::get('settings', 'UserSettingController@edit')->name('settings');
