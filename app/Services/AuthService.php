@@ -8,9 +8,18 @@
 
 namespace App\Services;
 
+use App\User;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Cookie;
+
 class AuthService
 {
 
+	/**
+	 * @param $info
+	 *
+	 * @return mixed
+	 */
 	public function findOrNewUser($info)
 	{
 		$user = User::where('steamid', $info->steamID64)->first();

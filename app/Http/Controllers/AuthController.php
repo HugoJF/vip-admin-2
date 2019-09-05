@@ -22,10 +22,17 @@ class AuthController extends Controller
 		return $this->steam->redirect();
 	}
 
+	public function logout()
+	{
+		Auth::logout();
+
+		return redirect()->route('home');
+	}
+
 	public function handle(AuthService $service)
 	{
 		// TODO: catch 429?
-		if (!$this->steam->validate()) {
+		if ($this->steam->validate()) {
 			$info = $this->steam->getUserInfo();
 
 			if (!is_null($info)) {

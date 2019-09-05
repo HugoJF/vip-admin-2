@@ -17,6 +17,10 @@ Route::get('test', function () {
 	dd($pendingOrders->toArray());
 });
 
+Route::get('email', function () {
+	return new \App\Mail\OrderActivated(\App\Order::first());
+});
+
 Route::get('/', 'HomeController@home')->name('home');
 Route::get('faq', 'HomeController@faq')->name('faq');
 Route::get('terms', 'HomeController@terms')->name('terms');
