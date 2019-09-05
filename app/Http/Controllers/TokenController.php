@@ -7,8 +7,6 @@ use App\Exceptions\TokenExpiredException;
 use App\Order;
 use App\Token;
 use App\TokenForm;
-use App\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;

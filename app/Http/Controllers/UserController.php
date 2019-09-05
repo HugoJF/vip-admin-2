@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\AffiliateCodeAlreadyLoggedException;
+use App\Services\AffiliateService;
 use App\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cookie;
 
 class UserController extends Controller
 {
@@ -16,36 +16,22 @@ class UserController extends Controller
 		return view('users.index', compact('users'));
 	}
 
-	public function settings(Request $request)
+	/**
+	 * @param AffiliateService $service
+	 * @param                  $code
+	 *
+	 * @return \Illuminate\Http\RedirectResponse
+	 * @throws AffiliateCodeAlreadyLoggedException
+	 */
+	public function affiliate(AffiliateService $service, $code)
 	{
-		$user = Auth::user();
+		if (Auth::check())
+			throw new AffiliateCodeAlreadyLoggedException();
 
-		$user->fill($request->only(['email', 'tradelink', 'name', 'terms', 'affiliate_code']));
-
-		$user->save();
-
-		flash()->success('Opções de usuários atualizadas!');
-
-		return redirect()->route('home');
-	}
-
-	public function affiliate($code)
-	{
-		if (Auth::check()) {
-			flash()->error('Não é possível registra código de afiliado após o registro!');
-
-			return redirect()->route('home');
-		}
-
-		$user = User::whereAffiliateCode($code)->first();
-
-		if (!$user) {
+		if ($service->attachAffiliateCode($code))
 			flash()->error('Código de afiliado inválido!');
-		} else {
-			Cookie::queue('affiliate', $user->id);
-
-			flash()->success("Código $code registrado!");
-		}
+		else
+			flash()->success("Código <strong>$code</strong> registrado!");
 
 		return redirect()->route('home');
 	}

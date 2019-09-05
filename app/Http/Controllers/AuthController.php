@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
-use Carbon\Carbon;
+use App\Services\AuthService;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cookie;
 use Invisnik\LaravelSteamAuth\SteamAuth;
 
 class AuthController extends Controller
@@ -24,13 +22,14 @@ class AuthController extends Controller
 		return $this->steam->redirect();
 	}
 
-	public function handle()
+	public function handle(AuthService $service)
 	{
-		if ($this->steam->validate()) {
+		// TODO: catch 429?
+		if (!$this->steam->validate()) {
 			$info = $this->steam->getUserInfo();
 
 			if (!is_null($info)) {
-				$user = $this->findOrNewUser($info);
+				$user = $service->findOrNewUser($info);
 
 				Auth::login($user, true);
 
@@ -39,40 +38,5 @@ class AuthController extends Controller
 		}
 
 		return $this->redirectToSteam();
-	}
-
-	/**
-	 * Getting user by info or created if not exists
-	 *
-	 * @param $info
-	 *
-	 * @return User
-	 */
-	protected function findOrNewUser($info)
-	{
-		$user = User::where('steamid', $info->steamID64)->first();
-
-		if (!is_null($user)) {
-			return $user;
-		}
-
-		$user = User::make([
-			'username' => $info->personaname,
-			'avatar'   => $info->avatarfull,
-		]);
-		$user->steamid = $info->steamID64;
-
-		if (Cookie::has('affiliate')) {
-			$affiliate = User::find(Cookie::get('affiliate'));
-
-			if ($affiliate) {
-				$user->referrer_id = $affiliate->id;
-				$user->referred_at = Carbon::now();
-			}
-		}
-
-		$user->save();
-
-		return $user;
 	}
 }

@@ -11,27 +11,26 @@
 |
 */
 
-Route::get('/', 'HomeController@home')->name('home');
-Route::get('faq', 'HomeController@faq')->name('faq');
-Route::get('terms', 'HomeController@terms')->name('terms');
-
 Route::get('test', function () {
 	$pendingOrders = \App\Order::query()->whereNull('synced_at')->where('paid', true)->where('canceled', false)->where('ends_at', '>', \Carbon\Carbon::now())->get();
 
 	dd($pendingOrders->toArray());
 });
 
-Route::middleware(['auth'])->group(function () {
-	Route::get('settings', 'HomeController@settings')->name('settings');
-	Route::patch('settings', 'UserController@settings')->name('settings');
-	Route::get('search', 'HomeController@search')->name('search');
-});
-
+Route::get('/', 'HomeController@home')->name('home');
+Route::get('faq', 'HomeController@faq')->name('faq');
+Route::get('terms', 'HomeController@terms')->name('terms');
 Route::get('a/{code}', 'UserController@affiliate')->name('affiliate');
 
 Route::get('auth/redirect', 'AuthController@redirectToSteam')->name('auth.redirect');
 Route::get('auth/handle', 'AuthController@handle')->name('auth.handle');
 Route::get('auth/logout', function () {})->name('auth.logout');
+
+Route::middleware(['auth'])->group(function () {
+	Route::get('settings', 'UserSettingController@edit')->name('settings');
+	Route::patch('settings', 'UserSettingController@update')->name('settings');
+	Route::get('search', 'SearchController@search')->name('search');
+});
 
 Route::middleware(['terms'])->group(function () {
 	Route::get('orders', 'OrderController@index')->name('orders.index');
@@ -54,7 +53,3 @@ Route::post('tokens/{token}', 'TokenController@use')->name('tokens.use');
 Route::post('tokens', 'TokenController@store')->name('tokens.store');
 
 Route::get('users', 'UserController@index')->name('users.index');
-
-//Route::get('{all?}', function () {
-//	return view('welcome');
-//})->where('all', '([A-z\d\-\/_.]+)?');
