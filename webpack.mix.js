@@ -12,11 +12,11 @@ const tailwindcss = require('tailwindcss');
  |
  */
 
-mix
-    // .react('resources/js/app.js', 'public/js')
-    .postCss('resources/css/app.css', 'public/css', [
-        tailwindcss('./tailwind.config.js'),
-    ])
-    .sourceMaps()
-    .version()
-;
+// mix
+//     // .react('resources/js/app.js', 'public/js')
+//     .postCss('resources/css/app.css', 'public/css', [
+//         tailwindcss('./tailwind.config.js'),
+//     ])
+//     .sourceMaps()
+//     .version()
+// ;
