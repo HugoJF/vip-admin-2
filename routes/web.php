@@ -38,7 +38,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['terms'])->group(function () {
 	Route::get('orders', 'OrderController@index')->name('orders.index');
-	Route::get('orders/{duration}', 'OrderController@create')->name('orders.create')->where('duration', '[0-9]+');
+	Route::get('orders/create/{duration}', 'OrderController@create')->name('orders.create')->where('duration', '[0-9]+');
 	Route::get('orders/{order}', 'OrderController@show')->name('orders.show');
 	Route::get('orders/{order}/edit', 'OrderController@edit')->name('orders.edit');
 	Route::post('orders/{duration}', 'OrderController@store')->name('orders.store');

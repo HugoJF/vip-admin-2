@@ -61,8 +61,6 @@ class OrderController extends Controller
 
 		event(new OrderCreated($order));
 
-		flash()->success('Pedido criado com sucesso!');
-
 		return redirect($response->init_point);
 	}
 
@@ -101,7 +99,7 @@ class OrderController extends Controller
 
 		flash()->success('Pedido ativado com sucesso!');
 
-		return redirect()->route('orders.index');
+		return redirect()->route('orders.show', $order);
 	}
 
 	public function show(Order $order)
@@ -110,7 +108,7 @@ class OrderController extends Controller
 
 		$order->save();
 
-		return redirect()->route('orders.index');
+		return view('orders.show', compact('order'));
 	}
 
 	public function update(OrderService $service, Request $request, Order $order)

@@ -25,7 +25,7 @@
             <tr>
                 <!-- ID -->
                 <td>
-                    <code>{{ $order->id }}</code>
+                    <code>#{{ $order->id }}</code>
                 </td>
                 
                 <!-- Duration -->
