@@ -161,12 +161,23 @@
                         </a>
                     </li>
                     </li>
-                    
+    
                     <!-- Afiliados -->
                     <li class="flex justify-between my-2 ml-3">
                         <a href="{{ route('affiliates.index') }}" class="flex items-center text-gray-500 no-underline text-base group">
                             <span class="group-hover:text-white" data-feather="share-2"></span>
                             <span class="group-hover:text-gray-400">Afiliados</span>
+                        </a>
+                        <a class="group no-underline" href="#">
+                            <span class="group-hover:text-white" data-feather="help-circle"></span>
+                        </a>
+                    </li>
+    
+                    <!-- Admins -->
+                    <li class="flex justify-between my-2 ml-3">
+                        <a href="{{ route('admins.index') }}" class="flex items-center text-gray-500 no-underline text-base group">
+                            <span class="group-hover:text-white" data-feather="layers"></span>
+                            <span class="group-hover:text-gray-400">Admins</span>
                         </a>
                         <a class="group no-underline" href="#">
                             <span class="group-hover:text-white" data-feather="help-circle"></span>

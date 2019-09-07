@@ -52,6 +52,15 @@ Route::middleware(['terms'])->group(function () {
 	Route::get('affiliates', 'AffiliateController@index')->name('affiliates.index');
 });
 
+Route::middleware(['terms'])->group(function () {
+	Route::get('admins', 'AdminController@index')->name('admins.index');
+	Route::get('admins/create', 'AdminController@create')->name('admins.create');
+
+	Route::post('admins', 'AdminController@store')->name('admins.store');
+
+	Route::delete('admins/{admin}', 'AdminController@destroy')->name('admins.destroy');
+});
+
 Route::get('tokens', 'TokenController@index')->name('tokens.index');
 Route::get('tokens/create', 'TokenController@create')->name('tokens.create');
 Route::get('tokens/{token}', 'TokenController@show')->name('tokens.show');
