@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Classes\PaymentSystem;
+use App\Events\OrderCreated;
 use App\Exceptions\InvalidOrderDurationException;
 use App\Exceptions\OrderAlreadyActivated;
 use App\Exceptions\OrderCanceled;
@@ -43,19 +44,24 @@ class OrderController extends Controller
 
 	/**
 	 * @param OrderService $service
+	 * @param Request      $request
 	 * @param              $duration
 	 *
 	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
 	 * @throws InvalidOrderDurationException
 	 */
-	public function store(OrderService $service, $duration)
+	public function store(OrderService $service, Request $request, $duration)
 	{
 		if (!$service->validateDuration($duration))
 			throw new InvalidOrderDurationException();
 
 		$user = Auth::user();
 
-		$response = $service->createOrder($user, $duration);
+		list($order, $response) = $service->createOrder($user, $request->only('auto-activate'), $duration);
+
+		event(new OrderCreated($order));
+
+		flash()->success('Pedido criado com sucesso!');
 
 		return redirect($response->init_point);
 	}

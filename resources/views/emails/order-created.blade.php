@@ -12,12 +12,13 @@ Detalhes do pedido:
 @endcomponent
 
 @component('vendor.mail.html.button-group')
-    @component('vendor.mail.html.basic-button', ['url' => route('orders.show', $order)])
-    Detalhes
-    @endcomponent
-    @component('vendor.mail.html.basic-button', ['color' => 'success', 'url' => '#'])
-    Pagar
-    @endcomponent
+@component('vendor.mail.html.basic-button', ['url' => route('orders.show', $order)])
+Detalhes
+@endcomponent
+
+@component('vendor.mail.html.basic-button', ['color' => 'success', 'url' => $order->init_point])
+Pagar
+@endcomponent
 @endcomponent
 
 **Obrigado**, equipe de_nerdTV.

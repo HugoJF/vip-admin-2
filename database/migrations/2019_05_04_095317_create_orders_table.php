@@ -23,6 +23,7 @@ class CreateOrdersTable extends Migration
 			$table->timestamp('synced_at')->nullable();
 
 			$table->string('reference')->nullable();
+			$table->string('init_point')->nullable();
 
 			$table->boolean('paid')->default(false);
 			$table->boolean('canceled')->default(false);

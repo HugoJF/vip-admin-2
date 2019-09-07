@@ -28,7 +28,7 @@ class OrderService
 		return array_key_exists($duration, config('vip-admin.durations'));
 	}
 
-	public function createOrder($user, $duration)
+	public function createOrder($user, $data, $duration)
 	{
 		$paymentSystem = app(PaymentSystem::class);
 
@@ -41,10 +41,14 @@ class OrderService
 			dd($response); // TODO: improve
 
 		$response = $response->content;
+
+		$order->auto_activate = $data['auto-activate'] === 'true' ? true : false;
 		$order->reference = $response->id;
+		$order->init_point = $response->init_point;
+
 		$order->save();
 
-		return $response;
+		return [$order, $response];
 	}
 
 	public function createEmptyOrder(User $user, $duration)

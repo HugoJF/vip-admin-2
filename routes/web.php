@@ -18,7 +18,7 @@ Route::get('test', function () {
 });
 
 Route::get('email', function () {
-	return new \App\Mail\OrderActivated(\App\Order::first());
+	return new \App\Mail\OrderCreated(\App\Order::find('d8243'));
 });
 
 Route::get('/', 'HomeController@home')->name('home');
