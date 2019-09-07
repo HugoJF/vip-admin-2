@@ -39,7 +39,7 @@ class Order extends Model
 		],
 	];
 
-	protected $fillable = ['duration', 'starts_at', 'ends_at', 'user_id', 'paid', 'canceled'];
+	protected $fillable = ['duration', 'starts_at', 'ends_at', 'user_id', 'paid', 'canceled', 'steamid'];
 
 	protected $with = ['user'];
 

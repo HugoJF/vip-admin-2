@@ -10,6 +10,7 @@ namespace App\Services;
 
 use App\Classes\PaymentSystem;
 use App\Events\OrderActivated;
+use App\Exceptions\InvalidSteamIdException;
 use App\Order;
 use App\User;
 
@@ -102,5 +103,30 @@ class OrderService
 		event(new OrderActivated($order));
 
 		return $order;
+	}
+
+	/**
+	 * @param Order $order
+	 * @param       $steamid
+	 *
+	 * @return void
+	 * @throws InvalidSteamIdException
+	 */
+	public function transferOrder(Order $order, $steamid)
+	{
+		try {
+			$steamid = new \SteamID($steamid);
+		} catch (\InvalidArgumentException $e) {
+			throw new InvalidSteamIdException($steamid);
+		}
+
+		$order->steamid = $steamid->ConvertToUInt64();
+		$order->save();
+	}
+
+	public function returnOrder(Order $order)
+	{
+		$order->steamid = null;
+		$order->save();
 	}
 }

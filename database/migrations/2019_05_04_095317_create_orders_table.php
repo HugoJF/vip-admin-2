@@ -18,6 +18,8 @@ class CreateOrdersTable extends Migration
 
 			$table->unsignedInteger('duration');
 
+			$table->string('steamid')->nullable();
+
 			$table->timestamp('starts_at')->nullable();
 			$table->timestamp('ends_at')->nullable();
 			$table->timestamp('synced_at')->nullable();

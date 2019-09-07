@@ -32,7 +32,11 @@ class SynchronizeServer implements ShouldQueue
 	 */
 	public function handle($event)
 	{
-		$pendingOrders = Order::query()->where('paid', true)->where('canceled', false)->where('ends_at', '>', Carbon::now())->get();
+		$pendingOrders = Order::query()
+							  ->where('paid', true)
+							  ->where('canceled', false)
+							  ->where('starts_at', '<', Carbon::now())
+							  ->where('ends_at', '>', Carbon::now())->get();
 
 		$this->updateOrders($pendingOrders);
 	}
@@ -41,7 +45,10 @@ class SynchronizeServer implements ShouldQueue
 	{
 		// Map SteamID => Username to remove duplicates
 		$orders = $pendingOrders->mapWithKeys(function ($order) {
-			return [$this->toSteamId2($order->user->steamid) => $order->user->username];
+			if ($order->steamid)
+				return [$this->toSteamId2($order->steamid) => $order->user->username];
+			else
+				return [$this->toSteamId2($order->user->steamid) => $order->user->username];
 		});
 
 		// Query current orders in database

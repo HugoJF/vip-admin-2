@@ -7,7 +7,10 @@
         @slot('title')
             <div class="d-flex items-center justify-between">
                 <span>Detalhes</span>
-                <a class="btn btn-outline-secondary btn-sm" href="{{ route('orders.edit', $order) }}">Editar</a>
+                <div class="btn-group">
+                    <a class="btn btn-primary btn-sm" href="{{ route('orders.gift', $order) }}">Transferir</a>
+                    <a class="btn btn-outline-secondary btn-sm" href="{{ route('orders.edit', $order) }}">Editar</a>
+                </div>
             </div>
         @endslot
         <table class="table">
@@ -32,6 +35,16 @@
                     @else
                         <span class="badge badge-warning">Pendente</span>
                     @endif
+                </td>
+            </tr>
+            <tr>
+                <td>Transferido</td>
+                <td>
+                @if($order->steamid)
+                   <span class="badge badge-primary">{{ $order->steamid }}</span>
+                @else
+                    <span class="badge badge-dark">Não</span>
+                @endif
                 </td>
             </tr>
             <tr>

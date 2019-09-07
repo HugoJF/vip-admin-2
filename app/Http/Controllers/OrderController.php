@@ -69,9 +69,20 @@ class OrderController extends Controller
 		$form = $forms->edit($order);
 
 		return view('form', [
-			'title'       => 'Updating order',
+			'title'       => 'Atualizando pedido',
 			'form'        => $form,
-			'submit_text' => 'Update',
+			'submit_text' => 'Atualizar',
+		]);
+	}
+
+	public function gift(OrderForms $forms, Order $order)
+	{
+		$form = $forms->gift($order);
+
+		return view('form', [
+			'title'       => 'Transferindo pedido',
+			'form'        => $form,
+			'submit_text' => 'Transferir',
 		]);
 	}
 
@@ -109,6 +120,29 @@ class OrderController extends Controller
 		$order->save();
 
 		return view('orders.show', compact('order'));
+	}
+
+	/**
+	 * @param OrderService $service
+	 * @param Request      $request
+	 * @param Order        $order
+	 *
+	 * @return \Illuminate\Http\RedirectResponse
+	 * @throws \App\Exceptions\InvalidSteamIdException
+	 */
+	public function transfer(OrderService $service, Request $request, Order $order)
+	{
+		if (empty($request->input('steamid'))) {
+			$service->returnOrder($order);
+
+			flash()->success('Pedido retornado para sua conta!');
+		} else {
+			$service->transferOrder($order, $request->input('steamid'));
+
+			flash()->success("Pedido transferido para a SteamID <strong>$order->steamid</strong>!");
+		}
+
+		return redirect()->route('orders.show', $order);
 	}
 
 	public function update(OrderService $service, Request $request, Order $order)

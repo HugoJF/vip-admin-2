@@ -41,8 +41,10 @@ Route::middleware(['terms'])->group(function () {
 	Route::get('orders/create/{duration}', 'OrderController@create')->name('orders.create')->where('duration', '[0-9]+');
 	Route::get('orders/{order}', 'OrderController@show')->name('orders.show');
 	Route::get('orders/{order}/edit', 'OrderController@edit')->name('orders.edit');
+	Route::get('orders/{order}/gift', 'OrderController@gift')->name('orders.gift');
 	Route::post('orders/{duration}', 'OrderController@store')->name('orders.store');
 	Route::patch('orders/{order}/activate', 'OrderController@activate')->name('orders.activate');
+	Route::patch('orders/{order}/transfer', 'OrderController@transfer')->name('orders.transfer');
 	Route::patch('orders/{order}', 'OrderController@update')->name('orders.update');
 });
 
