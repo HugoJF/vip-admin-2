@@ -9,6 +9,7 @@ use App\Exceptions\OrderAlreadyActivated;
 use App\Exceptions\OrderCanceled;
 use App\Exceptions\OrderNotPaidException;
 use App\Order;
+use App\Product;
 use App\Services\Forms\OrderForms;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
@@ -28,36 +29,27 @@ class OrderController extends Controller
 	}
 
 	/**
-	 * @param OrderService $service
-	 * @param              $duration
+	 * @param Product $product
 	 *
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-	 * @throws InvalidOrderDurationException
 	 */
-	public function create(OrderService $service, $duration)
+	public function create(Product $product)
 	{
-		if (!$service->validateDuration($duration))
-			throw new InvalidOrderDurationException();
-
-		return view('orders.create', compact('duration'));
+		return view('orders.create', compact('product'));
 	}
 
 	/**
 	 * @param OrderService $service
 	 * @param Request      $request
-	 * @param              $duration
+	 * @param Product      $product
 	 *
 	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-	 * @throws InvalidOrderDurationException
 	 */
-	public function store(OrderService $service, Request $request, $duration)
+	public function store(OrderService $service, Request $request, Product $product)
 	{
-		if (!$service->validateDuration($duration))
-			throw new InvalidOrderDurationException();
-
 		$user = Auth::user();
 
-		list($order, $response) = $service->createOrder($user, $request->only('auto-activate'), $duration);
+		list($order, $response) = $service->createOrder($user, $request->only('auto-activate'), $product);
 
 		event(new OrderCreated($order));
 

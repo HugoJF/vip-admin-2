@@ -8,6 +8,7 @@
 
 namespace App\Services\Forms;
 
+use App\Admin;
 use App\AdminForm;
 
 class AdminForms extends ServiceForms
@@ -17,6 +18,15 @@ class AdminForms extends ServiceForms
 		return $this->builder->create(AdminForm::class, [
 			'method' => 'POST',
 			'url'    => route('admins.store'),
+		]);
+	}
+
+	public function edit(Admin $admin)
+	{
+		return $this->builder->create(AdminForm::class, [
+			'method' => 'PATCH',
+			'url'    => route('admins.update', $admin),
+			'model'  => $admin,
 		]);
 	}
 }

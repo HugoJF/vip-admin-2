@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
 
@@ -149,19 +149,20 @@
                             <span class="group-hover:text-white" data-feather="help-circle"></span>
                         </a>
                     </li>
-                    
-                    <!-- Usuários -->
-                    <li class="flex justify-between my-2 ml-3">
-                        <a href="{{ route('users.index') }}" class="flex items-center text-gray-500 no-underline text-base group">
-                            <span class="group-hover:text-white" data-feather="users"></span>
-                            <span class="group-hover:text-gray-400">Usuários</span>
-                        </a>
-                        <a class="group no-underline" href="#">
-                            <span class="group-hover:text-white" data-feather="help-circle"></span>
-                        </a>
-                    </li>
-                    </li>
     
+                    <!-- Usuários -->
+                    @admin
+                        <li class="flex justify-between my-2 ml-3">
+                            <a href="{{ route('users.index') }}" class="flex items-center text-gray-500 no-underline text-base group">
+                                <span class="group-hover:text-white" data-feather="users"></span>
+                                <span class="group-hover:text-gray-400">Usuários</span>
+                            </a>
+                            <a class="group no-underline" href="#">
+                                <span class="group-hover:text-white" data-feather="help-circle"></span>
+                            </a>
+                        </li>
+                    @endadmin
+                    
                     <!-- Afiliados -->
                     <li class="flex justify-between my-2 ml-3">
                         <a href="{{ route('affiliates.index') }}" class="flex items-center text-gray-500 no-underline text-base group">
@@ -173,7 +174,21 @@
                         </a>
                     </li>
     
+                    <!-- Produtos -->
+                    @admin
+                    <li class="flex justify-between my-2 ml-3">
+                        <a href="{{ route('products.index') }}" class="flex items-center text-gray-500 no-underline text-base group">
+                            <span class="group-hover:text-white" data-feather="tag"></span>
+                            <span class="group-hover:text-gray-400">Produtos</span>
+                        </a>
+                        <a class="group no-underline" href="#">
+                            <span class="group-hover:text-white" data-feather="help-circle"></span>
+                        </a>
+                    </li>
+                    @endadmin
+
                     <!-- Admins -->
+                    @admin
                     <li class="flex justify-between my-2 ml-3">
                         <a href="{{ route('admins.index') }}" class="flex items-center text-gray-500 no-underline text-base group">
                             <span class="group-hover:text-white" data-feather="layers"></span>
@@ -183,6 +198,7 @@
                             <span class="group-hover:text-white" data-feather="help-circle"></span>
                         </a>
                     </li>
+                    @endadmin
                 </ul>
                 
                 <h6 class="flex justify-between items-center px-3 mt-8 mb-4 uppercase font-normal tracking-wider text-gray-700">
@@ -255,7 +271,6 @@
 <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
-
 <script>
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
@@ -272,6 +287,5 @@
     }())
 </script>
 @stack('scripts')
-{{-- TODO: add this? <script src="{{ mix('/js/app.js') }}"></script>--}}
 </body>
 </html>

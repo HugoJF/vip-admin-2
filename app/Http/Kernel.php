@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\Admin;
 use App\Http\Middleware\AgreedWithTerms;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Tymon\JWTAuth\Http\Middleware\Authenticate;
@@ -56,6 +57,7 @@ class Kernel extends HttpKernel
 	 * @var array
 	 */
 	protected $routeMiddleware = [
+		'admin'         => Admin::class,
 		'jwt.auth'      => Authenticate::class,
 		'jwt.check'     => Check::class,
 		'jwt.refresh'   => RefreshToken::class,

@@ -11,12 +11,6 @@
 |
 */
 
-Route::get('test', function () {
-	$pendingOrders = \App\Order::query()->whereNull('synced_at')->where('paid', true)->where('canceled', false)->where('ends_at', '>', \Carbon\Carbon::now())->get();
-
-	dd($pendingOrders->toArray());
-});
-
 Route::get('email', function () {
 	return new \App\Mail\OrderCreated(\App\Order::find('d8243'));
 });
@@ -36,35 +30,57 @@ Route::middleware(['auth'])->group(function () {
 	Route::get('search', 'SearchController@search')->name('search');
 });
 
+Route::middleware(['admin'])->group(function () {
+	Route::get('products', 'ProductController@index')->name('products.index');
+	Route::get('products/create', 'ProductController@create')->name('products.create');
+	Route::get('products/{product}/edit', 'ProductController@edit')->name('products.edit');
+
+	Route::post('products', 'ProductController@store')->name('products.store');
+
+	Route::patch('products/{product}', 'ProductController@update')->name('products.update');
+
+	Route::delete('products/{product}', 'ProductController@destroy')->name('products.destroy');
+});
+
 Route::middleware(['terms'])->group(function () {
 	Route::get('orders', 'OrderController@index')->name('orders.index');
-	Route::get('orders/create/{duration}', 'OrderController@create')->name('orders.create')->where('duration', '[0-9]+');
+	Route::get('orders/create/{product}', 'OrderController@create')->name('orders.create')->where('duration', '[0-9]+');
 	Route::get('orders/{order}', 'OrderController@show')->name('orders.show');
 	Route::get('orders/{order}/edit', 'OrderController@edit')->name('orders.edit');
 	Route::get('orders/{order}/gift', 'OrderController@gift')->name('orders.gift');
-	Route::post('orders/{duration}', 'OrderController@store')->name('orders.store');
+
+	Route::post('orders/{product}', 'OrderController@store')->name('orders.store');
+
 	Route::patch('orders/{order}/activate', 'OrderController@activate')->name('orders.activate');
 	Route::patch('orders/{order}/transfer', 'OrderController@transfer')->name('orders.transfer');
 	Route::patch('orders/{order}', 'OrderController@update')->name('orders.update');
 });
 
-Route::middleware(['terms'])->group(function () {
+Route::middleware(['auth', 'terms'])->group(function () {
 	Route::get('affiliates', 'AffiliateController@index')->name('affiliates.index');
 });
 
-Route::middleware(['terms'])->group(function () {
+Route::middleware(['admin'])->group(function () {
 	Route::get('admins', 'AdminController@index')->name('admins.index');
 	Route::get('admins/create', 'AdminController@create')->name('admins.create');
+	Route::get('admins/{admin}/edit', 'AdminController@edit')->name('admins.edit');
 
 	Route::post('admins', 'AdminController@store')->name('admins.store');
+
+	Route::patch('admins/{admin}', 'AdminController@update')->name('admins.update');
 
 	Route::delete('admins/{admin}', 'AdminController@destroy')->name('admins.destroy');
 });
 
-Route::get('tokens', 'TokenController@index')->name('tokens.index');
-Route::get('tokens/create', 'TokenController@create')->name('tokens.create');
-Route::get('tokens/{token}', 'TokenController@show')->name('tokens.show');
-Route::post('tokens/{token}', 'TokenController@use')->name('tokens.use');
-Route::post('tokens', 'TokenController@store')->name('tokens.store');
+Route::middleware(['terms', 'auth'])->group(function () {
+	Route::get('tokens', 'TokenController@index')->name('tokens.index');
+	Route::get('tokens/create', 'TokenController@create')->name('tokens.create');
+	Route::get('tokens/{token}', 'TokenController@show')->name('tokens.show');
 
-Route::get('users', 'UserController@index')->name('users.index');
+	Route::post('tokens/{token}', 'TokenController@use')->name('tokens.use');
+	Route::post('tokens', 'TokenController@store')->name('tokens.store');
+});
+
+Route::middleware(['admin'])->group(function () {
+	Route::get('users', 'UserController@index')->name('users.index');
+});

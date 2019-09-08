@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Admin;
+use App\Services\AdminService;
 use App\Services\Forms\AdminForms;
 use Illuminate\Http\Request;
 
@@ -26,25 +27,33 @@ class AdminController extends Controller
 		]);
 	}
 
+	public function edit(AdminForms $forms, Admin $admin)
+	{
+		$form = $forms->edit($admin);
+
+		return view('form', [
+			'title'       => 'Editando admin',
+			'form'        => $form,
+			'submit_text' => 'Atualizar',
+		]);
+	}
+
 	public function store(AdminService $service, Request $request)
 	{
-
-		$admin = Admin::create($request->all());
+		$admin = $service->storeAdmin($request->all());
 
 		flash()->success("Admin <strong>$admin->username</strong> criado com sucesso!");
 
 		return redirect()->route('admins.index');
 	}
 
-	public function update(Request $request, Admin $admin)
+	public function update(AdminService $service, Request $request, Admin $admin)
 	{
-		$admin->fill($request->all());
-
-		$admin->save();
+		$admin = $service->updateAdmin($admin, $request->all());
 
 		flash()->success("Admin $admin->username atualizado!");
 
-		return $admin;
+		return redirect()->route('admins.index');
 	}
 
 	public function destroy(Admin $admin)

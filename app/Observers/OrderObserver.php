@@ -21,6 +21,7 @@ class OrderObserver
 
 	public function creating(Order $order)
 	{
+		// TODO: check if ID already exists to avoid random exceptions
 		$order->id = $this->randomString(5);
 	}
 

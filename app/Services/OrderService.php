@@ -12,6 +12,7 @@ use App\Classes\PaymentSystem;
 use App\Events\OrderActivated;
 use App\Exceptions\InvalidSteamIdException;
 use App\Order;
+use App\Product;
 use App\User;
 
 class OrderService
@@ -24,17 +25,12 @@ class OrderService
 		$order->save();
 	}
 
-	public function validateDuration($duration)
-	{
-		return array_key_exists($duration, config('vip-admin.durations'));
-	}
-
-	public function createOrder($user, $data, $duration)
+	public function createOrder($user, $data, Product $product)
 	{
 		$paymentSystem = app(PaymentSystem::class);
 
-		$order = $this->createEmptyOrder($user, $duration);
-		$details = $this->buildOrderDetails($order, $user, $duration);
+		$order = $this->createEmptyOrder($user, $product->duration);
+		$details = $this->buildOrderDetails($order, $user, $product);
 
 		$response = $paymentSystem->createOrder($details);
 
@@ -64,14 +60,12 @@ class OrderService
 		return $order;
 	}
 
-	public function buildOrderDetails(Order $order, User $user, $duration)
+	public function buildOrderDetails(Order $order, User $user, Product $product)
 	{
-		$info = config('vip-admin.durations');
-
-		$details['reason'] = "VIP de ${duration} dias nos servidores de_nerdTV";
+		$details['reason'] = "VIP de $product->duration dias nos servidores de_nerdTV";
 		$details['return_url'] = url("/orders/{$order->id}");
 		$details['cancel_url'] = url("/orders/{$order->id}");
-		$details['preset_amount'] = $info[ $duration ]['price'];
+		$details['preset_amount'] = round($product->cost * (1 - $product->discount));
 		$details['reason'] = 'VIP servidores de_nerdTV';
 		$details['product_name_singular'] = 'dia';
 		$details['product_name_plural'] = 'dias';
@@ -80,6 +74,7 @@ class OrderService
 		$details['payer_steam_id'] = $user->steamid;
 		$details['payer_tradelink'] = $user->tradelink;
 
+		// TODO: update this
 		$details['unit_price'] = 8;
 		$details['unit_price_limit'] = 6;
 		$details['discount_per_unit'] = 0.1;

@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Product;
+
 class HomeController extends Controller
 {
 	public function home()
 	{
 		$prices = config('vip-admin.durations');
+		$products = Product::all();
 
-		return view('home', compact('prices'));
+		return view('home', compact('products', 'prices'));
 	}
 
 	public function faq()

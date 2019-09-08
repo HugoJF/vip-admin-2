@@ -11652,10 +11652,12 @@ h6 {
  */
 
 .-translate-50 {
-  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
 }
 
 .scale-110 {
+  -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }
 

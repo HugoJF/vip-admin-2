@@ -36,7 +36,8 @@
                 <td>
                     {!! Form::open(['url' => route('admins.destroy', $admin), 'method' => 'DELETE']) !!}
                     <div class="btn-group" role="group">
-                        <button class="btn btn-sm btn-danger">Delete</button>
+                        <a class="btn btn-sm btn-primary" href="{{ route('admins.edit', $admin) }}">Editar</a>
+                        <button class="btn btn-sm btn-outline-danger">Deletar</button>
                     </div>
                     {!! Form::close() !!}
                 </td>
