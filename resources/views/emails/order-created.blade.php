@@ -21,5 +21,5 @@ Pagar
 @endcomponent
 @endcomponent
 
-**Obrigado**, equipe de_nerdTV.
+**Obrigado!** Equipe de_nerdTV.
 @endcomponent

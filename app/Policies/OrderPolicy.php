@@ -18,7 +18,7 @@ class OrderPolicy extends BasePolicy
 		return $user->id === $order->user_id;
 	}
 
-	public function store(User $user, Order $order)
+	public function store(User $user)
 	{
 		return true;
 	}

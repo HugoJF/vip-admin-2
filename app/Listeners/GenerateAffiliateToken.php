@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Events\NewAffiliateToken;
 use App\Events\OrderPaid;
 use App\Token;
 use Illuminate\Queue\InteractsWithQueue;
@@ -9,16 +10,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 class GenerateAffiliateToken
 {
-	/**
-	 * Create the event listener.
-	 *
-	 * @return void
-	 */
-	public function __construct()
-	{
-		//
-	}
-
 	/**
 	 * Handle the event.
 	 *
@@ -43,6 +34,8 @@ class GenerateAffiliateToken
 			$token->user()->associate($affiliate);
 
 			$token->save();
+
+			event(new NewAffiliateToken($token));
 		}
 	}
 }

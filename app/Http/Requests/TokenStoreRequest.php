@@ -15,6 +15,7 @@ class TokenStoreRequest extends FormRequest
 	{
 		return [
 			'id'         => 'required|alpha_num',
+			'note'       => 'string',
 			'duration'   => 'required|numeric',
 			'expires_at' => 'after:now',
 		];

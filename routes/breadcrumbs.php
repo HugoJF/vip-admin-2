@@ -99,6 +99,12 @@ Breadcrumbs::for ('tokens.create', function ($trail) {
 	$trail->push('Criando tokens', route('tokens.create'));
 });
 
+// Tokens > Show
+Breadcrumbs::for ('tokens.show', function ($trail, $token) {
+	$trail->parent('tokens.index');
+	$trail->push('Vendo token', route('tokens.show', $token));
+});
+
 // Users
 Breadcrumbs::for ('users.index', function ($trail) {
 	$trail->parent('home');

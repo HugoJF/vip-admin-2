@@ -23,5 +23,5 @@ Caso tenha alguma dúvida a respeito da plataforma ou de nossos servidores, sint
 **Twitter:** https://twitter.com
 @endcomponent
 
-**Obrigado**, equipe de_nerdTV.
+**Obrigado!** Equipe de_nerdTV.
 @endcomponent

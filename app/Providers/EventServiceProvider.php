@@ -3,12 +3,14 @@
 namespace App\Providers;
 
 use App\Events\ManualServerSynchronization;
+use App\Events\NewAffiliateToken;
 use App\Events\OrderActivated;
 use App\Events\OrderCreated;
 use App\Events\OrderExpired;
 use App\Events\OrderPaid;
 use App\Listeners\GenerateAffiliateToken;
 use App\Listeners\GenerateOrderActivation;
+use App\Listeners\SendNewAffiliateTokenMail;
 use App\Listeners\SendOrderActivatedMail;
 use App\Listeners\SendOrderCreatedMail;
 use App\Listeners\SendOrderPaidMail;
@@ -42,6 +44,9 @@ class EventServiceProvider extends ServiceProvider
 		],
 		OrderExpired::class                => [
 			SynchronizeServer::class,
+		],
+		NewAffiliateToken::class           => [
+			SendNewAffiliateTokenMail::class,
 		],
 		ManualServerSynchronization::class => [
 			SynchronizeServer::class,
