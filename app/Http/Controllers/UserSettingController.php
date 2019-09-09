@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserSettingsUpdateRequest;
 use App\Services\Forms\HomeForms;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,11 +22,11 @@ class UserSettingController extends Controller
 		]);
 	}
 
-	public function update(Request $request)
+	public function update(UserSettingsUpdateRequest $request)
 	{
 		$user = Auth::user();
 
-		$user->fill($request->only(['email', 'tradelink', 'name', 'terms', 'affiliate_code']));
+		$user->fill($request->validated() + ['terms' => 0]);
 
 		$user->save();
 

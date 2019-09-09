@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Admin;
+use App\Http\Requests\AdminStoreRequest;
+use App\Http\Requests\AdminUpdateRequest;
 use App\Services\AdminService;
 use App\Services\Forms\AdminForms;
 use Illuminate\Http\Request;
@@ -38,18 +40,18 @@ class AdminController extends Controller
 		]);
 	}
 
-	public function store(AdminService $service, Request $request)
+	public function store(AdminService $service, AdminStoreRequest $request)
 	{
-		$admin = $service->storeAdmin($request->all());
+		$admin = $service->storeAdmin($request->validated());
 
 		flash()->success("Admin <strong>$admin->username</strong> criado com sucesso!");
 
 		return redirect()->route('admins.index');
 	}
 
-	public function update(AdminService $service, Request $request, Admin $admin)
+	public function update(AdminService $service, AdminUpdateRequest $request, Admin $admin)
 	{
-		$admin = $service->updateAdmin($admin, $request->all());
+		$admin = $service->updateAdmin($admin, $request->validated());
 
 		flash()->success("Admin $admin->username atualizado!");
 

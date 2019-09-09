@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\AlreadyUsedTokenException;
 use App\Exceptions\TokenExpiredException;
+use App\Http\Requests\TokenStoreRequest;
+use App\Http\Requests\TokenUpdateRequest;
 use App\Order;
 use App\Token;
 use App\TokenForm;
@@ -75,26 +77,16 @@ class TokenController extends Controller
 		]);
 	}
 
-	public function store(Request $request)
+	public function store(TokenStoreRequest $request)
 	{
-		$validation = Validator::make($request->all(), [
-			'id'         => 'required|alpha_num',
-			'duration'   => 'required|numeric',
-			'expires_at' => 'after:now',
-		]);
-
-		if ($validation->fails())
-			// TODO: return as error (this is status code 200)
-			return $validation->errors()->toJson();
-
-		$token = Token::create($request->all());
+		$token = Token::create($request->validated());
 
 		return redirect()->route('tokens.show', $token);
 	}
 
-	public function update(Request $request, Token $token)
+	public function update(TokenUpdateRequest $request, Token $token)
 	{
-		$token->fill($request->all());
+		$token->fill($request->validated());
 
 		$token->save();
 

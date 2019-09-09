@@ -8,10 +8,9 @@ class HomeController extends Controller
 {
 	public function home()
 	{
-		$prices = config('vip-admin.durations');
 		$products = Product::all();
 
-		return view('home', compact('products', 'prices'));
+		return view('home', compact('products'));
 	}
 
 	public function faq()

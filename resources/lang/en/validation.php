@@ -126,12 +126,13 @@ return [
     | specify a specific custom language line for a given attribute rule.
     |
     */
+	'steamid' => 'The :attribute must be a valid SteamID.',
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
-        ],
-    ],
+		'attribute-name' => [
+			'rule-name' => 'custom-message',
+		],
+	],
 
     /*
     |--------------------------------------------------------------------------
@@ -144,6 +145,8 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+    	//
+	],
 
 ];
