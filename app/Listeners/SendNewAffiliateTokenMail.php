@@ -6,6 +6,7 @@ use App\Events\NewAffiliateToken;
 use App\Mail\NewAffiliateTokenMail;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Mail;
 
 class SendNewAffiliateTokenMail
 {
