@@ -46,6 +46,7 @@ class User extends Authenticatable implements JWTSubject
 
 	protected $casts = [
 		'admin'             => 'boolean',
+		'affiliate'         => 'boolean',
 		'terms'             => 'boolean',
 		'email_verified_at' => 'datetime',
 		'referred_at'       => 'datetime:c',

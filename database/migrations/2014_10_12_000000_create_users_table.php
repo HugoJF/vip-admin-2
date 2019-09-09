@@ -30,7 +30,8 @@ class CreateUsersTable extends Migration
 			$table->string('email')->unique()->nullable();
 
 			$table->string('affiliate_code')->nullable();
-	
+			$table->boolean('affiliate')->default(false);
+
 			$table->unsignedInteger('referrer_id')->nullable();
 			$table->dateTime('referred_at')->nullable();
 

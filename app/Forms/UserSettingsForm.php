@@ -11,6 +11,9 @@ class UserSettingsForm extends Form
 		$this->add('tradelink', 'text');
 		$this->add('email', 'text');
 		$this->add('terms', 'checkbox');
-		$this->add('affiliate_code', 'text');
+
+		$user = $this->getData('user');
+		if ($user && $user->affiliate)
+			$this->add('affiliate_code', 'text');
 	}
 }
