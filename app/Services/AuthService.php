@@ -25,6 +25,10 @@ class AuthService
 		$user = User::where('steamid', $info->steamID64)->first();
 
 		if (!is_null($user)) {
+			$user->username = $info->personaname;
+			$user->avatar = $info->avatarfull;
+			$user->save();
+
 			return $user;
 		}
 
