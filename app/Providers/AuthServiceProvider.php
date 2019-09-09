@@ -6,10 +6,12 @@ use App\Admin;
 use App\Order;
 use App\Policies\AdminPolicy;
 use App\Policies\OrderPolicy;
+use App\Policies\ProductPolicy;
 use App\Policies\SettingPolicy;
 use App\Policies\TokenPolicy;
 use App\Policies\UserPolicy;
 use App\Policies\UserSettingPolicy;
+use App\Product;
 use App\Setting;
 use App\Token;
 use App\User;
@@ -30,6 +32,7 @@ class AuthServiceProvider extends ServiceProvider
 		Setting::class     => SettingPolicy::class,
 		UserSetting::class => UserSettingPolicy::class,
 		Token::class       => TokenPolicy::class,
+		Product::class     => ProductPolicy::class,
 		Admin::class       => AdminPolicy::class,
 	];
 

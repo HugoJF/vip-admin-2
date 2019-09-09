@@ -6,45 +6,19 @@ use App\Token;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class TokenPolicy
+class TokenPolicy extends BasePolicy
 {
-	use HandlesAuthorization;
-
-	/**
-	 * Create a new policy instance.
-	 *
-	 * @return void
-	 */
-	public function __construct()
-	{
-		//
-	}
-
-	public function before($user, $ability)
-	{
-		if ($user->banned)
-			return false;
-
-		if ($user->admin)
-			return true;
-	}
-
 	public function list(User $user)
 	{
 		return true;
 	}
 
-	public function create(User $user)
+	public function view(User $User, Token $token)
 	{
-		return false;
+		return true;
 	}
 
-	public function update(User $user, Token $token)
-	{
-		return false;
-	}
-
-	public function delete(User $user, Token $token)
+	public function store(User $user)
 	{
 		return false;
 	}
@@ -52,5 +26,10 @@ class TokenPolicy
 	public function use(User $user, Token $token)
 	{
 		return true;
+	}
+
+	public function delete(User $user, Token $token)
+	{
+		return false;
 	}
 }

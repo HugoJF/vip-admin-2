@@ -6,19 +6,8 @@ use App\Order;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class OrderPolicy
+class OrderPolicy extends BasePolicy
 {
-	use HandlesAuthorization;
-
-	public function before($user, $ability)
-	{
-		if ($user->banned)
-			return false;
-
-		if ($user->admin)
-			return true;
-	}
-
 	public function list(User $user)
 	{
 		return true;
@@ -29,18 +18,23 @@ class OrderPolicy
 		return $user->id === $order->user_id;
 	}
 
-	public function create(User $user)
+	public function store(User $user, Order $order)
 	{
 		return true;
-	}
-
-	public function activate(User $user, Order $order)
-	{
-		return $user->id === $order->user_id;
 	}
 
 	public function update(User $user, Order $order)
 	{
 		return false;
+	}
+
+	public function transfer(User $user, Order $order)
+	{
+		return $user->id === $order->user_id;
+	}
+
+	public function activate(User $user, Order $order)
+	{
+		return $user->id === $order->user_id;
 	}
 }

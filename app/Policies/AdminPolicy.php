@@ -6,20 +6,9 @@ use App\Admin;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class AdminPolicy
+class AdminPolicy extends BasePolicy
 {
-    use HandlesAuthorization;
-
-	public function before($user, $ability)
-	{
-		if ($user->banned)
-			return false;
-
-		if ($user->admin)
-			return true;
-	}
-
-	public function view(User $user, Admin $admin)
+	public function list(User $user, Admin $admin)
 	{
 		return false;
 	}
