@@ -14,6 +14,7 @@
         <tr>
             <th>Nome</th>
             <th>Tradelink</th>
+            <th>Pedidos</th>
             <th>Cargo</th>
             <th>Created at</th>
             <th>Actions</th>
@@ -36,6 +37,9 @@
                     @endif
                 </td>
                 
+                <!-- Pedidos -->
+                <td><span class="badge badge-primary">{{ $user->orders()->count() }}</span></td>
+                
                 <!-- Cargo -->
                 <td>
                     @if($user->admin)
@@ -50,10 +54,11 @@
                 
                 <!-- Actions -->
                 <td>
-{{--                    {!! Form::open(['url' => route('orders.activate', $user), 'method' => 'PATCH']) !!}--}}
+                    {!! Form::open(['url' => route('users.admin', $user), 'method' => 'PATCH']) !!}
                     <div class="btn-group" role="group">
+                        <button class="btn btn-primary btn-sm">Toggle admin</button>
                     </div>
-{{--                    {!! Form::close() !!}--}}
+                    {!! Form::close() !!}
                 </td>
             </tr>
         @empty

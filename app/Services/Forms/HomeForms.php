@@ -21,6 +21,6 @@ class HomeForms extends ServiceForms
 			'method' => 'PATCH',
 			'url'    => route('settings'),
 			'model'  => $user,
-		]);
+		], compact('user'));
 	}
 }

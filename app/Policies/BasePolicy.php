@@ -8,6 +8,8 @@
 
 namespace App\Policies;
 
+use Illuminate\Auth\Access\HandlesAuthorization;
+
 class BasePolicy
 {
 	use HandlesAuthorization;

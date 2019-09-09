@@ -17,7 +17,7 @@ class ProductUpdateRequest extends FormRequest
 			'title'       => 'required|string',
 			'duration'    => 'required|numeric|min:0|max:180',
 			'cost'        => 'required|numeric|min:0',
-			'discount'    => 'required|min:0|max:1',
+			'discount'    => 'required|numeric|min:0|max:1',
 			'description' => 'required|string',
 		];
 	}

@@ -13,6 +13,15 @@ use Carbon\Carbon;
 
 class UserService
 {
+	public function toggleAdmin(User $user)
+	{
+		$user->admin = !$user->admin;
+
+		$user->save();
+
+		return $user;
+	}
+
 	public function getOrderBasePoint(User $user)
 	{
 		$lastOrder = $user->orders()->where('canceled', false)->whereNotNull('ends_at')->orderBy('ends_at', 'DESC')->first();

@@ -11,4 +11,9 @@ class UserPolicy extends BasePolicy
 	{
 		return false;
 	}
+
+	public function admin(User $user, User $other)
+	{
+		return false;
+	}
 }

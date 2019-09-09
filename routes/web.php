@@ -75,7 +75,7 @@ Route::middleware(['auth'])->group(function () {
 */
 
 Route::middleware(['admin'])->group(function () {
-	Route::get('products', 'ProductController@index')->name('products.index')->middleware('can:view,App\Product');
+	Route::get('products', 'ProductController@index')->name('products.index')->middleware('can:list,App\Product');
 	Route::get('products/create', 'ProductController@create')->name('products.create')->middleware('can:store,App\Product');
 	Route::get('products/{product}/edit', 'ProductController@edit')->name('products.edit')->middleware('can:update,product');
 
@@ -157,4 +157,6 @@ Route::middleware(['terms', 'auth'])->group(function () {
 
 Route::middleware(['admin'])->group(function () {
 	Route::get('users', 'UserController@index')->name('users.index')->middleware('can:list,App\User');
+
+	Route::patch('users/{user}/admin', 'UserController@admin')->name('users.admin')->middleware('can:admin,user');
 });
