@@ -16,10 +16,15 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('id');
 
+            // Product title
             $table->string('title');
+            // How many days the 'product' has
             $table->integer('duration');
+            // How many cents it cost
             $table->integer('cost');
+            // Discount percentage
             $table->float('discount')->default(0);
+            // Markdown description
             $table->text('description');
 
             $table->timestamps();

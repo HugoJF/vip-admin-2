@@ -49,7 +49,6 @@ class User extends Authenticatable implements JWTSubject
 		'affiliate'         => 'boolean',
 		'terms'             => 'boolean',
 		'email_verified_at' => 'datetime',
-		'referred_at'       => 'datetime:c',
 		'created_at'        => 'datetime:c',
 		'updated_at'        => 'datetime:c',
 	];

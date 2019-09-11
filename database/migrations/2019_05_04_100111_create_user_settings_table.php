@@ -16,9 +16,12 @@ class CreateUserSettingsTable extends Migration
         Schema::create('user_settings', function (Blueprint $table) {
             $table->bigIncrements('id');
 
+            // Setting key
 			$table->string('key');
+			// Setting value
 			$table->string('value');
 
+			// User owner for setting
 			$table->unsignedInteger('user_id')->references('id')->on('users');
 
 			$table->timestamps();

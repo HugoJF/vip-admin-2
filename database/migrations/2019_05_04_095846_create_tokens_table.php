@@ -16,17 +16,23 @@ class CreateTokensTable extends Migration
 		Schema::create('tokens', function (Blueprint $table) {
 			$table->string('id')->unique();
 
+			// How many days the token will generate
 			$table->unsignedInteger('duration');
 
+			// Token note
 			$table->text('note');
 
+			// User that owns this token (admin who generated or affiliate that received the token)
 			$table->unsignedInteger('user_id')->nullable()->references('id')->on('users');
+			// Order that was created by this token
 			$table->string('order_id')->nullable()->references('id')->on('orders');
 
-			// TODO: add index?
-			$this->string('reason_type');
-			$this->unsignedBigInteger('reason_id');
+			// Custom morphsTo() using string as `reason_id`
+			$table->string('reason_type');
+			$table->string('reason_id');
+			$table->index(['reason_type', 'reason_id']);
 
+			// When this token expires
 			$table->timestamp('expires_at')->nullable();
 			$table->timestamps();
 		});

@@ -16,10 +16,13 @@ class CreateAdminsTable extends Migration
         Schema::create('admins', function (Blueprint $table) {
             $table->bigIncrements('id');
 
+            // User-friendly username
             $table->string('username');
+            // SteamID64 for admin
             $table->string('steamid');
+            // SourceMod flags [a-tz]
             $table->string('flags');
-
+            // User-friendly note
             $table->text('note');
 
             $table->timestamps();
