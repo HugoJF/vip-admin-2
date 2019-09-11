@@ -39,7 +39,7 @@ class TokenController extends Controller
 		if ($token->order !== null)
 			throw new AlreadyUsedTokenException('Token already used.');
 
-		if ($token->expires_at->isPast())
+		if ($token->expires_at && $token->expires_at->isPast())
 			throw new TokenExpiredException('Expired tokens cannot be used');
 
 		$order = Order::make();
