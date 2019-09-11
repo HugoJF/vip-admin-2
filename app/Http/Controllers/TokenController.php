@@ -51,11 +51,9 @@ class TokenController extends Controller
 		$order->canceled = false;
 
 		$order->user()->associate(Auth::user());
-
-		$order->recheck();
-
 		$token->order()->associate($order);
 
+		$order->save();
 		$token->save();
 
 		flash()->success('Token registrado com sucesso!');
