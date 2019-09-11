@@ -3,7 +3,6 @@
 namespace App\Events;
 
 use App\Order;
-use App\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -12,20 +11,20 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class OrderExpired
+class OrderSynchronized
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $user;
+    public $order;
 
 	/**
 	 * Create a new event instance.
 	 *
-	 * @param User $user
+	 * @param Order $order
 	 */
-    public function __construct(User $user)
+    public function __construct(Order $order)
     {
-    	$this->user = $user;
+    	$this->order = $order;
     }
 
     /**
