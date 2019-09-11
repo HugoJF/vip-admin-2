@@ -12,7 +12,7 @@ class MissingAffiliateCode extends Alert
 {
 	public function triggered()
 	{
-		return is_null($this->user->affiliate_code);
+		return is_null($this->user->affiliate_code) && $this->user->affiliate;
 	}
 
 	public function getMessage()
