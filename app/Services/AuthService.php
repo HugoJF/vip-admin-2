@@ -10,6 +10,7 @@ namespace App\Services;
 
 use App\User;
 use Carbon\Carbon;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Cookie;
 
 class AuthService
@@ -48,6 +49,8 @@ class AuthService
 		}
 
 		$user->save();
+
+		event(new Registered($user));
 
 		return $user;
 	}
