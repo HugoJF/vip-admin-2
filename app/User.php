@@ -89,15 +89,16 @@ class User extends Authenticatable implements JWTSubject
 
 	public function currentVip()
 	{
-		$paidOrders = $this->orders()->wherePaid(true)->whereCanceled(false)->get();
+		$paidOrders = $this->orders()
+						   ->wherePaid(true)
+						   ->whereNotNull('ends_at')
+						   ->whereCanceled(false)
+						   ->get();
 
 		if ($paidOrders->count() === 0)
 			return false;
 
 		$durations = $paidOrders->map(function ($order) {
-			if (!$order->activated || !$order->paid)
-				return 0;
-
 			// +1 because 23h = 0 days
 			return $order->ends_at->diffInDays(Carbon::now()) + 1;
 		});
