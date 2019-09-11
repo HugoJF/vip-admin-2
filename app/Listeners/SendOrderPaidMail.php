@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\OrderPaid;
-use App\Mail\OrderPaid as OrderPaidMail;
+use App\Mail\OrderPaidMail;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Mail;

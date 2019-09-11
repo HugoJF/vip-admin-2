@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\OrderActivated;
-use App\Mail\OrderActivated as OrderActivatedMail;
+use App\Mail\OrderActivatedMail;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Mail;

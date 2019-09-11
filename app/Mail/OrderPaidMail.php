@@ -8,7 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class OrderCreated extends Mailable
+class OrderPaidMail extends Mailable
 {
 	use Queueable, SerializesModels;
 
@@ -31,6 +31,6 @@ class OrderCreated extends Mailable
 	 */
 	public function build()
 	{
-		return $this->markdown('emails.order-created', ['order' => $this->order]);
+		return $this->markdown('emails.order-paid', ['order' => $this->order]);
 	}
 }

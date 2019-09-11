@@ -17,7 +17,7 @@
 |--------------------------------------------------------------------------
 */
 Route::get('email', function () {
-	return new \App\Mail\NewAffiliateTokenMail(\App\Token::query()->inRandomOrder()->first());
+	return new \App\Mail\OrderExpiredMail();
 });
 
 /*

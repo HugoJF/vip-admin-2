@@ -2,26 +2,23 @@
 
 namespace App\Mail;
 
-use App\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class OrderActivated extends Mailable
+class OrderExpiredMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    private $order;
-
-	/**
+    /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Order $order)
+    public function __construct()
     {
-    	$this->order = $order;
+        //
     }
 
     /**
@@ -31,6 +28,6 @@ class OrderActivated extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.order-activated', ['order' => $this->order]);
+        return $this->markdown('emails.order-expired-mail');
     }
 }

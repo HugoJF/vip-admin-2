@@ -2,23 +2,26 @@
 
 namespace App\Mail;
 
+use App\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class Welcome extends Mailable
+class OrderActivatedMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    /**
+    private $order;
+
+	/**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Order $order)
     {
-        //
+    	$this->order = $order;
     }
 
     /**
@@ -28,6 +31,6 @@ class Welcome extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.welcome');
+        return $this->markdown('emails.order-activated', ['order' => $this->order]);
     }
 }
