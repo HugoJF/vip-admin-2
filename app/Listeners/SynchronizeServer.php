@@ -91,7 +91,7 @@ class SynchronizeServer implements ShouldQueue
 			// TODO: remove with whereIn?
 			DB::connection('sm_admins')->table('sm_admins')->where('identity', $this->toSteamId2($id->identity))->delete();
 			$steam64 = $this->toSteamId64($id->identity);
-			$user = User::whereSteamid($steam64);
+			$user = User::whereSteamid($steam64)->first();
 			if ($user)
 				event(new OrderExpired($user));
 		}
