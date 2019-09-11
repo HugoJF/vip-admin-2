@@ -82,6 +82,11 @@ class User extends Authenticatable implements JWTSubject
 		return $this->hasMany(User::class, 'referrer_id');
 	}
 
+	public function reason()
+	{
+		return $this->morphOne(Token::class, 'reason');
+	}
+
 	public function currentVip()
 	{
 		$paidOrders = $this->orders()->wherePaid(true)->whereCanceled(false)->get();

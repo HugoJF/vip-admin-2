@@ -23,6 +23,10 @@ class CreateTokensTable extends Migration
 			$table->unsignedInteger('user_id')->nullable()->references('id')->on('users');
 			$table->string('order_id')->nullable()->references('id')->on('orders');
 
+			// TODO: add index?
+			$this->string('reason_type');
+			$this->unsignedBigInteger('reason_id');
+
 			$table->timestamp('expires_at')->nullable();
 			$table->timestamps();
 		});

@@ -60,4 +60,9 @@ class Token extends Model
 	{
 		return $this->belongsTo(Order::class);
 	}
+
+	public function reason()
+	{
+		return $this->morphTo();
+	}
 }

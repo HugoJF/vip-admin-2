@@ -64,6 +64,11 @@ class Order extends Model
 		return $this->hasOne(Token::class);
 	}
 
+	public function reason()
+	{
+		return $this->morphOne(Token::class, 'reason');
+	}
+
 	public function getActivatedAttribute()
 	{
 		return $this->starts_at && $this->ends_at;
