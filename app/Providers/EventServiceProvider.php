@@ -8,8 +8,10 @@ use App\Events\OrderActivated;
 use App\Events\OrderCreated;
 use App\Events\OrderExpired;
 use App\Events\OrderPaid;
-use App\Listeners\GenerateAffiliateToken;
+use App\Events\OrderSynchronized;
+use App\Listeners\GeneratePaidOrderAffiliateToken;
 use App\Listeners\GenerateOrderActivation;
+use App\Listeners\GenerateUserRegisterAffiliateToken;
 use App\Listeners\SendNewAffiliateTokenMail;
 use App\Listeners\SendOrderActivatedMail;
 use App\Listeners\SendOrderCreatedMail;
@@ -28,22 +30,26 @@ class EventServiceProvider extends ServiceProvider
 	 */
 	protected $listen = [
 		Registered::class                  => [
-			SendEmailVerificationNotification::class,
+//			SendEmailVerificationNotification::class,
+			GenerateUserRegisterAffiliateToken::class,
 		],
 		OrderCreated::class                => [
 			SendOrderCreatedMail::class,
 		],
 		OrderPaid::class                   => [
 			GenerateOrderActivation::class,
-			GenerateAffiliateToken::class,
+			GeneratePaidOrderAffiliateToken::class,
 			SendOrderPaidMail::class,
 		],
 		OrderActivated::class              => [
 			SynchronizeServer::class,
 			SendOrderActivatedMail::class,
 		],
+		OrderSynchronized::class => [
+			//
+		],
 		OrderExpired::class                => [
-			SynchronizeServer::class,
+
 		],
 		NewAffiliateToken::class           => [
 			SendNewAffiliateTokenMail::class,
