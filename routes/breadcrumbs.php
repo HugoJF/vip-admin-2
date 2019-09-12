@@ -75,6 +75,12 @@ Breadcrumbs::for ('orders.show', function ($trail, $order) {
 	$trail->push("Pedido #$order->id", route('orders.show', $order));
 });
 
+// Orders > Edit
+Breadcrumbs::for ('orders.edit', function ($trail, $order) {
+	$trail->parent('orders.show', $order);
+	$trail->push("Editando pedido #$order->id", route('orders.edit', $order));
+});
+
 // Orders > Gift
 Breadcrumbs::for ('orders.gift', function ($trail, $order) {
 	$trail->parent('orders.show', $order);

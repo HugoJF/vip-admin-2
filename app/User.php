@@ -17,7 +17,7 @@ class User extends Authenticatable implements JWTSubject
 {
 	use Notifiable;
 	use SearchableTrait;
-	
+
 	protected $searchable = [
 		'columns' => [
 			'users.steamid'        => 75,
