@@ -31,6 +31,8 @@ class NewAffiliateTokenMail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.new-affiliate-token', ['token' => $this->token]);
+        return $this
+			->subject('Você recebeu um novo token!')
+			->markdown('emails.new-affiliate-token', ['token' => $this->token]);
     }
 }

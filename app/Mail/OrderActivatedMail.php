@@ -31,6 +31,8 @@ class OrderActivatedMail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.order-activated', ['order' => $this->order]);
+        return $this
+			->subject('Seu pedido acabou de ser ativado!')
+			->markdown('emails.order-activated', ['order' => $this->order]);
     }
 }

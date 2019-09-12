@@ -31,6 +31,10 @@ class OrderCreatedMail extends Mailable
 	 */
 	public function build()
 	{
-		return $this->markdown('emails.order-created', ['order' => $this->order]);
+		$id = $this->order->id;
+
+		return $this
+			->subject("Pedido #$id gerado!")
+			->markdown('emails.order-created', ['order' => $this->order]);
 	}
 }

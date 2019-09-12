@@ -31,6 +31,10 @@ class OrderPaidMail extends Mailable
 	 */
 	public function build()
 	{
-		return $this->markdown('emails.order-paid', ['order' => $this->order]);
+		$id = $this->order->id;
+
+		return $this
+			->subject("Seu pedido #$id foi pago!")
+			->markdown('emails.order-paid', ['order' => $this->order]);
 	}
 }
