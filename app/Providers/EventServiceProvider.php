@@ -7,6 +7,7 @@ use App\Events\NewAffiliateToken;
 use App\Events\OrderActivated;
 use App\Events\OrderCreated;
 use App\Events\OrderExpired;
+use App\Events\VipExpired;
 use App\Events\OrderPaid;
 use App\Events\OrderSynchronized;
 use App\Listeners\GeneratePaidOrderAffiliateToken;
@@ -15,6 +16,7 @@ use App\Listeners\GenerateUserRegisterAffiliateToken;
 use App\Listeners\SendNewAffiliateTokenMail;
 use App\Listeners\SendOrderActivatedMail;
 use App\Listeners\SendOrderCreatedMail;
+use App\Listeners\SendOrderExpiredMail;
 use App\Listeners\SendOrderPaidMail;
 use App\Listeners\SynchronizeServer;
 use Illuminate\Auth\Events\Registered;
@@ -30,7 +32,7 @@ class EventServiceProvider extends ServiceProvider
 	 */
 	protected $listen = [
 		Registered::class                  => [
-//			SendEmailVerificationNotification::class,
+			// SendEmailVerificationNotification::class,
 			GenerateUserRegisterAffiliateToken::class,
 		],
 		OrderCreated::class                => [
@@ -45,11 +47,14 @@ class EventServiceProvider extends ServiceProvider
 			SynchronizeServer::class,
 			SendOrderActivatedMail::class,
 		],
-		OrderSynchronized::class => [
+		OrderSynchronized::class           => [
 			//
 		],
 		OrderExpired::class                => [
-
+			//
+		],
+		VipExpired::class                  => [
+			SendOrderExpiredMail::class,
 		],
 		NewAffiliateToken::class           => [
 			SendNewAffiliateTokenMail::class,

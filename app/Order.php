@@ -5,6 +5,8 @@ namespace App;
 use App\Classes\PaymentSystem;
 use App\Events\OrderPaid;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Concerns\QueriesRelationships;
 use Illuminate\Database\Eloquent\Model;
 use Nicolaslopezj\Searchable\SearchableTrait;
 
@@ -74,6 +76,60 @@ class Order extends Model
 		return $this->starts_at && $this->ends_at;
 	}
 
+	public function scopePaid(Builder $query)
+	{
+		return $query->wherePaid(true);
+	}
+
+	public function scopeValid(Builder $query)
+	{
+		return $query->whereCanceled(false);
+	}
+
+	public function scopeStarted(Builder $query)
+	{
+		return $query->where('starts_at', '<', Carbon::now());
+	}
+
+	public function scopeNotExpired(Builder $query)
+	{
+		return $query->where('ends_at', '>', Carbon::now());
+	}
+	public function scopeExpired(Builder $query)
+	{
+		return $query->where('ends_at', '<', Carbon::now());
+	}
+
+	public function scopeSynced(Builder $query)
+	{
+		return $query->whereNotNull('synced_at');
+	}
+
+	public function scopeUnsynced(Builder $query)
+	{
+		return $query->whereNull('synced_at');
+	}
+
+	public function scopePending(Builder $query)
+	{
+		return $query
+			->paid()
+			->valid()
+			->started()
+			->notExpired()
+			->unsynced();
+	}
+
+	public function scopeActive(Builder $query)
+	{
+		return $query
+			->paid()
+			->valid()
+			->started()
+			->notExpired()
+			->synced();
+	}
+	
 	public function recheck()
 	{
 		$paymentSystem = new PaymentSystem();

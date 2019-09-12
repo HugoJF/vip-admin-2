@@ -2,11 +2,10 @@
 
 namespace App\Listeners;
 
-use App\Classes\SteamID;
+use App\Admin;
 use App\Events\OrderExpired;
 use App\Events\OrderSynchronized;
 use App\Order;
-use App\User;
 use Carbon\Carbon;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -17,16 +16,6 @@ class SynchronizeServer implements ShouldQueue
 	use InteractsWithQueue;
 
 	/**
-	 * Create the event listener.
-	 *
-	 * @return void
-	 */
-	public function __construct()
-	{
-		//
-	}
-
-	/**
 	 * Handle the event.
 	 *
 	 * @param  object $event
@@ -35,83 +24,117 @@ class SynchronizeServer implements ShouldQueue
 	 */
 	public function handle($event)
 	{
-		// TODO: order asc by ends_at
-		$pendingOrders = Order::query()
-							  ->where('paid', true)
-							  ->where('canceled', false)
-							  ->where('starts_at', '<', Carbon::now())
-							  ->where('ends_at', '>', Carbon::now())
-							  ->get();
+		$expiredOrders = Order::expired()->synced()->get();
+		$this->expireOrders($expiredOrders);
 
-		$this->updateOrders($pendingOrders);
+		$pendingOrders = Order::pending()->get();
+		$this->syncOrders($pendingOrders);
+
+		$currentOrders = Order::active()->get();
+		$admins = Admin::all();
+
+		$this->updateDatabase($currentOrders, $admins);
 	}
 
-	private function updateOrders($pendingOrders)
+	private function expireOrders($expiredOrders)
+	{
+		foreach ($expiredOrders as $order) {
+			$this->expireOrder($order);
+		}
+	}
+
+	private function expireOrder(Order $order)
+	{
+		$order->synced_at = null;
+		$order->save();
+
+		event(new OrderExpired($order));
+	}
+
+	private function syncOrders($pendingOrders)
+	{
+		// Insert order into database
+		foreach ($pendingOrders as $order) {
+			$this->syncOrder($order);
+		}
+	}
+
+	public function syncOrder(Order $order)
+	{
+		$order->synced_at = Carbon::now();
+		$order->save();
+
+		event(new OrderSynchronized($order));
+	}
+
+	private function mapOrdersToInfo($orders)
 	{
 		// Map SteamID => Username to remove duplicates
-		$orders = $pendingOrders->mapWithKeys(function ($order) {
-			if ($order->steamid)
-				return [$this->toSteamId2($order->steamid) => $order];
-			else
-				return [$this->toSteamId2($order->user->steamid) => $order];
-		});
+		return $orders->mapWithKeys(function ($order) {
+			$id = $order->steamid ?? $order->user->steamid;
 
-		// Query current orders in database
+			return [steamid2($id) => [
+				'username' => $order->user->username,
+				'flags'     => config('vip-admin.vip-flag', 'a'),
+			]];
+		});
+	}
+
+	private function mapAdminsToInfo($admins)
+	{
+		return $admins->mapWithKeys(function (Admin $admin) {
+			return [steamid2($admin->steamid) => [
+				'username' => $admin->username,
+				'flags'     => $admin->flags,
+			]];
+		});
+	}
+
+	private function fetchCurrentDatabase()
+	{
 		$existing = DB::connection('sm_admins')->table('sm_admins')->select('identity')->get()->unique('identity');
 
-		// Figure out what orders are missing from database
-		$pendingOrders = $orders->reject(function ($order, $id) use ($existing) {
-			return $existing->contains('identity', $id);
+		return $existing->mapWithKeys(function ($r) {
+			return [$r->identity => $r->identity];
 		});
+	}
 
-		// Since we store the actual order, map to steamid
-		$orders = $orders->map(function ($order) {
-			return $this->toSteamId2($order->user->steamid);
-		});
+	private function updateDatabase($currentOrders, $admins)
+	{
+		$vips = $this->mapOrdersToInfo($currentOrders);
+		$adms = $this->mapAdminsToInfo($admins);
 
-		// Figure out what orders should not be in the database
-		$expiredOrders = $existing->reject(function ($id) use ($orders) {
-			return $orders->has($id->identity);
-		});
+		$result = array_merge($vips->toArray(), $adms->toArray());
 
-		// Insert order into database
-		foreach ($pendingOrders as $steamid => $order) {
-			DB::connection('sm_admins')->table('sm_admins')->insert([
-				'authtype' => 'steam',
-				'identity' => $steamid,
-				'name'     => $order->user->username,
-				'flags'    => 'a',
-				'immunity' => 50,
-			]);
+		$current = $this->fetchCurrentDatabase()->toArray();
 
-			$order->synced_at = Carbon::now();
-			$order->save();
+		$pending = array_diff_key($result, $current);
+		$expired = array_diff_key($current, $result);
 
-			event(new OrderSynchronized($order));
-		}
+		$this->addAdmins($pending);
+		$this->removeAdmins($expired);
+	}
 
-		// Delete expires orders
-		foreach ($expiredOrders as $id) {
-			// TODO: remove with whereIn?
-			DB::connection('sm_admins')->table('sm_admins')->where('identity', $this->toSteamId2($id->identity))->delete();
-			$steam64 = $this->toSteamId64($id->identity);
-			$user = User::whereSteamid($steam64)->first();
-			if ($user)
-				event(new OrderExpired($user));
+	private function addAdmins($data)
+	{
+		foreach ($data as $id => $d) {
+			$this->addAdmin($id, $d['username'], $d['flags']);
 		}
 	}
 
-	public function toSteamId2($steamid)
+	private function addAdmin($steamid, $username, $flag): void
 	{
-		$id = new \SteamID($steamid);
-
-		return $id->RenderSteam2();
+		DB::connection('sm_admins')->table('sm_admins')->insert([
+			'authtype' => 'steam',
+			'identity' => $steamid,
+			'name'     => $username,
+			'flags'    => $flag,
+			'immunity' => 50,
+		]);
 	}
 
-	public function toSteamId64($steamid)
+	private function removeAdmins($ids): void
 	{
-		$id = new \SteamID($steamid);
-
-		return $id->ConvertToUInt64();
+		DB::connection('sm_admins')->table('sm_admins')->whereIn('identity', $ids)->delete();
 	}
 }

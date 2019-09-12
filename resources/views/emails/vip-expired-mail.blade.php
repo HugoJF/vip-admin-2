@@ -3,7 +3,7 @@
 
 Caso tenha interesse em continuar com o período VIP, clique no botão *Painel VIP* abaixo.
 
-@component('mail::button', ['color' => 'success', 'url' => '#'])
+@component('mail::button', ['color' => 'success', 'url' => route('home')])
     Painel VIP
 @endcomponent
 

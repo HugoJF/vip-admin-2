@@ -2,35 +2,35 @@
 
 namespace App\Listeners;
 
-use App\Events\OrderExpired;
+use App\Events\VipExpired;
 use App\Mail\OrderExpiredMail;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Mail;
 
 class SendOrderExpiredMail
 {
-    /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
+	/**
+	 * Create the event listener.
+	 *
+	 * @return void
+	 */
+	public function __construct()
+	{
+		//
+	}
 
 	/**
 	 * Handle the event.
 	 *
-	 * @param OrderExpired $event
+	 * @param VipExpired $event
 	 *
 	 * @return void
 	 */
-    public function handle(OrderExpired $event)
-    {
-		$user = $event->user;
+	public function handle(VipExpired $event)
+	{
+		$order = $event->order;
+		$user = $order->user;
 
 		if ($user->email)
 			Mail::to($user->email)->send(new OrderExpiredMail());
-    }
+	}
 }
