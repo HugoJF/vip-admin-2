@@ -21,12 +21,18 @@ class OrderObserver
 
 	public function creating(Order $order)
 	{
-		// TODO: check if ID already exists to avoid random exceptions
-		$order->id = $this->randomString(5);
-	}
+		$found = false;
+		$id = null;
 
-	protected function randomString($length)
-	{
-		return substr(md5(microtime(true)), 0, $length);
+		while (!$found) {
+			$id = random_id(5);
+
+			$check = Order::find($id);
+
+			if (!$check)
+				$found = true;
+		}
+
+		$order->id = $id;
 	}
 }
