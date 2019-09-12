@@ -83,6 +83,10 @@ class SynchronizeServer implements ShouldQueue
 				'flags'    => 'a',
 				'immunity' => 50,
 			]);
+
+			$order->synced_at = Carbon::now();
+			$order->save();
+
 			event(new OrderSynchronized($order));
 		}
 
