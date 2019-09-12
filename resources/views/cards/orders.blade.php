@@ -16,6 +16,9 @@
             <th>ID</th>
             <th>Duration</th>
             <th>Status</th>
+            @admin
+                <th>User</th>
+            @endadmin
             <th>Created at</th>
             <th>Actions</th>
         </tr>
@@ -45,6 +48,11 @@
                         <span class="badge badge-warning">Pendente</span>
                     @endif
                 </td>
+                
+                <!-- User -->
+                @admin
+                    <td>{{ $order->user->username ?? $order->user->name }}</td>
+                @endadmin
                 
                 <!-- Created at -->
                 <td>{{ $order->created_at->diffForHumans() }}</td>
