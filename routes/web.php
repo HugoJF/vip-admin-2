@@ -43,6 +43,8 @@ Route::get('a/{code}', 'UserController@affiliate')->name('affiliate');
 |
 */
 
+Route::get('login', 'AuthController@login')->name('login');
+
 Route::get('auth/redirect', 'AuthController@redirectToSteam')->name('auth.redirect');
 Route::get('auth/handle', 'AuthController@handle')->name('auth.handle');
 Route::get('auth/logout', 'AuthController@logout')->name('auth.logout');

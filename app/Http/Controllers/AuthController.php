@@ -17,6 +17,11 @@ class AuthController extends Controller
 		$this->steam = $steam;
 	}
 
+	public function login()
+	{
+		return redirect()->route('auth.redirect');
+	}
+
 	public function redirectToSteam()
 	{
 		return $this->steam->redirect();
