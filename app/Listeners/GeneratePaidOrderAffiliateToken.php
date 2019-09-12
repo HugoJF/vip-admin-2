@@ -25,7 +25,9 @@ class GeneratePaidOrderAffiliateToken
 
 		$affiliate = $client->referrer;
 
-		if ($affiliate) {
+		$fromToken = Token::whereOrderId($order)->exists();
+
+		if ($affiliate && !$fromToken) {
 			$token = Token::make();
 
 			$token->id = random_id(20);
