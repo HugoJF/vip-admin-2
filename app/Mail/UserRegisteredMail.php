@@ -32,7 +32,7 @@ class UserRegisteredMail extends Mailable
 	public function build()
 	{
 		$name = $this->user->name;
-		
+
 		return $this
 			->subject("Usuário $name acabou de registrar!")
 			->markdown('emails.user-registered', ['user' => $this->user]);
