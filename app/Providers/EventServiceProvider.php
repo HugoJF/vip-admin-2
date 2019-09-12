@@ -16,7 +16,7 @@ use App\Listeners\GenerateUserRegisterAffiliateToken;
 use App\Listeners\SendNewAffiliateTokenMail;
 use App\Listeners\SendOrderActivatedMail;
 use App\Listeners\SendOrderCreatedMail;
-use App\Listeners\SendOrderExpiredMail;
+use App\Listeners\SendVipExpiredMail;
 use App\Listeners\SendOrderPaidMail;
 use App\Listeners\SynchronizeServer;
 use Illuminate\Auth\Events\Registered;
@@ -54,7 +54,7 @@ class EventServiceProvider extends ServiceProvider
 			//
 		],
 		VipExpired::class                  => [
-			SendOrderExpiredMail::class,
+			SendVipExpiredMail::class,
 		],
 		NewAffiliateToken::class           => [
 			SendNewAffiliateTokenMail::class,

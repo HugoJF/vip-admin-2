@@ -3,10 +3,10 @@
 namespace App\Listeners;
 
 use App\Events\VipExpired;
-use App\Mail\OrderExpiredMail;
+use App\Mail\VipExpiredMail;
 use Illuminate\Support\Facades\Mail;
 
-class SendOrderExpiredMail
+class SendVipExpiredMail
 {
 	/**
 	 * Create the event listener.
@@ -31,6 +31,6 @@ class SendOrderExpiredMail
 		$user = $order->user;
 
 		if ($user->email)
-			Mail::to($user->email)->send(new OrderExpiredMail());
+			Mail::to($user->email)->send(new VipExpiredMail());
 	}
 }

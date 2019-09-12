@@ -17,7 +17,7 @@
 |--------------------------------------------------------------------------
 */
 Route::get('email', function () {
-	return new \App\Mail\OrderExpiredMail();
+	return new \App\Mail\VipExpiredMail();
 });
 
 /*

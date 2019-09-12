@@ -7,7 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class OrderExpiredMail extends Mailable
+class VipExpiredMail extends Mailable
 {
 	use Queueable, SerializesModels;
 
@@ -30,6 +30,6 @@ class OrderExpiredMail extends Mailable
 	{
 		return $this
 			->subject('Seu VIP expirou :(')
-			->markdown('emails.order-expired-mail');
+			->markdown('emails.vip-expired-mail');
 	}
 }
