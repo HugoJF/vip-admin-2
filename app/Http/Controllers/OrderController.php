@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Classes\PaymentSystem;
 use App\Events\OrderCreated;
 use App\Exceptions\InvalidOrderDurationException;
-use App\Exceptions\OrderAlreadyActivated;
-use App\Exceptions\OrderCanceled;
+use App\Exceptions\OrderAlreadyActivatedException;
+use App\Exceptions\OrderCanceledException;
 use App\Exceptions\OrderNotPaidException;
 use App\Http\Requests\OrderStoreRequest;
 use App\Order;
@@ -84,17 +84,17 @@ class OrderController extends Controller
 	 * @param Order        $order
 	 *
 	 * @return \Illuminate\Http\RedirectResponse
-	 * @throws OrderAlreadyActivated
-	 * @throws OrderCanceled
+	 * @throws OrderAlreadyActivatedException
+	 * @throws OrderCanceledException
 	 * @throws OrderNotPaidException
 	 */
 	public function activate(OrderService $service, Order $order)
 	{
 		if ($order->canceled)
-			throw new OrderCanceled();
+			throw new OrderCanceledException();
 
 		if ($order->activated)
-			throw new OrderAlreadyActivated();
+			throw new OrderAlreadyActivatedException();
 
 		if (!$order->paid)
 			throw new OrderNotPaidException();

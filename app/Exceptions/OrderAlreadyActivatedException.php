@@ -2,7 +2,7 @@
 
 namespace App\Exceptions;
 
-class OrderAlreadyActivated extends FlashException
+class OrderAlreadyActivatedException extends FlashException
 {
 	public function flash()
 	{

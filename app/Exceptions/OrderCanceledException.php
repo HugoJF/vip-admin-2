@@ -4,7 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 
-class OrderCanceled extends FlashException
+class OrderCanceledException extends FlashException
 {
 	public function flash()
 	{
