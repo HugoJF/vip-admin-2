@@ -12,8 +12,8 @@
             <div class="flex justify-center">
                 {{--<Spinner class="h-16 w-16"/>--}}
                 <div class="btn-group btn-group-lg">
-                    <button name="auto-activate" value="1" class="btn btn-primary">Sim, manter ativado</button>
-                    <button name="auto-activate" value="0" class="btn btn-outline-secondary">Não, desativar</button>
+                    <button name="auto-activates" value="1" class="btn btn-primary">Sim, manter ativado</button>
+                    <button name="auto-activates" value="0" class="btn btn-outline-secondary">Não, desativar</button>
                 </div>
             </div>
             {!! Form::close() !!}

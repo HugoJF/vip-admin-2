@@ -8,7 +8,7 @@ Detalhes do pedido:
 
 **Duração:** {{ $order->duration }} dias
 
-**Auto-ativação:** {{ $order->auto_activate ? 'Sim' : 'Não' }}
+**Auto-ativação:** {{ $order->auto_activates ? 'Sim' : 'Não' }}
 @endcomponent
 
 @component('vendor.mail.html.button-group')

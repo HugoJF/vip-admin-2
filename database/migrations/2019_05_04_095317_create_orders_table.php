@@ -39,7 +39,7 @@ class CreateOrdersTable extends Migration
 			// If order was canceled (manually set)
 			$table->boolean('canceled')->default(false);
 			// If owner set automatic activation
-			$table->boolean('auto_activate')->default(false);
+			$table->boolean('auto_activates')->default(false);
 			// How many times we had to recheck the order
 			$table->unsignedInteger('recheck_attempts')->default(0);
 

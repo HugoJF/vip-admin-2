@@ -9,12 +9,12 @@ Detalhes do pedido:
 **Duração:** {{ $order->duration }} dias
 @endcomponent
 
-@if(!$order->auto_activate)
+@if(!$order->auto_activates)
 Para ativar seu pedido, clique no botão abaixo para ser redirecionado para nossa plataforma.
 @endif
 
 @component('vendor.mail.html.button-group')
-@if(!$order->auto_activate)
+@if(!$order->auto_activates)
 @component('vendor.mail.html.basic-button', ['color' => 'success', 'url' => route('orders.show', $order)])
 Ativar
 @endcomponent

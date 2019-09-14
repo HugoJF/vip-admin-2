@@ -12,7 +12,7 @@ class OrderForm extends Form
 		$this->add('ends_at', 'datetimepicker');
 		$this->add('paid', 'checkbox');
 		$this->add('canceled', 'checkbox');
-		$this->add('auto_activate', 'checkbox');
+		$this->add('auto_activates', 'checkbox');
 		$this->add('recheck_attempts', 'number');
 	}
 }

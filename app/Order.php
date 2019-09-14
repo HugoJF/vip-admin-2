@@ -28,7 +28,7 @@ class Order extends Model
 			'orders.duration'      => 20,
 			'orders.paid'          => 10,
 			'orders.canceled'      => 10,
-			'orders.auto_activate' => 10,
+			'orders.auto_activates'=> 10,
 			'users.email'          => 30,
 			'users.steamid'        => 20,
 			'users.username'       => 20,
