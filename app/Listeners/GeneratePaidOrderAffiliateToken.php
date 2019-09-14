@@ -31,7 +31,7 @@ class GeneratePaidOrderAffiliateToken
 			$token = Token::make();
 
 			$token->id = random_id(20);
-			$token->duration = round($order->duration / 2);
+			$token->duration = round($order->duration * $affiliate->affiliate_order_ratio);
 			$token->note = "Token de afiliado gerado pelo pedido $order->id";
 			$token->user()->associate($affiliate);
 			$token->reason()->associate($order);

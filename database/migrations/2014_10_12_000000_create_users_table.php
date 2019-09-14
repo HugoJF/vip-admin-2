@@ -39,6 +39,10 @@ class CreateUsersTable extends Migration
 			$table->boolean('affiliate')->default(false);
 			// Affiliation code that is used on referral URLs
 			$table->string('affiliate_code')->unique()->nullable();
+			// How many days the affiliate receives when someone register using his code
+			$table->unsignedInteger('affiliate_register_duration')->default(5);
+			// The ratio that the affiliate will receive when someone pays an order with his code
+			$table->float('affiliate_order_ratio')->default(0.5);
 
 			// Who referred user
 			$table->unsignedInteger('referrer_id')->references('id')->in('users')->nullable();

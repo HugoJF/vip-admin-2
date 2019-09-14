@@ -11,16 +11,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 class GenerateUserRegisterAffiliateToken
 {
 	/**
-	 * Create the event listener.
-	 *
-	 * @return void
-	 */
-	public function __construct()
-	{
-		//
-	}
-
-	/**
 	 * Handle the event.
 	 *
 	 * @param  Registered $event
@@ -37,7 +27,7 @@ class GenerateUserRegisterAffiliateToken
 			$token = Token::make();
 
 			$token->id = random_id(5);
-			$token->duration = 7;
+			$token->duration = $affiliate->affiliate_register_duration;
 			$token->note = "Token de afiliado gerado pelo registro de $client->username";
 			$token->user()->associate($affiliate);
 			$token->reason()->associate($client);
