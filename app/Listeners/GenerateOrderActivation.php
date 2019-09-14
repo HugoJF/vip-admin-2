@@ -4,22 +4,13 @@ namespace App\Listeners;
 
 use App\Events\OrderActivated;
 use App\Events\OrderPaid;
+use App\Services\OrderService;
 use Carbon\Carbon;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class GenerateOrderActivation
 {
-    /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
 	/**
 	 * Handle the event.
 	 *
@@ -33,11 +24,10 @@ class GenerateOrderActivation
 
     	// Only active order is auto-activation is enabled
     	if($order->auto_activates) {
-    		// TODO: this does not exists anymore
-    		$order->activate();
-    		$order->save();
+    		/** @var OrderService $service */
+    		$service = app(OrderService::class);
 
-    		event(new OrderActivated($order));
+    		$service->activateOrder($order);
 		}
     }
 }
