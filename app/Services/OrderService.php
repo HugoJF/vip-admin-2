@@ -14,6 +14,7 @@ use App\Exceptions\InvalidSteamIdException;
 use App\Order;
 use App\Product;
 use App\User;
+use Illuminate\Support\Facades\Log;
 
 class OrderService
 {
@@ -34,8 +35,11 @@ class OrderService
 
 		$response = $paymentSystem->createOrder($details);
 
-		if ($response->status !== 201)
-			dd($response); // TODO: improve
+		if ($response->status !== 201) {
+			dd($response); 
+			Log::error('Invalid PaymentSystem response', compact('response'));
+			throw new \Exception('Invalid PaymentSystem response');
+		}
 
 		$response = $response->content;
 
