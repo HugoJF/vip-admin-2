@@ -8,12 +8,21 @@
 
 namespace App\Alerts;
 
+use App\User;
+
 class AgreedToTerms extends Alert
 {
+	protected $enforcing;
+
+	public function __construct(User $user)
+	{
+		parent::__construct($user);
+		$this->enforcing = config('vip-admin.enforce-terms', false);
+	}
 
 	public function triggered()
 	{
-		return $this->user->terms !== true;
+		return $this->enforcing && $this->user->terms !== true;
 	}
 
 	public function getMessage()

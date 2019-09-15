@@ -17,7 +17,9 @@ class AgreedWithTerms
 	 */
 	public function handle($request, Closure $next)
 	{
-		if (Auth::check() && Auth::user()->terms === true) {
+		$enforcing = config('vip-admin.enforce-terms', false);
+
+		if (!$enforcing || Auth::check() && Auth::user()->terms === true) {
 			return $next($request);
 		} else {
 			flash()->error('Você ainda não revisou e concordou com os termos!');

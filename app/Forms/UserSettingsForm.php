@@ -10,7 +10,9 @@ class UserSettingsForm extends Form
 	{
 		$this->add('tradelink', 'text');
 		$this->add('email', 'text');
-		$this->add('terms', 'checkbox');
+
+		if (config('vip-admin.enforce-terms', false))
+			$this->add('terms', 'checkbox');
 
 		$user = $this->getData('user');
 		if ($user && $user->affiliate)
