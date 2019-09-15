@@ -24,7 +24,7 @@ class OrderController extends Controller
 
 		$query = $user->admin ? Order::query() : $user->orders();
 
-		$orders = $query->with(['user'])->latest()->get();
+		$orders = $query->with(['user'])->latest()->paginate(50);
 
 		return view('orders.index', compact('orders'));
 	}
