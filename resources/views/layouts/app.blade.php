@@ -75,16 +75,21 @@
                                 $vip = auth()->user()->currentVip();
                             @endphp
                             <div class="flex items-center justify-around">
-                                @if($vip > 14)
-                                    <span class="badge badge-success">{{ $vip }} dias restantes</span>
-                                    <h3>{{ collect(['💥', '🤩', '😍', '😏', '🤗', '😎'])->random() }}</h3>
-                                @elseif($vip > 0)
-                                    <span class="badge badge-warning">{{ $vip }} dias restantes</span>
-                                    <h3>{{ collect(['😁', '🙂', '😬', '👌', '🤔'])->random() }}</h3>
+                                @admin
+                                    @if($vip > 14)
+                                        <span class="badge badge-success">{{ $vip }} dias restantes</span>
+                                        <h3>{{ collect(['💥', '🤩', '😍', '😏', '🤗', '😎'])->random() }}</h3>
+                                    @elseif($vip > 0)
+                                        <span class="badge badge-warning">{{ $vip }} dias restantes</span>
+                                        <h3>{{ collect(['😁', '🙂', '😬', '👌', '🤔'])->random() }}</h3>
+                                    @else
+                                        <span class="badge badge-danger">Sem VIP</span>
+                                        <h3>{{ collect(['☹', '😭', '😡', '🙄'])->random() }}</h3>
+                                    @endif
                                 @else
-                                    <span class="badge badge-danger">Sem VIP</span>
-                                    <h3>{{ collect(['☹', '😭', '😡', '🙄'])->random() }}</h3>
-                                @endif
+                                    <span class="badge badge-success">Admin</span>
+                                    <h3>😎</h3>
+                                @endadmin
                             </div>
                             <!-- TODO: add VIP status and remaining duration -->
                         </div>
