@@ -88,6 +88,7 @@ class ImportOldData extends Command
 		$order->synced_at = null;
 
 		$order->steamid = null;
+		$order->paid = true;
 
 		$order->canceled = false;
 		$order->reference = null;
