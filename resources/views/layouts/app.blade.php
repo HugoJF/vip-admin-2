@@ -129,7 +129,7 @@
                             <span class="group-hover:text-gray-400">Home</span>
                         </a>
                         <a class="group no-underline" href="#">
-                            <span class="group-hover:text-white" data-feather="help-circle"></span>
+                            <span class="group-hover:text-white" data-toggle="modal" data-target="#homeHelpModal" data-feather="help-circle"></span>
                         </a>
                     </li>
                     
@@ -140,7 +140,7 @@
                             <span class="group-hover:text-gray-400">Pedidos</span>
                         </a>
                         <a class="group no-underline" href="#">
-                            <span class="group-hover:text-white" data-feather="help-circle"></span>
+                            <span class="group-hover:text-white" data-toggle="modal" data-target="#ordersHelpModal" data-feather="help-circle"></span>
                         </a>
                     </li>
                     
@@ -151,7 +151,7 @@
                             <span class="group-hover:text-gray-400">Tokens</span>
                         </a>
                         <a class="group no-underline" href="#">
-                            <span class="group-hover:text-white" data-feather="help-circle"></span>
+                            <span class="group-hover:text-white" data-toggle="modal" data-target="#tokensHelpModal" data-feather="help-circle"></span>
                         </a>
                     </li>
     
@@ -163,7 +163,7 @@
                                 <span class="group-hover:text-gray-400">Usuários</span>
                             </a>
                             <a class="group no-underline" href="#">
-                                <span class="group-hover:text-white" data-feather="help-circle"></span>
+                                <span class="group-hover:text-white" data-toggle="modal" data-target="#usersHelpModal" data-feather="help-circle"></span>
                             </a>
                         </li>
                     @endadmin
@@ -176,7 +176,7 @@
                                 <span class="group-hover:text-gray-400">Afiliados</span>
                             </a>
                             <a class="group no-underline" href="#">
-                                <span class="group-hover:text-white" data-feather="help-circle"></span>
+                                <span class="group-hover:text-white" data-toggle="modal" data-target="#affiliatesHelpModal" data-feather="help-circle"></span>
                             </a>
                         </li>
                     @endaffiliate
@@ -189,7 +189,7 @@
                             <span class="group-hover:text-gray-400">Produtos</span>
                         </a>
                         <a class="group no-underline" href="#">
-                            <span class="group-hover:text-white" data-feather="help-circle"></span>
+                            <span class="group-hover:text-white" data-toggle="modal" data-target="#productsHelpModal" data-feather="help-circle"></span>
                         </a>
                     </li>
                     @endadmin
@@ -202,7 +202,7 @@
                             <span class="group-hover:text-gray-400">Admins</span>
                         </a>
                         <a class="group no-underline" href="#">
-                            <span class="group-hover:text-white" data-feather="help-circle"></span>
+                            <span class="group-hover:text-white" data-toggle="modal" data-target="#adminsHelpModal" data-feather="help-circle"></span>
                         </a>
                     </li>
                     @endadmin
@@ -273,6 +273,17 @@
         </main>
     </main>
 </div>
+
+@stack('modals')
+
+@include('modals.home-help-modal')
+@include('modals.orders-help-modal')
+@include('modals.tokens-help-modal')
+@include('modals.users-help-modal')
+@include('modals.affiliates-help-modal')
+@include('modals.products-help-modal')
+@include('modals.admins-help-modal')
+
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://getbootstrap.com/docs/4.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>

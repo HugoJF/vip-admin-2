@@ -93,8 +93,7 @@ a {
  */
 
 body {
-    @apply trans
-    bg-gray-200 font-sans
+    @apply bg-gray-200 font-sans
 }
 
 h1 {
