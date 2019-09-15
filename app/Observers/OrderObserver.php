@@ -21,6 +21,8 @@ class OrderObserver
 
 	public function creating(Order $order)
 	{
+		if ($order->id)
+			return;
 		$found = false;
 		$id = null;
 
