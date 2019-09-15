@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
-class AgreedWithTerms
+class AgreedToTerms
 {
 	/**
 	 * Handle an incoming request.
