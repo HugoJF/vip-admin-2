@@ -96,34 +96,38 @@ body {
     @apply bg-gray-200 font-sans
 }
 
+p {
+    text-indent: 1rem;
+}
+
 h1 {
     @apply font-thin
-    text-center text-5xl text-gray-800 tracking-wider
+    text-5xl text-gray-800 tracking-wider
 }
 
 h2 {
     @apply font-thin
-    text-center text-3xl text-gray-800 tracking-wider
+    text-3xl text-gray-800 tracking-wider
 }
 
 h3 {
     @apply font-thin
-    text-center text-2xl text-gray-800 tracking-wider
+    text-2xl text-gray-800 tracking-wider
 }
 
 h4 {
     @apply font-thin
-    text-center text-xl text-gray-800 tracking-wider
+    text-xl text-gray-800 tracking-wider
 }
 
 h5 {
     @apply font-thin
-    text-center text-lg text-gray-800 tracking-wider
+    text-lg text-gray-800 tracking-wider
 }
 
 h6 {
     @apply font-thin
-    text-center text-base text-gray-800 tracking-wider
+    text-base text-gray-800 tracking-wider
 }
 
 /**
@@ -350,7 +354,6 @@ h6 {
  * Bootstrap custom CSS
  */
 .sidebar {
-    position: fixed;
     top: 0;
     bottom: 0;
     left: 0;
@@ -359,10 +362,13 @@ h6 {
     box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
 }
 
+@media (min-width: 768px) {
+    .sidebar-sticky {
+        margin-top: 51px; /* Height of navbar */
+    }
+}
+
 .sidebar-sticky {
-    position: absolute;
-    top: 51px; /* Height of navbar */
-    height: calc(100vh - 51px);
     padding-top: .5rem;
     overflow-x: hidden;
     overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */

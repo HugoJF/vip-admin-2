@@ -14,6 +14,9 @@ const tailwindcss = require('tailwindcss');
 
 mix
 // .react('resources/js/app.js', 'public/js')
+    .scripts([
+        'resources/js/responsive-collapse.js',
+    ], 'public/js/app.js')
     .postCss('resources/css/app.css', 'public/css', [
         tailwindcss('./tailwind.config.js'),
     ])
