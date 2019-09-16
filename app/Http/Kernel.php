@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Http\Middleware\Admin;
 use App\Http\Middleware\AgreedToTerms;
+use App\Http\Middleware\ForceHttps;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Tymon\JWTAuth\Http\Middleware\Authenticate;
 use Tymon\JWTAuth\Http\Middleware\Check;
@@ -24,6 +25,7 @@ class Kernel extends HttpKernel
 		\App\Http\Middleware\TrimStrings::class,
 		\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
 		\App\Http\Middleware\TrustProxies::class,
+		ForceHttps::class,
 	];
 
 	/**
