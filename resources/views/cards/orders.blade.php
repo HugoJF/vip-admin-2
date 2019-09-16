@@ -4,9 +4,11 @@
             <span>Pedidos</span>
             <div class="btn-group" role="group">
                 <a class="btn btn-primary btn-sm" href="{{ route('home') }}">Novo pedido</a>
-                @if($viewRoute ?? false)
-                    <a class="btn btn-outline-dark btn-sm" href="{{ route('orders.store') }}">View orders</a>
-                @endif
+                @admin
+                    @if($viewRoute ?? false)
+                        <a class="btn btn-outline-dark btn-sm" href="{{ route('orders.store') }}">View orders</a>
+                    @endif
+                @endadmin
             </div>
         </div>
     @endslot

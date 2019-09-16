@@ -3,7 +3,9 @@
         <div class="d-flex items-center justify-between">
             <span>Tokens</span>
             <div class="btn-group" role="group">
-                <a class="btn btn-primary btn-sm" href="{{ route('tokens.create') }}">Criar token</a>
+                @admin
+                    <a class="btn btn-primary btn-sm" href="{{ route('tokens.create') }}">Criar token</a>
+                @endadmin
                 @if($viewRoute ?? false)
                     <a class="btn btn-outline-dark btn-sm" href="{{ route('tokens.index') }}">View tokens</a>
                 @endif
