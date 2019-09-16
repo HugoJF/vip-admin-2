@@ -58,9 +58,11 @@
                 <!-- Actions -->
                 <td>
                     <div class="btn-group" role="group">
-                        @if(!$token->order)
-                            <a class="btn btn-primary btn-sm" href="#">Edit</a>
-                        @endif
+                        @admin
+                            @if(!$token->order)
+                                <a class="btn btn-primary btn-sm" href="#">Edit</a>
+                            @endif
+                        @endadmin
                     </div>
                 </td>
             </tr>

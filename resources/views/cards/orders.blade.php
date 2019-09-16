@@ -66,7 +66,9 @@
                                 <button class="btn btn-success btn-sm">Ativar</button>
                             @endif
                             <a class="btn btn-outline-primary btn-sm" href="{{ route('orders.show', $order) }}">Detalhe</a>
-                            <a class="btn btn-outline-secondary btn-sm" href="{{ route('orders.edit', $order) }}">Editar</a>
+                            @admin
+                                <a class="btn btn-outline-secondary btn-sm" href="{{ route('orders.edit', $order) }}">Editar</a>
+                            @endadmin
                         </div>
                         {!! Form::close() !!}
                     </td>
