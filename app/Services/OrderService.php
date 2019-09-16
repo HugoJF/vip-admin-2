@@ -35,7 +35,7 @@ class OrderService
 
 		$response = $response->content;
 
-		$order->auto_activates = $data['auto-activates'] === 'true' ? true : false;
+		$order->auto_activates = $data['auto-activates'] === 'true' ?? false;
 		$order->reference = $response->id;
 		$order->init_point = $response->init_point;
 

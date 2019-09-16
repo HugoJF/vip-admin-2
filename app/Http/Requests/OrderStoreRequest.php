@@ -15,7 +15,7 @@ class OrderStoreRequest extends FormRequest
     public function rules()
     {
         return [
-        	'auto-activate' => 'boolean',
+        	'auto-activates' => 'boolean',
         ];
     }
 }

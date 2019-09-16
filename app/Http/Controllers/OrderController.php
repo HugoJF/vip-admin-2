@@ -45,6 +45,7 @@ class OrderController extends Controller
 	 * @param Product           $product
 	 *
 	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+	 * @throws \Exception
 	 */
 	public function store(OrderService $service, OrderStoreRequest $request, Product $product)
 	{
