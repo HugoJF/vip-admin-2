@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <title>@yield('title', 'Home') | Host de_nerdTV</title>
+    <title>@yield('title', 'Home') | VIP Servidores de_nerdTV</title>
     
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
