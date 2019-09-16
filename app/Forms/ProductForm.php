@@ -21,11 +21,10 @@ class ProductForm extends Form
 				'max' => 5000,
 			],
 		]);
-		$this->add('discount', 'number', [
+		$this->add('original_cost', 'number', [
 			'attr' => [
 				'min'  => 0,
-				'max'  => 1,
-				'step' => 0.01,
+				'max'  => 5000,
 			],
 		]);
 		$this->add('description', 'textarea');

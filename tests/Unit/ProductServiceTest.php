@@ -14,14 +14,14 @@ class ProductServiceTest extends TestCase
 		'title'       => 'my product',
 		'duration'    => 30,
 		'cost'        => 1000,
-		'discount'    => 0.3,
+		'original_cost'    => 1200,
 		'description' => 'product description',
 	];
 	protected $updated = [
 		'title'       => 'my new product',
 		'duration'    => 60,
 		'cost'        => 1500,
-		'discount'    => 0.2,
+		'discount'    => 1700,
 		'description' => 'new product description',
 	];
 

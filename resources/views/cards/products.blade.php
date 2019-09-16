@@ -13,7 +13,7 @@
             <th>Title</th>
             <th>Duration</th>
             <th>Cost</th>
-            <th>Discount</th>
+            <th>Original Cost</th>
             <th>Action</th>
         </tr>
         </thead>
@@ -33,13 +33,9 @@
                     <span class="badge badge-primary">R$ {{ number_format($product->cost / 100, 2) }}</span>
                 </td>
                 
-                <!-- Discount -->
+                <!-- Original Cost -->
                 <td>
-                    @if($product->discount > 0)
-                        <span class="badge badge-primary">{{ round($product->discount * 100) }}%</span>
-                    @else
-                        <span class="badge badge-dark">0%</span>
-                    @endif
+                    <span class="badge badge-primary">R$ {{ number_format($product->original_cost / 100, 2) }}</span>
                 </td>
                 
                 <!-- Actions -->

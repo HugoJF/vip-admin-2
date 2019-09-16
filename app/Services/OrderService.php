@@ -61,7 +61,7 @@ class OrderService
 		$details['reason'] = "VIP de $product->duration dias nos servidores de_nerdTV";
 		$details['return_url'] = url("/orders/{$order->id}");
 		$details['cancel_url'] = url("/orders/{$order->id}");
-		$details['preset_amount'] = round($product->cost * (1 - $product->discount));
+		$details['preset_amount'] = $product->cost;
 		$details['reason'] = 'VIP servidores de_nerdTV';
 		$details['product_name_singular'] = 'dia';
 		$details['product_name_plural'] = 'dias';

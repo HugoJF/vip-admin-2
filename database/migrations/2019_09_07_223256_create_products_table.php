@@ -22,8 +22,8 @@ class CreateProductsTable extends Migration
             $table->integer('duration');
             // How many cents it cost
             $table->integer('cost');
-            // Discount percentage
-            $table->float('discount')->default(0);
+            // How many cents it originally cost
+            $table->integer('original_cost');
             // Markdown description
             $table->text('description');
 

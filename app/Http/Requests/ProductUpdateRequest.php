@@ -14,11 +14,11 @@ class ProductUpdateRequest extends FormRequest
 	public function rules()
 	{
 		return [
-			'title'       => 'required|string',
-			'duration'    => 'required|numeric|min:0|max:180',
-			'cost'        => 'required|numeric|min:0',
-			'discount'    => 'required|numeric|min:0|max:1',
-			'description' => 'required|string',
+			'title'         => 'required|string',
+			'duration'      => 'required|numeric|min:0|max:180',
+			'cost'          => 'required|numeric|min:0',
+			'original_cost' => 'required|numeric|min:0',
+			'description'   => 'required|string',
 		];
 	}
 }
