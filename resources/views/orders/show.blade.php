@@ -9,7 +9,9 @@
                 <span>Detalhes</span>
                 <div class="btn-group">
                     <a class="btn btn-primary btn-sm" href="{{ route('orders.gift', $order) }}">Transferir</a>
+                    @admin
                     <a class="btn btn-outline-secondary btn-sm" href="{{ route('orders.edit', $order) }}">Editar</a>
+                    @endadmin
                 </div>
             </div>
         @endslot
