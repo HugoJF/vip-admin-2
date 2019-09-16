@@ -18,14 +18,6 @@ use Illuminate\Support\Facades\Log;
 
 class OrderService
 {
-	public function updateOrder(Order $order, array $values)
-	{
-		// TODO: improve with validator?
-		$order->fill($values + ['paid' => false, 'canceled' => false]);
-
-		$order->save();
-	}
-
 	public function createOrder($user, $data, Product $product)
 	{
 		$paymentSystem = app(PaymentSystem::class);
@@ -86,6 +78,16 @@ class OrderService
 		$details['max_units'] = 90;
 
 		return $details;
+	}
+
+	public function updateOrder(Order $order, array $values)
+	{
+		// TODO: improve with validator?
+		$order->fill($values + ['paid' => false, 'canceled' => false]);
+
+		$order->save();
+
+		return $order;
 	}
 
 	public function activateOrder(Order $order)

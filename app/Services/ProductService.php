@@ -24,5 +24,7 @@ class ProductService
 		$product->fill($values);
 
 		$product->save();
+
+		return $product;
 	}
 }
