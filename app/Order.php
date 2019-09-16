@@ -76,6 +76,11 @@ class Order extends Model
 		return $this->starts_at && $this->ends_at;
 	}
 
+	public function getExpiredAttribute()
+	{
+		return $this->ends_at && $this->ends_at->isPast();
+	}
+
 	public function scopePaid(Builder $query)
 	{
 		return $query->wherePaid(true);

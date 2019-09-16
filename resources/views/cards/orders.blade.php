@@ -43,6 +43,8 @@
                     <td>
                         @if($order->canceled)
                             <span class="badge badge-danger">Cancelado</span>
+                        @elseif($order->expired)
+                            <span class="badge badge-danger">Expirado</span>
                         @elseif($order->paid && $order->activated)
                             <span class="badge badge-success">Ativo</span>
                         @elseif($order->paid)
