@@ -19,6 +19,7 @@
         "laravel/tinker": "^1.0",
         "laravelcollective/html": "^5.8",
         "nicolaslopezj/searchable": "1.*",
+        "sentry/sentry-laravel": "1.2.0",
         "tymon/jwt-auth": "1.0.*",
         "xpaw/steamid": "^1.0"
     },
