@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Pedido <code>#{{ $order->id }}</code></h1>
+    <h1 class="text-center">Pedido <code>#{{ $order->id }}</code></h1>
     <br/>
     @component('partials.card')
         @slot('title')

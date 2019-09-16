@@ -115,6 +115,7 @@
                     @endif
                 @endauth
                 
+                @auth
                 <a class="flex justify-between items-center px-3 mb-4 uppercase font-normal tracking-wider text-gray-700" data-toggle="collapse" href="#menu">
                     <span class="md:hidden" data-feather="menu"></span>
                     <span>Menu</span>
@@ -210,7 +211,7 @@
                         @endadmin
                     </ul>
                 </div>
-                
+                @endauth
                 <a class="flex justify-between items-center px-3 mt-8 mb-4 uppercase font-normal tracking-wider text-gray-700" data-toggle="collapse" href="#links">
                     <span class="md:hidden" data-feather="menu"></span>
                     <span>Links rápidos</span>
