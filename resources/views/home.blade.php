@@ -44,5 +44,5 @@
         @endforeach
     </div>
     
-    <h1 class="font-thin text-center text-5xl text-grey-darkest tracking-wide">VIPs por Skins</h1>
+    {{--<h1 class="font-thin text-center text-5xl text-grey-darkest tracking-wide">VIPs por Skins</h1>--}}
 @endsection
