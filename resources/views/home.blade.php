@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1 class="font-thin text-center text-5xl text-grey-darkest tracking-wide">VIPs por MercadoPago ou PayPal</h1>
+    <h1 class="font-thin text-center text-5xl text-grey-darkest tracking-wide">VIPs por MercadoPago, PayPal ou skins</h1>
     
     <div class="flex flex-wrap justify-center p-8">
         @foreach ($products as $product)
