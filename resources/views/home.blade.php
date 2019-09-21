@@ -4,7 +4,7 @@
     <h1 class="font-thin text-center text-5xl text-grey-darkest tracking-wide">VIPs por MercadoPago, PayPal ou skins</h1>
     
     <div class="flex flex-wrap justify-center p-8">
-        @foreach ($products as $product)
+        @forelse ($products as $product)
             
             <div class="w-full lg:w-1/3 p-4">
                 <div class="flex flex-col text-grey-darkest border border-grey justify-between items-center shadow border-grey-darkest">
@@ -41,7 +41,9 @@
                     </div>
                 </div>
             </div>
-        @endforeach
+        @empty
+            <h2>Atualmente não temos nenhum período para venda! <strong>Isso bem provávelmente é um erro!</strong></h2>
+        @endforelse
     </div>
     
     {{--<h1 class="font-thin text-center text-5xl text-grey-darkest tracking-wide">VIPs por Skins</h1>--}}
