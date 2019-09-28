@@ -20,7 +20,7 @@
                             <h4 class="flex items-baseline text-5xl">
                                 <span class="mr-1 font-light">R$</span>
                                 <span class="font-semibold text-grey-darkest">{{ number_format($product->cost / 100, 2) }}</span>
-                                @if($product->original_cost !==  $product->cost)
+                                @if($product->original_cost >=  $product->cost)
                                     <span class="ml-2 font-normal text-red-700 line-through">{{ number_format($product->original_cost / 100, 2) }}</span>
                                 @endif
                                 {{--<span class="mr-1 font-normal text-xl text-grey-dark">{suffix}</span>--}}

@@ -49,12 +49,12 @@
                 </a>
                 <a href="{{ route('auth.logout') }}" class="trans flex flex-grow justify-center items-center p-3 no-underline text-gray-400 hover:bg-gray-700">
                     <span class="mr-1 inline text-gray-400" data-feather="log-out"></span>
-                    <span>Logout</span>
+                    <span>Sair</span>
                 </a>
             @else
                 <a href="{{ route('auth.redirect') }}" class="trans flex flex-grow justify-center items-center p-3 no-underline text-gray-400 hover:bg-gray-700">
                     <span class="mr-1 inline text-gray-400" data-feather="log-in"></span>
-                    <span>Login</span>
+                    <span>Entrar</span>
                 </a>
             @endauth
         </li>
