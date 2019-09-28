@@ -7,10 +7,10 @@
         @forelse ($products as $product)
             
             <div class="w-full lg:w-1/3 p-4">
-                <div class="flex flex-col text-grey-darkest border border-grey justify-between items-center shadow border-grey-darkest">
+                <div class="flex flex-col bg-gray-100 text-grey-darkest border border-grey justify-between items-center shadow-lg border-grey-darkest">
                     <!-- Title -->
-                    <div class="self-stretch py-3 border-b border-grey bg-grey-lighter">
-                        <h2 class="font-normal text-center text-grey-darkest">{{ $product->title }}</h2>
+                    <div class="self-stretch py-3 border-b border-grey">
+                        <h2 class="font-normal text-center text-gray-900">{{ $product->title }}</h2>
                     </div>
                     
                     <!-- Body -->
