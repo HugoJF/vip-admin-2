@@ -17,17 +17,17 @@
                     <div class="flex flex-col items-center w-100 p-8">
                         <!-- Price -->
                         <div>
-                            <h4 class="flex flex-col justify-center flex-wrap items-baseline text-5xl">
+                            <div class="flex flex-col items-center flex-wrap text-5xl leading-tight">
                                 <div class="flex">
                                     <span class="mr-1 font-light">R$</span>
                                     <span class="font-semibold text-grey-darkest">{{ number_format($product->cost / 100, 2) }}</span>
                                 </div>
                                 @if($product->original_cost >=  $product->cost)
-                                    <div class="w-100 flex flex-row-reverse">
+                                    <div class="flex">
                                         <span class="mr-1 font-light text-3xl text-red-700 opacity-50 line-through">R${{ number_format($product->original_cost / 100, 2) }}</span>
                                     </div>
                                 @endif
-                            </h4>
+                            </div>
                         </div>
                         
                         <!-- Details -->
