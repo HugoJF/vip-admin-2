@@ -23,7 +23,7 @@ class RecheckPendingOrders implements ShouldQueue
 	 */
 	public function __construct()
 	{
-		$this->waitingPeriods = config('payment-system.rechecking_periods');
+		$this->waitingPeriods = config('payment-system.rechecking-periods');
 	}
 
 	/**
@@ -33,7 +33,7 @@ class RecheckPendingOrders implements ShouldQueue
 	 */
 	public function handle()
 	{
-		$pendingOrders = Order::wherePaid(false)->get();
+		$pendingOrders = Order::wherePaid(false)->valid()->get();
 
 		Log::info("Found {$pendingOrders->count()} pending orders...");
 
