@@ -15,7 +15,7 @@
             <th>Nome</th>
             <th>Tradelink</th>
             <th>Email</th>
-            <th>Pedidos</th>
+            <th>Pedidos <small>(pagos/total)</small></th>
             <th>Cargo</th>
             <th>Created at</th>
             <th>Actions</th>
@@ -41,14 +41,16 @@
                 <!-- Email -->
                 <td>
                     @if($user->email)
-                        <span class="badge badge-dark">✔</span>
+                        <span>✔</span>
                     @else
                         <span class="badge badge-danger">N/A</span>
                     @endif
                 </td>
                 
                 <!-- Pedidos -->
-                <td><span class="badge badge-primary">{{ $user->orders()->count() }}</span></td>
+                <td>
+                    <span class="badge badge-primary">{{ $user->orders()->paid()->count() }} / {{ $user->orders()->count() }}</span>
+                </td>
                 
                 <!-- Cargo -->
                 <td>
@@ -60,7 +62,7 @@
                 </td>
                 
                 <!-- Created at -->
-                <td>{{ $user->created_at->diffForHumans() }}</td>
+                <td><span title="{{ $user->created_at }}">{{ $user->created_at->diffForHumans() }}</span></td>
                 
                 <!-- Actions -->
                 <td>
