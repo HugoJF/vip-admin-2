@@ -17,7 +17,7 @@ class UserController extends Controller
 		return view('users.index', compact('users'));
 	}
 
-	public function admin(UserService $service, User $user)
+	public function toggleAdmin(UserService $service, User $user)
 	{
 		$service->toggleAdmin($user);
 
@@ -25,6 +25,18 @@ class UserController extends Controller
 			flash()->success("<strong>$user->username</strong> promovido para administrador!");
 		else
 			flash()->success("<strong>$user->username</strong> removido dos administradores");
+
+		return back();
+	}
+
+	public function toggleAffiliate(UserService $service, User $user)
+	{
+		$service->toggleAffiliate($user);
+
+		if ($user->affiliate)
+			flash()->success("<strong>$user->username</strong> adicionado para lista de afiliados");
+		else
+			flash()->success("<strong>$user->username</strong> removido da lista de afiliados");
 
 		return back();
 	}

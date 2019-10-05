@@ -22,6 +22,15 @@ class UserService
 		return $user;
 	}
 
+	public function toggleAffiliate(User $user)
+	{
+		$user->affiliate = !$user->affiliate;
+
+		$user->save();
+
+		return $user;
+	}
+
 	public function getOrderBasePoint(User $user)
 	{
 		$lastOrder = $user->orders()->where('canceled', false)->whereNotNull('ends_at')->orderBy('ends_at', 'DESC')->first();

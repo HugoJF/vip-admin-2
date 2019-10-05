@@ -66,9 +66,14 @@
                 
                 <!-- Actions -->
                 <td>
-                    {!! Form::open(['url' => route('users.admin', $user), 'method' => 'PATCH']) !!}
+                    {!! Form::open(['url' => route('users.admin', $user), 'method' => 'PATCH', 'style' => 'display: inline-block']) !!}
                     <div class="btn-group" role="group">
                         <button class="btn btn-primary btn-sm">Toggle admin</button>
+                    </div>
+                    {!! Form::close() !!}
+                    {!! Form::open(['url' => route('users.affiliate', $user), 'method' => 'PATCH', 'style' => 'display: inline-block']) !!}
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-primary btn-sm">Toggle affiliate</button>
                     </div>
                     {!! Form::close() !!}
                 </td>
