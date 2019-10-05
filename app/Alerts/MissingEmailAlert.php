@@ -28,6 +28,6 @@ class MissingEmailAlert extends Alert
 
 	public function getUrl()
 	{
-		return '#';
+		return route('settings');
 	}
 }

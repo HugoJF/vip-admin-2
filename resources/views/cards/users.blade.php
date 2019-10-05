@@ -14,6 +14,7 @@
         <tr>
             <th>Nome</th>
             <th>Tradelink</th>
+            <th>Email</th>
             <th>Pedidos</th>
             <th>Cargo</th>
             <th>Created at</th>
@@ -32,6 +33,15 @@
                 <td>
                     @if($user->tradelink)
                         <a class="badge badge-dark" href="{{ $user->tradelink }}">Tradelink</a>
+                    @else
+                        <span class="badge badge-danger">N/A</span>
+                    @endif
+                </td>
+                
+                <!-- Email -->
+                <td>
+                    @if($user->email)
+                        <span class="badge badge-dark">✔</span>
                     @else
                         <span class="badge badge-danger">N/A</span>
                     @endif

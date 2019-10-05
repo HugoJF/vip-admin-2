@@ -28,6 +28,6 @@ class MissingTradeLinkAlert extends Alert
 
 	public function getUrl()
 	{
-		return '#';
+		return route('settings');
 	}
 }
