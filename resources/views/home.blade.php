@@ -45,7 +45,7 @@
                 </div>
             </div>
         @empty
-            <h2>Atualmente não temos nenhum período para venda! <strong>Isso bem provávelmente é um erro!</strong></h2>
+            <h2>Atualmente não temos nenhum período para venda! <strong>Isso bem provavelmente é um erro!</strong></h2>
         @endforelse
     </div>
     
