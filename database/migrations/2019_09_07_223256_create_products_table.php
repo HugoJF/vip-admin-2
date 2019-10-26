@@ -26,6 +26,8 @@ class CreateProductsTable extends Migration
             $table->integer('original_cost');
             // Markdown description
             $table->text('description');
+            // User filter to enable product
+            $table->string('filter')->nullable();
 
             $table->timestamps();
         });

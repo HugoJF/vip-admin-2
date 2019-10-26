@@ -14,6 +14,7 @@
             <th>Duration</th>
             <th>Cost</th>
             <th>Original Cost</th>
+            <th>Filter</th>
             <th>Action</th>
         </tr>
         </thead>
@@ -36,6 +37,11 @@
                 <!-- Original Cost -->
                 <td>
                     <span class="badge badge-primary">R$ {{ number_format($product->original_cost / 100, 2) }}</span>
+                </td>
+                
+                <!-- Filter -->
+                <td>
+                    <code>{{ $product->filter }}</code>
                 </td>
                 
                 <!-- Actions -->

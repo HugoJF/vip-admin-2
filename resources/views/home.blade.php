@@ -6,6 +6,10 @@
     <div class="flex flex-wrap justify-center p-8">
         @forelse ($products as $product)
             
+            @if($product->filtered())
+                @continue
+            @endif
+            
             <div class="w-full lg:w-1/3 p-4">
                 <div class="flex flex-col bg-gray-100 text-grey-darkest border border-grey justify-between items-center shadow-lg border-grey-darkest">
                     <!-- Title -->

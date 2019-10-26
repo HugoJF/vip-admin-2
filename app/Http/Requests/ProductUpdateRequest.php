@@ -19,6 +19,7 @@ class ProductUpdateRequest extends FormRequest
 			'cost'          => 'required|numeric|min:0',
 			'original_cost' => 'required|numeric|min:0',
 			'description'   => 'required|string',
+			'filter'        => 'string',
 		];
 	}
 }

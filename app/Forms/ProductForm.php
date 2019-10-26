@@ -38,5 +38,9 @@ class ProductForm extends Form
 			'label'      => 'Descrição do VIP',
 			'help_block' => $this->buildHelpBlock('Descrição do <i>card</i> do VIP'),
 		]);
+		$this->add('filter', 'text', [
+			'label'      => 'Filtro',
+			'help_block' => $this->buildHelpBlock('Filtro para que o produto seja visível'),
+		]);
 	}
 }
