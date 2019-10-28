@@ -18,8 +18,8 @@ class ProductStoreRequest extends FormRequest
 			'duration'      => 'required|numeric|min:0|max:180',
 			'cost'          => 'required|numeric|min:0',
 			'original_cost' => 'required|numeric|min:0',
-			'description'   => 'string',
-			'filter'        => 'string',
+			'description'   => 'nullable|string',
+			'filter'        => 'nullable|string',
 		];
 	}
 }
