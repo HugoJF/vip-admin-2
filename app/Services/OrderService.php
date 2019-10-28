@@ -9,11 +9,14 @@
 namespace App\Services;
 
 use App\Classes\PaymentSystem;
+use App\Coupon;
 use App\Events\OrderActivated;
+use App\Exceptions\InvalidCouponException;
 use App\Exceptions\InvalidSteamIdException;
 use App\Order;
 use App\Product;
 use App\User;
+use Exception;
 use Illuminate\Support\Facades\Log;
 
 class OrderService
@@ -21,15 +24,29 @@ class OrderService
 	public function createOrder($user, $data, Product $product)
 	{
 		$paymentSystem = app(PaymentSystem::class);
+		$couponService = app(CouponService::class);
 
 		$order = $this->createEmptyOrder($user, $product->duration);
-		$details = $this->buildOrderDetails($order, $user, $product);
+
+		$coupon = false;
+
+		if (array_key_exists('coupon', $data) && $data['coupon']) {
+			$coupon = $couponService->findCoupon($data['coupon']);
+			if (!$coupon) {
+				throw new InvalidCouponException($data['coupon']);
+			} else {
+				$coupon->order_id = $order->id;
+				$coupon->save();
+			}
+		}
+
+		$details = $this->buildOrderDetails($order, $user, $product, $coupon);
 
 		$response = $paymentSystem->createOrder($details);
 
 		if ($response->status !== 201) {
 			Log::error('Invalid PaymentSystem response', compact('response'));
-			throw new \Exception('Invalid PaymentSystem response');
+			throw new Exception('Invalid PaymentSystem response');
 		}
 
 		$response = $response->content;
@@ -55,12 +72,16 @@ class OrderService
 		return $order;
 	}
 
-	public function buildOrderDetails(Order $order, User $user, Product $product)
+	public function buildOrderDetails(Order $order, User $user, Product $product, $coupon)
 	{
+		$ratio = 1;
+		if ($coupon instanceof Coupon)
+			$ratio = 1 - $coupon->discount;
+
 		$details['reason'] = "VIP de $product->duration dias nos servidores de_nerdTV";
 		$details['return_url'] = url("/orders/{$order->id}");
 		$details['cancel_url'] = url("/orders/{$order->id}");
-		$details['preset_amount'] = $product->cost;
+		$details['preset_amount'] = round($product->cost * $ratio);
 		$details['reason'] = 'VIP servidores de_nerdTV';
 		$details['product_name_singular'] = 'dia';
 		$details['product_name_plural'] = 'dias';

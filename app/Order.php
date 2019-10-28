@@ -23,18 +23,18 @@ class Order extends Model
 		 * @var array
 		 */
 		'columns' => [
-			'orders.id'            => 30,
-			'orders.reference'     => 30,
-			'orders.duration'      => 20,
-			'orders.paid'          => 10,
-			'orders.canceled'      => 10,
-			'orders.auto_activates'=> 10,
-			'users.email'          => 30,
-			'users.steamid'        => 20,
-			'users.username'       => 20,
-			'users.name'           => 20,
-			'users.tradelink'      => 10,
-			'users.admin'          => 10,
+			'orders.id'             => 30,
+			'orders.reference'      => 30,
+			'orders.duration'       => 20,
+			'orders.paid'           => 10,
+			'orders.canceled'       => 10,
+			'orders.auto_activates' => 10,
+			'users.email'           => 30,
+			'users.steamid'         => 20,
+			'users.username'        => 20,
+			'users.name'            => 20,
+			'users.tradelink'       => 10,
+			'users.admin'           => 10,
 		],
 		'joins'   => [
 			'users' => ['orders.user_id', 'users.id'],
@@ -71,6 +71,11 @@ class Order extends Model
 		return $this->morphOne(Token::class, 'reason');
 	}
 
+	public function coupon()
+	{
+		return $this->hasOne(Coupon::class);
+	}
+
 	public function getActivatedAttribute()
 	{
 		return $this->starts_at && $this->ends_at;
@@ -100,6 +105,7 @@ class Order extends Model
 	{
 		return $query->where('ends_at', '>', Carbon::now());
 	}
+
 	public function scopeExpired(Builder $query)
 	{
 		return $query->where('ends_at', '<', Carbon::now());
@@ -134,7 +140,7 @@ class Order extends Model
 			->notExpired()
 			->synced();
 	}
-	
+
 	public function recheck()
 	{
 		$paymentSystem = new PaymentSystem();

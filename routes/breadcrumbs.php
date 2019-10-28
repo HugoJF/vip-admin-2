@@ -116,3 +116,21 @@ Breadcrumbs::for ('users.index', function ($trail) {
 	$trail->parent('home');
 	$trail->push('Usuários', route('users.index'));
 });
+
+// Coupons
+Breadcrumbs::for ('coupons.index', function ($trail) {
+	$trail->parent('home');
+	$trail->push('Cupons', route('coupons.index'));
+});
+
+// Coupons > Create
+Breadcrumbs::for ('coupons.create', function ($trail) {
+	$trail->parent('coupons.index');
+	$trail->push('Criando cupom', route('coupons.create'));
+});
+
+// Coupons > Create
+Breadcrumbs::for ('coupons.edit', function ($trail, $coupon) {
+	$trail->parent('coupons.index');
+	$trail->push("Editando cupom {$coupon->code}", route('coupons.edit', $coupon));
+});

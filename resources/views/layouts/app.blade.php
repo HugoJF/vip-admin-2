@@ -183,8 +183,8 @@
                             </a>
                         </li>
                         @endaffiliate
-                    
-                    <!-- Produtos -->
+    
+                        <!-- Produtos -->
                         @admin
                         <li class="flex justify-between my-2 ml-3">
                             <a href="{{ route('products.index') }}" class="flex items-center text-gray-500 no-underline text-base group">
@@ -196,8 +196,21 @@
                             </a>
                         </li>
                         @endadmin
-                    
-                    <!-- Admins -->
+    
+                        <!-- Cupons -->
+                        @admin
+                        <li class="flex justify-between my-2 ml-3">
+                            <a href="{{ route('coupons.index') }}" class="flex items-center text-gray-500 no-underline text-base group">
+                                <span class="group-hover:text-white" data-feather="percent"></span>
+                                <span class="group-hover:text-gray-400">Cupons</span>
+                            </a>
+                            <a class="group no-underline" href="#">
+                                <span class="group-hover:text-white" data-toggle="modal" data-target="#couponsHelpModal" data-feather="help-circle"></span>
+                            </a>
+                        </li>
+                        @endadmin
+    
+                        <!-- Admins -->
                         @admin
                         <li class="flex justify-between my-2 ml-3">
                             <a href="{{ route('admins.index') }}" class="flex items-center text-gray-500 no-underline text-base group">
