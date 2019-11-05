@@ -128,7 +128,7 @@ Route::middleware(['admin'])->group(function () {
 	Route::get('admins/create', 'AdminController@create')->name('admins.create')->middleware('can:store,App\Admin');
 	Route::get('admins/{admin}/edit', 'AdminController@edit')->name('admins.edit')->middleware('can:update,admin');
 
-	Route::post('admins', 'AdminController@store')->name('admins.store')->middleware('can:store,admin');
+	Route::post('admins', 'AdminController@store')->name('admins.store')->middleware('can:store,App\Admin');
 
 	Route::patch('admins/{admin}', 'AdminController@update')->name('admins.update')->middleware('can:update,admin');
 
