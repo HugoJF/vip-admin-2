@@ -96,10 +96,10 @@ class SynchronizeServer implements ShouldQueue
 
 	private function fetchCurrentDatabase()
 	{
-		$existing = DB::connection('sm_admins')->table('sm_admins')->select('identity')->get()->unique('identity');
+		$existing = DB::connection('sm_admins')->table('sm_admins')->select(['identity', 'flags'])->get()->unique('identity');
 
 		return $existing->mapWithKeys(function ($r) {
-			return [$r->identity => $r->identity];
+			return [$r->identity => $r->flags];
 		});
 	}
 
@@ -109,7 +109,6 @@ class SynchronizeServer implements ShouldQueue
 		$adms = $this->mapAdminsToInfo($admins)->toArray();
 
 		$inter = array_intersect_key($vips, $adms);
-
 		$result = array_merge($vips, $adms);
 
 		foreach ($inter as $id => $flag) {
@@ -119,12 +118,28 @@ class SynchronizeServer implements ShouldQueue
 		$current = $this->fetchCurrentDatabase()->toArray();
 
 		$pending = array_diff_key($result, $current);
+		$update = array_diff_ukey($result, $current, function ($a, $b) {
+			return strcmp($a, $b);
+		});
 		$expired = array_diff_key($current, $result);
 
-		$this->addAdmins($pending);
+		$this->updateAdmins($update);
 		$this->removeAdmins($expired);
+		$this->addAdmins($pending);
 	}
 
+	private function updateAdmins($data)
+	{
+		foreach ($data as $id => $d) {
+			$this->updateAdmin($id, $d['username'], $d['flags']);
+		}
+	}
+	private function updateAdmin($steamid, $username, $flag): void
+	{
+		DB::connection('sm_admins')->table('sm_admins')->where('identity', $steamid)->update([
+			'flags'    => $flag,
+		]);
+	}
 	private function addAdmins($data)
 	{
 		foreach ($data as $id => $d) {
