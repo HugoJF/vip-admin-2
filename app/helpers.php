@@ -1,5 +1,20 @@
 <?php
 
+if (!function_exists('merge_sm_flags')) {
+	function merge_sm_flags(...$args)
+	{
+		$mergedFlags = [];
+		foreach ($args as $arg) {
+			$flags = str_split($arg);
+			foreach ($flags as $flag) {
+				$mergedFlags[ $flag ] = 1;
+			}
+		}
+
+		return join(array_keys($mergedFlags));
+	}
+}
+
 if (!function_exists('random_id')) {
 	function random_id($length)
 	{

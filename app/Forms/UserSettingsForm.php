@@ -28,5 +28,10 @@ class UserSettingsForm extends Form
 				'label'      => 'Código de afiliado',
 				'help_block' => $this->buildHelpBlock('Código que será utilizado no seu link de afiliado. Exemplo: <strong>' . route('affiliate', 'seucodigoaqui') . '</strong>'),
 			]);
+
+		$this->add('hidden_tag', 'checkbox', [
+			'label'      => 'Remover tags ',
+			'help_block' => $this->buildHelpBlock('Remover as tags do <i>scoreboard</i> e do <i>chat</i>.'),
+		]);
 	}
 }

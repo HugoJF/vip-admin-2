@@ -18,6 +18,7 @@ class UserSettingsUpdateRequest extends FormRequest
 			'tradelink'      => 'string',
 			'name'           => 'string',
 			'terms'          => 'boolean',
+			'hidden_tag'     => 'boolean',
 			'affiliate_code' => 'string|min:3|max:50',
 		];
 	}

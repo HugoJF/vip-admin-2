@@ -18,7 +18,7 @@ class SynchronizeServer implements ShouldQueue
 	/**
 	 * Handle the event.
 	 *
-	 * @param  object $event
+	 * @param object $event
 	 *
 	 * @return void
 	 */
@@ -73,9 +73,13 @@ class SynchronizeServer implements ShouldQueue
 		return $orders->mapWithKeys(function ($order) {
 			$id = $order->steamid ?? $order->user->steamid;
 
+			$flags = config('vip-admin.vip-flag', 'a');
+			if ($order->user->hidden_flags)
+				$flags .= config('vip-admin.hidden-flags-flag', 'o');
+
 			return [steamid2($id) => [
 				'username' => $order->user->username,
-				'flags'     => config('vip-admin.vip-flag', 'a'),
+				'flags'    => $flags,
 			]];
 		});
 	}
@@ -85,7 +89,7 @@ class SynchronizeServer implements ShouldQueue
 		return $admins->mapWithKeys(function (Admin $admin) {
 			return [steamid2($admin->steamid) => [
 				'username' => $admin->username,
-				'flags'     => $admin->flags,
+				'flags'    => $admin->flags,
 			]];
 		});
 	}
@@ -104,7 +108,13 @@ class SynchronizeServer implements ShouldQueue
 		$vips = $this->mapOrdersToInfo($currentOrders);
 		$adms = $this->mapAdminsToInfo($admins);
 
+		$inter = array_intersect_key($vips, $adms);
+
 		$result = array_merge($vips->toArray(), $adms->toArray());
+
+		foreach ($inter as $id => $flag) {
+			$result[ $id ] = merge_sm_flags($vips[ $id ], $adms[ $id ]);
+		}
 
 		$current = $this->fetchCurrentDatabase()->toArray();
 

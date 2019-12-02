@@ -10,7 +10,7 @@ use Kris\LaravelFormBuilder\FormBuilder;
 
 class UserSettingController extends Controller
 {
-	public function edit(HomeForms $forms, FormBuilder $builder)
+	public function edit(HomeForms $forms)
 	{
 		$user = Auth::user();
 		$form = $forms->settings($user);
@@ -26,7 +26,7 @@ class UserSettingController extends Controller
 	{
 		$user = Auth::user();
 
-		$user->fill($request->validated() + ['terms' => 0]);
+		$user->fill($request->validated() + ['hidden_tag' => 0, 'terms' => 0]);
 
 		$user->save();
 
