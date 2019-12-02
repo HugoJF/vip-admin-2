@@ -20,10 +20,10 @@ class UserSettingsUpdated
 	public $user;
 
 	/**
-     * Create a new event instance.
-     *
-     * @return void
-     */
+	 * Create a new event instance.
+	 *
+	 * @param User $user
+	 */
     public function __construct(User $user)
     {
     	$this->user = $user;

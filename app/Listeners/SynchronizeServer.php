@@ -105,12 +105,12 @@ class SynchronizeServer implements ShouldQueue
 
 	private function updateDatabase($currentOrders, $admins)
 	{
-		$vips = $this->mapOrdersToInfo($currentOrders);
-		$adms = $this->mapAdminsToInfo($admins);
+		$vips = $this->mapOrdersToInfo($currentOrders->toArray());
+		$adms = $this->mapAdminsToInfo($admins->toArray());
 
 		$inter = array_intersect_key($vips, $adms);
 
-		$result = array_merge($vips->toArray(), $adms->toArray());
+		$result = array_merge($vips, $adms);
 
 		foreach ($inter as $id => $flag) {
 			$result[ $id ] = merge_sm_flags($vips[ $id ], $adms[ $id ]);
