@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Events\AdminCreated;
+use App\Events\AdminUpdated;
 use App\Events\ManualServerSynchronization;
 use App\Events\NewAffiliateToken;
 use App\Events\OrderActivated;
@@ -64,6 +65,9 @@ class EventServiceProvider extends ServiceProvider
 			SynchronizeServer::class,
 		],
 		AdminCreated::class                => [
+			SynchronizeServer::class,
+		],
+		AdminUpdated::class                => [
 			SynchronizeServer::class,
 		],
 	];

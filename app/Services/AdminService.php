@@ -10,6 +10,7 @@ namespace App\Services;
 
 use App\Admin;
 use App\Events\AdminCreated;
+use App\Events\AdminUpdated;
 
 class AdminService
 {
@@ -27,6 +28,8 @@ class AdminService
 		$admin->fill($values);
 
 		$admin->save();
+
+		event(new AdminUpdated($admin));
 
 		return $admin;
 	}
