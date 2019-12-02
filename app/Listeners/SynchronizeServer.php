@@ -118,7 +118,7 @@ class SynchronizeServer implements ShouldQueue
 		$current = $this->fetchCurrentDatabase()->toArray();
 
 		$pending = array_diff_key($result, $current);
-		$update = array_diff_ukey($result, $current, function ($a, $b) {
+		$update = array_intersect_ukey($result, $current, function ($a, $b) {
 			return strcmp($a, $b);
 		});
 		$expired = array_diff_key($current, $result);
