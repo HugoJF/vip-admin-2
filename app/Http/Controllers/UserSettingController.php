@@ -27,7 +27,7 @@ class UserSettingController extends Controller
 	{
 		$user = Auth::user();
 
-		$user->fill($request->validated() + ['hidden_tag' => 0, 'terms' => 0]);
+		$user->fill($request->validated() + ['hidden_flags' => 0, 'terms' => 0]);
 
 		$user->save();
 
