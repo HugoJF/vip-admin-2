@@ -9,12 +9,15 @@
 namespace App\Services;
 
 use App\Admin;
+use App\Events\AdminCreated;
 
 class AdminService
 {
 	public function storeAdmin(array $values)
 	{
 		$admin = Admin::create($values);
+
+		event(new AdminCreated($admin));
 
 		return $admin;
 	}

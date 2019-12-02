@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Events\AdminCreated;
 use App\Events\ManualServerSynchronization;
 use App\Events\NewAffiliateToken;
 use App\Events\OrderActivated;
@@ -51,7 +52,7 @@ class EventServiceProvider extends ServiceProvider
 			//
 		],
 		OrderExpired::class                => [
-			//
+			SynchronizeServer::class,
 		],
 		VipExpired::class                  => [
 			SendVipExpiredMail::class,
@@ -60,6 +61,9 @@ class EventServiceProvider extends ServiceProvider
 			SendNewAffiliateTokenMail::class,
 		],
 		ManualServerSynchronization::class => [
+			SynchronizeServer::class,
+		],
+		AdminCreated::class                => [
 			SynchronizeServer::class,
 		],
 	];
