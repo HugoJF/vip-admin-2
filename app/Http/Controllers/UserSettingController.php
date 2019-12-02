@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserSettingsUpdated;
 use App\Http\Requests\UserSettingsUpdateRequest;
 use App\Services\Forms\HomeForms;
 use Illuminate\Http\Request;
@@ -29,6 +30,8 @@ class UserSettingController extends Controller
 		$user->fill($request->validated() + ['hidden_tag' => 0, 'terms' => 0]);
 
 		$user->save();
+
+		event(new UserSettingsUpdated($user));
 
 		flash()->success('Opções de usuários atualizadas!');
 

@@ -11,6 +11,8 @@ namespace App\Services;
 use App\Classes\PaymentSystem;
 use App\Coupon;
 use App\Events\OrderActivated;
+use App\Events\OrderCreated;
+use App\Events\OrderUpdated;
 use App\Exceptions\InvalidCouponException;
 use App\Exceptions\InvalidSteamIdException;
 use App\Order;
@@ -57,7 +59,9 @@ class OrderService
 
 		$order->save();
 
-		return [$order, $response];
+		event(new OrderCreated($order));
+
+		return $response;
 	}
 
 	public function createEmptyOrder(User $user, $duration)
@@ -106,6 +110,8 @@ class OrderService
 		$order->fill($values + ['paid' => false, 'canceled' => false]);
 
 		$order->save();
+
+		event(new OrderUpdated($order));
 
 		return $order;
 	}

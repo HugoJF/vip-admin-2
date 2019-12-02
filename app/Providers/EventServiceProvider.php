@@ -9,6 +9,8 @@ use App\Events\NewAffiliateToken;
 use App\Events\OrderActivated;
 use App\Events\OrderCreated;
 use App\Events\OrderExpired;
+use App\Events\OrderUpdated;
+use App\Events\UserSettingsUpdated;
 use App\Events\VipExpired;
 use App\Events\OrderPaid;
 use App\Events\OrderSynchronized;
@@ -40,6 +42,9 @@ class EventServiceProvider extends ServiceProvider
 		OrderCreated::class                => [
 			SendOrderCreatedMail::class,
 		],
+		OrderUpdated::class                => [
+			SynchronizeServer::class,
+		],
 		OrderPaid::class                   => [
 			GenerateOrderActivation::class,
 			GeneratePaidOrderAffiliateToken::class,
@@ -68,6 +73,9 @@ class EventServiceProvider extends ServiceProvider
 			SynchronizeServer::class,
 		],
 		AdminUpdated::class                => [
+			SynchronizeServer::class,
+		],
+		UserSettingsUpdated::class         => [
 			SynchronizeServer::class,
 		],
 	];

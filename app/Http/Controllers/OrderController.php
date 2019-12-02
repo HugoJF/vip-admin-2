@@ -51,9 +51,7 @@ class OrderController extends Controller
 	{
 		$user = Auth::user();
 
-		list($order, $response) = $service->createOrder($user, $request->validated(), $product);
-
-		event(new OrderCreated($order));
+		$response = $service->createOrder($user, $request->validated(), $product);
 
 		return redirect($response->init_point);
 	}
