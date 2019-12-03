@@ -43,8 +43,9 @@ class AdminController extends Controller
 	public function store(AdminService $service, AdminStoreRequest $request)
 	{
 		$admin = $service->storeAdmin($request->validated());
+		$username = e($admin->username);
 
-		flash()->success("Admin <strong>$admin->username</strong> criado com sucesso!");
+		flash()->success("Admin <strong>$username</strong> criado com sucesso!");
 
 		return redirect()->route('admins.index');
 	}
@@ -52,8 +53,9 @@ class AdminController extends Controller
 	public function update(AdminService $service, AdminUpdateRequest $request, Admin $admin)
 	{
 		$admin = $service->updateAdmin($admin, $request->validated());
+		$username = e($admin->username);
 
-		flash()->success("Admin $admin->username atualizado!");
+		flash()->success("Admin <strong>$username</strong> atualizado!");
 
 		return redirect()->route('admins.index');
 	}
@@ -61,8 +63,9 @@ class AdminController extends Controller
 	public function destroy(Admin $admin)
 	{
 		$admin->delete();
+		$username = e($admin->username);
 
-		flash()->success("Admin <strong>$admin->username</strong> removido!");
+		flash()->success("Admin <strong>$username</strong> removido!");
 
 		return redirect()->route('admins.index');
 	}

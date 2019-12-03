@@ -43,8 +43,9 @@ class ProductController extends Controller
 	public function store(ProductService $service, ProductStoreRequest $request)
 	{
 		$product = $service->storeProduct($request->validated());
+		$title = e($product->title);
 
-		flash()->success("Produto <strong>$product->title</strong> criado com sucesso!");
+		flash()->success("Produto <strong>$title</strong> criado com sucesso!");
 
 		return redirect()->route('products.index');
 	}
@@ -52,8 +53,9 @@ class ProductController extends Controller
 	public function update(ProductService $service, ProductUpdateRequest $request, Product $product)
 	{
 		$service->updateProduct($product, $request->validated());
+		$title = e($product->title);
 
-		flash()->success('Produto atualizado com sucesso!');
+		flash()->success("Produto <strong>$title</strong> atualizado com sucesso!");
 
 		return redirect()->route('products.index');
 	}
@@ -61,8 +63,9 @@ class ProductController extends Controller
 	public function destroy(Product $product)
 	{
 		$product->delete();
+		$title = e($product->title);
 
-		flash()->success("<strong>$product->title</strong> removido com sucesso!");
+		flash()->success("<strong>$title</strong> removido com sucesso!");
 
 		return back();
 	}

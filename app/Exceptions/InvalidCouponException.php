@@ -17,9 +17,10 @@ class InvalidCouponException extends FlashException
 
 	public function flash()
 	{
-		if ($this->coupon)
-			flash()->error("Cupom <strong>{$this->coupon}</strong> não é válido!");
-		else
+		if ($this->coupon) {
+			$coupon = e($this->coupon);
+			flash()->error("Cupom <strong>$coupon</strong> não é válido!");
+		} else
 			flash()->error('Cupom inválido!');
 	}
 

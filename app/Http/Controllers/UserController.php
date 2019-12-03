@@ -21,10 +21,11 @@ class UserController extends Controller
 	{
 		$service->toggleAdmin($user);
 
+		$username = e($user->username);
 		if ($user->admin)
-			flash()->success("<strong>$user->username</strong> promovido para administrador!");
+			flash()->success("<strong>$username</strong> promovido para administrador!");
 		else
-			flash()->success("<strong>$user->username</strong> removido dos administradores");
+			flash()->success("<strong>$username</strong> removido dos administradores");
 
 		return back();
 	}
@@ -33,10 +34,11 @@ class UserController extends Controller
 	{
 		$service->toggleAffiliate($user);
 
+		$username = e($user->username);
 		if ($user->affiliate)
-			flash()->success("<strong>$user->username</strong> adicionado para lista de afiliados");
+			flash()->success("<strong>$username</strong> adicionado para lista de afiliados");
 		else
-			flash()->success("<strong>$user->username</strong> removido da lista de afiliados");
+			flash()->success("<strong>$username</strong> removido da lista de afiliados");
 
 		return back();
 	}
