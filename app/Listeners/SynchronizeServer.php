@@ -88,7 +88,7 @@ class SynchronizeServer implements ShouldQueue
 	private function mapAdminsToInfo($admins)
 	{
 		$ids = $admins->map(function (Admin $admin) {
-			return steamid2($admin->steamid);
+			return steamid64($admin->steamid);
 		});
 		$users = User::query()->whereIn('steamid', $ids)->get();
 
