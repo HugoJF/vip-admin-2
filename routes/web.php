@@ -93,7 +93,7 @@ Route::middleware(['admin'])->group(function () {
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['terms'])->group(function () {
+Route::middleware(['auth', 'terms'])->group(function () {
 	Route::get('orders', 'OrderController@index')->name('orders.index')->middleware('can:list,App\Order');
 	Route::get('orders/create/{product}', 'OrderController@create')->name('orders.create')->middleware('can:store,App\Order');
 	Route::get('orders/{order}', 'OrderController@show')->name('orders.show')->middleware('can:view,order');
@@ -141,7 +141,7 @@ Route::middleware(['admin'])->group(function () {
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['terms', 'auth'])->group(function () {
+Route::middleware(['auth', 'terms'])->group(function () {
 	Route::get('tokens', 'TokenController@index')->name('tokens.index')->middleware('can:list,App\Token');
 	Route::get('tokens/create', 'TokenController@create')->name('tokens.create')->middleware('can:store,App\Token');
 	Route::get('tokens/{token}', 'TokenController@show')->name('tokens.show')->middleware('can:view,token');
