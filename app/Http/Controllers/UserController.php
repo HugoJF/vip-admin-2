@@ -55,10 +55,10 @@ class UserController extends Controller
 		if (Auth::check())
 			throw new AffiliateCodeAlreadyLoggedException();
 
-		if ($service->attachAffiliateCode($code))
+		if ($service->attachAffiliateCode($code)) {
 			$code = e($code);
 			flash()->success("Código <strong>$code</strong> registrado!");
-		else
+		} else
 			flash()->error('Código de afiliado inválido!');
 
 		return redirect()->route('home');

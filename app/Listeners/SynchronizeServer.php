@@ -6,6 +6,7 @@ use App\Admin;
 use App\Events\OrderExpired;
 use App\Events\OrderSynchronized;
 use App\Order;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -86,10 +87,20 @@ class SynchronizeServer implements ShouldQueue
 
 	private function mapAdminsToInfo($admins)
 	{
-		return $admins->mapWithKeys(function (Admin $admin) {
+		$ids = $admins->map(function (Admin $admin) {
+			return steamid2($admin->steamid);
+		});
+		$users = User::query()->whereIn('steamid', $ids)->get();
+
+		return $admins->mapWithKeys(function (Admin $admin) use ($users) {
+			$user = $users[ $admin->steamid ];
+			$flags = $admin->flags;
+			if ($user && $user->hidden_flags)
+				$flags = merge_sm_flags($flags, config('vip-admin.hidden-flags-flag', 'o'));
+
 			return [steamid2($admin->steamid) => [
 				'username' => $admin->username,
-				'flags'    => $admin->flags,
+				'flags'    => $flags,
 			]];
 		});
 	}
@@ -134,12 +145,14 @@ class SynchronizeServer implements ShouldQueue
 			$this->updateAdmin($id, $d['username'], $d['flags']);
 		}
 	}
+
 	private function updateAdmin($steamid, $username, $flag): void
 	{
 		DB::connection('sm_admins')->table('sm_admins')->where('identity', $steamid)->update([
-			'flags'    => $flag,
+			'flags' => $flag,
 		]);
 	}
+
 	private function addAdmins($data)
 	{
 		foreach ($data as $id => $d) {
