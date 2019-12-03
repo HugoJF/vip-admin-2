@@ -95,9 +95,9 @@ class OrderService
 		$details['payer_tradelink'] = $user->tradelink;
 
 		// TODO: update this
-		$details['unit_price'] = 8;
-		$details['unit_price_limit'] = 6;
-		$details['discount_per_unit'] = 0.1;
+		$details['unit_price'] = 10;
+		$details['unit_price_limit'] = 5;
+		$details['discount_per_unit'] = 0.08;
 		$details['min_units'] = 14;
 		$details['max_units'] = 90;
 
