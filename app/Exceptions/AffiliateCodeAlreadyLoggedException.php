@@ -8,7 +8,7 @@ class AffiliateCodeAlreadyLoggedException extends FlashException
 {
 	public function flash()
 	{
-		flash()->error('Não é possível registra código de afiliado após o registro!');
+		flash()->error('Não é possível registrar código de afiliado após o registro!');
 	}
 
 	public function getResponse()
