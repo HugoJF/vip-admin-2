@@ -22,6 +22,10 @@
                 <td><code>#{{ $order->id }}</code></td>
             </tr>
             <tr>
+                <td>Ref.</td>
+                <td><code>#{{ $order->reference }}</code></td>
+            </tr>
+            <tr>
                 <td>Duração</td>
                 <td><span class="badge badge-primary">{{ $order->duration }} dias</span></td>
             </tr>
