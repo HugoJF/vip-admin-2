@@ -93,7 +93,7 @@ class SynchronizeServer implements ShouldQueue
 		$users = User::query()->whereIn('steamid', $ids)->get();
 
 		return $admins->mapWithKeys(function (Admin $admin) use ($users) {
-			$user = $users[ $admin->steamid ];
+			$user = $users[ $admin->steamid ] ?? false;
 			$flags = $admin->flags;
 			if ($user && $user->hidden_flags)
 				$flags = merge_sm_flags($flags, config('vip-admin.hidden-flags-flag', 'o'));
