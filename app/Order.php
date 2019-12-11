@@ -103,7 +103,7 @@ class Order extends Model
 
 	public function scopeNotExpired(Builder $query)
 	{
-		return $query->where('ends_at', '=>', Carbon::now());
+		return $query->where('ends_at', '>=', Carbon::now());
 	}
 
 	public function scopeExpired(Builder $query)
