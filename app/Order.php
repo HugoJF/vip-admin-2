@@ -98,17 +98,17 @@ class Order extends Model
 
 	public function scopeStarted(Builder $query)
 	{
-		return $query->where('starts_at', '<=', Carbon::now());
+		return $query->where('starts_at', '<=', now());
 	}
 
 	public function scopeNotExpired(Builder $query)
 	{
-		return $query->where('ends_at', '>=', Carbon::now());
+		return $query->where('ends_at', '>=', now());
 	}
 
 	public function scopeExpired(Builder $query)
 	{
-		return $query->where('ends_at', '<', Carbon::now());
+		return $query->where('ends_at', '<', now());
 	}
 
 	public function scopeSynced(Builder $query)

@@ -28,12 +28,15 @@ class SynchronizeServer implements ShouldQueue
 	{
 		$expiredOrders = Order::expired()->synced()->get();
 		$this->expireOrders($expiredOrders);
+		info('Expiring orders', ['orders' => $expiredOrders]);
 
 		$pendingOrders = Order::pending()->get();
 		$this->syncOrders($pendingOrders);
+		info('Syncing orders', ['orders' => $pendingOrders]);
 
 		$currentOrders = Order::active()->get();
 		$admins = Admin::all();
+		info('Current orders and admins', compact('currentOrders', 'admins'));
 
 		$this->updateDatabase($currentOrders, $admins);
 	}
@@ -63,7 +66,7 @@ class SynchronizeServer implements ShouldQueue
 
 	public function syncOrder(Order $order)
 	{
-		$order->synced_at = Carbon::now();
+		$order->synced_at = now();
 		$order->save();
 
 		event(new OrderSynchronized($order));
