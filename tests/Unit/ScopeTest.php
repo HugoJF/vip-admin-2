@@ -15,12 +15,12 @@ class ScopeTest extends TestCase
 	public function test_active_scope_is_working()
 	{
 		$order = factory(Order::class)->create([
-			'starts_at'  => now()->addSecond(),
+			'starts_at'  => now(),
 			'ends_at'    => now()->addDay(),
 			'paid'       => true,
 			'canceled'   => false,
-			'created_at' => now()->addSecond(),
-			'synced_at'  => now()->addSecond(),
+			'created_at' => now(),
+			'synced_at'  => now(),
 		]);
 
 		$that = Order::active()->where('id', $order->id)->first();
