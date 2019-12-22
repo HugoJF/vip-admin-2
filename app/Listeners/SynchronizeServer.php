@@ -10,6 +10,7 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class SynchronizeServer implements ShouldQueue
@@ -90,10 +91,11 @@ class SynchronizeServer implements ShouldQueue
 		$ids = $admins->map(function (Admin $admin) {
 			return steamid64($admin->steamid);
 		});
+		/** @var Collection $users */
 		$users = User::query()->whereIn('steamid', $ids)->get();
 
 		return $admins->mapWithKeys(function (Admin $admin) use ($users) {
-			$user = $users[ $admin->steamid ] ?? false;
+			$user = $users->firstWhere('steamid', steamid64($admin->steamid));
 			$flags = $admin->flags;
 			if ($user && $user->hidden_flags)
 				$flags = merge_sm_flags($flags, config('vip-admin.hidden-flags-flag', 'o'));
