@@ -60,8 +60,11 @@ class RecheckPendingOrders implements ShouldQueue
 
 		// The wait time for this order
 		$time = $this->waitingPeriods[ $index ];
+		$delta = $order->updated_at->diffInSeconds();
 
-		return $order->updated_at->diffInSeconds() > $time;
+		info("Order $order->id has a delta of $delta seconds");
+
+		return $delta > $time;
 	}
 
 	protected function clamp($value, $min, $max)
