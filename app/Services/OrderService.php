@@ -119,6 +119,7 @@ class OrderService
 	public function activateOrder(Order $order)
 	{
 		// TODO: Check if order was actually activated?
+		/** @var UserService $service */
 		$service = app(UserService::class);
 
 		$basePoint = $service->getOrderBasePoint($order->user);

@@ -61,7 +61,7 @@ class RecheckPendingOrders implements ShouldQueue
 		// The wait time for this order
 		$time = $this->waitingPeriods[ $index ];
 
-		return $order->updated_at->diffInMilliseconds() > $time;
+		return $order->updated_at->diffInSeconds() > $time;
 	}
 
 	protected function clamp($value, $min, $max)

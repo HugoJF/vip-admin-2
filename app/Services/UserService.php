@@ -9,7 +9,6 @@
 namespace App\Services;
 
 use App\User;
-use Carbon\Carbon;
 
 class UserService
 {
@@ -38,6 +37,6 @@ class UserService
 		if ($lastOrder)
 			return $lastOrder->ends_at;
 		else
-			return Carbon::now();
+			return now();
 	}
 }
