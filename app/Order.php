@@ -147,6 +147,9 @@ class Order extends Model
 
 		$this->recheck_attempts = $this->recheck_attempts + 1;
 
+		$this->touch();
+		$this->save();
+
 		if (!$this->reference)
 			return;
 
