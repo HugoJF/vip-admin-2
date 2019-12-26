@@ -15,8 +15,8 @@ class OrderObserver
 	 */
 	public function retrieved(Order $order)
 	{
-		if (!$order->paid)
-			$order->recheck();
+//		if (!$order->paid)
+//			$order->recheck();
 	}
 
 	public function creating(Order $order)
