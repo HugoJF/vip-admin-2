@@ -167,10 +167,12 @@ class SynchronizeServer implements ShouldQueue
 
 	private function addAdmin($steamid, $username, $flag): void
 	{
+	    // Strip non alpha-numeric chars from username
+	    $cleanedUsername = preg_replace('/[A-Za-z0-9_-]/', '_', $username);
 		DB::connection('sm_admins')->table('sm_admins')->insert([
 			'authtype' => 'steam',
 			'identity' => $steamid,
-			'name'     => $username,
+			'name'     => $cleanedUsername,
 			'flags'    => $flag,
 			'immunity' => 50,
 		]);
