@@ -23,7 +23,7 @@ class AuthService
 	 */
 	public function findOrNewUser($info)
 	{
-		$user = User::where('steamid', $info->steamID64)->first();
+		$user = User::where('steamid', steamid64($info->steamID64))->first();
 
 		if (!is_null($user)) {
 			$user->username = $info->personaname;
@@ -37,7 +37,7 @@ class AuthService
 			'username' => $info->personaname,
 			'avatar'   => $info->avatarfull,
 		]);
-		$user->steamid = $info->steamID64;
+		$user->steamid = steamid64($info->steamID64);
 
 		if (Cookie::has('affiliate')) {
 			$affiliate = User::find(Cookie::get('affiliate'));

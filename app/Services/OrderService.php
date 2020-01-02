@@ -20,145 +20,160 @@ use App\Product;
 use App\User;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use SteamID;
 
 class OrderService
 {
-	public function createOrder($user, $data, Product $product)
-	{
-	    /** @var PaymentSystem $paymentSystem */
-		$paymentSystem = app(PaymentSystem::class);
+    public function createOrder($user, $data, Product $product)
+    {
+        /** @var PaymentSystem $paymentSystem */
+        $paymentSystem = app(PaymentSystem::class);
 
-		/** @var CouponService $couponService */
-		$couponService = app(CouponService::class);
+        /** @var CouponService $couponService */
+        $couponService = app(CouponService::class);
 
-		$order = $this->createEmptyOrder($user, $product->duration);
+        $order = $this->createEmptyOrder($user, $product->duration);
 
-		$coupon = false;
+        $coupon = false;
 
-		if ($data['coupon'] ?? false) {
-			$coupon = $couponService->findCoupon($data['coupon']);
-			if (!$coupon) {
-				throw new InvalidCouponException($data['coupon']);
-			} else {
-				$coupon->order_id = $order->id;
-				$coupon->save();
-			}
-		}
+        if ($data['coupon'] ?? false) {
+            $coupon = $couponService->findCoupon($data['coupon']);
+            if (!$coupon) {
+                throw new InvalidCouponException($data['coupon']);
+            } else {
+                $coupon->order_id = $order->id;
+                $coupon->save();
+            }
+        }
 
-		$details = $this->buildOrderDetails($order, $user, $product, $coupon);
+        $details = $this->buildOrderDetails($order, $user, $product, $coupon);
 
-		$response = $paymentSystem->createOrder($details);
+        $response = $paymentSystem->createOrder($details);
 
-		if ($response->status !== 201) {
-			Log::error('Invalid PaymentSystem response', compact('response'));
-			throw new Exception('Invalid PaymentSystem response');
-		}
+        if ($response->status !== 201) {
+            Log::error('Invalid PaymentSystem response', compact('response'));
+            throw new Exception('Invalid PaymentSystem response');
+        }
 
-		$response = $response->content;
+        $response = $response->content;
 
-		$order->auto_activates = $data['auto-activates'] == true;
-		$order->reference = $response->id;
-		$order->init_point = $response->init_point;
+        $order->auto_activates = $data['auto-activates'] == true;
+        $order->reference = $response->id;
+        $order->init_point = $response->init_point;
 
-		$order->save();
+        $order->save();
 
-		event(new OrderCreated($order));
+        event(new OrderCreated($order));
 
-		return $response;
-	}
+        return $response;
+    }
 
-	public function createEmptyOrder(User $user, $duration)
-	{
-		$order = Order::make();
+    public function createEmptyOrder(User $user, $duration)
+    {
+        $order = Order::make();
 
-		$order->duration = $duration;
-		$order->user()->associate($user);
+        $order->duration = $duration;
+        $order->user()->associate($user);
 
-		$order->save();
+        $order->save();
 
-		return $order;
-	}
+        return $order;
+    }
 
-	public function buildOrderDetails(Order $order, User $user, Product $product, $coupon)
-	{
-		$ratio = 1;
-		if ($coupon instanceof Coupon)
-			$ratio = 1 - $coupon->discount;
+    public function buildOrderDetails(Order $order, User $user, Product $product, $coupon)
+    {
+        $ratio = 1;
+        if ($coupon instanceof Coupon)
+            $ratio = 1 - $coupon->discount;
 
-		$details['reason'] = "VIP de $product->duration dias nos servidores de_nerdTV";
-		$details['return_url'] = url("/orders/{$order->id}");
-		$details['cancel_url'] = url("/orders/{$order->id}");
-		$details['preset_amount'] = round($product->cost * $ratio);
-		$details['reason'] = 'VIP servidores de_nerdTV';
-		$details['product_name_singular'] = 'dia';
-		$details['product_name_plural'] = 'dias';
+        $details['reason'] = "VIP de $product->duration dias nos servidores de_nerdTV";
+        $details['return_url'] = url("/orders/{$order->id}");
+        $details['cancel_url'] = url("/orders/{$order->id}");
+        $details['preset_amount'] = round($product->cost * $ratio);
+        $details['reason'] = 'VIP servidores de_nerdTV';
+        $details['product_name_singular'] = 'dia';
+        $details['product_name_plural'] = 'dias';
 
-		$details['avatar'] = $user->avatar;
-		$details['payer_steam_id'] = $user->steamid;
-		$details['payer_tradelink'] = $user->tradelink;
+        $details['avatar'] = $user->avatar;
+        $details['payer_steam_id'] = $user->steamid;
+        $details['payer_tradelink'] = $user->tradelink;
 
-		// TODO: update this
-		$details['unit_price'] = 10;
-		$details['unit_price_limit'] = 5;
-		$details['discount_per_unit'] = 0.08;
-		$details['min_units'] = 14;
-		$details['max_units'] = 90;
+        // TODO: update this
+        $details['unit_price'] = 10;
+        $details['unit_price_limit'] = 5;
+        $details['discount_per_unit'] = 0.08;
+        $details['min_units'] = 14;
+        $details['max_units'] = 90;
 
-		return $details;
-	}
+        return $details;
+    }
 
-	public function updateOrder(Order $order, array $values)
-	{
-		// TODO: improve with validator?
-		$order->fill($values + ['paid' => false, 'canceled' => false]);
+    public function updateOrder(Order $order, array $values)
+    {
+        // TODO: improve with validator?
+        $order->fill($values + ['paid' => false, 'canceled' => false]);
 
-		$order->save();
+        $order->save();
 
-		event(new OrderUpdated($order));
+        event(new OrderUpdated($order));
 
-		return $order;
-	}
+        return $order;
+    }
 
-	public function activateOrder(Order $order)
-	{
-		// TODO: Check if order was actually activated?
-		/** @var UserService $service */
-		$service = app(UserService::class);
+    public function activateOrder(Order $order)
+    {
+        // TODO: Check if order was actually activated?
+        /** @var UserService $service */
+        $service = app(UserService::class);
 
-		$basePoint = $service->getOrderBasePoint($order->user);
+        $basePoint = $service->getOrderBasePoint($order->user);
 
-		$order->starts_at = $basePoint;
-		$order->ends_at = $basePoint->addDays($order->duration);
+        $order->starts_at = $basePoint;
+        $order->ends_at = $basePoint->addDays($order->duration);
 
-		$order->save();
+        $order->save();
 
-		event(new OrderActivated($order));
+        event(new OrderActivated($order));
 
-		return $order;
-	}
+        return $order;
+    }
 
-	/**
-	 * @param Order $order
-	 * @param       $steamid
-	 *
-	 * @return void
-	 * @throws InvalidSteamIdException
-	 */
-	public function transferOrder(Order $order, $steamid)
-	{
-		try {
-			$steamid = new \SteamID($steamid);
-		} catch (\InvalidArgumentException $e) {
-			throw new InvalidSteamIdException($steamid);
-		}
+    /**
+     * @param Order $order
+     * @param       $steamid
+     *
+     * @return void
+     * @throws InvalidSteamIdException
+     */
+    public function transferOrder(Order $order, $steamid)
+    {
+        try {
+            $steamid = steamid64($steamid);
+        } catch (\InvalidArgumentException $e) {
+            throw new InvalidSteamIdException($steamid);
+        }
+        $old = $order->steamid;
+        $order->steamid = $steamid;
+        $order->save();
 
-		$order->steamid = $steamid->ConvertToUInt64();
-		$order->save();
-	}
+        /** @var OrderRefactoringService $service */
+        $service = app(OrderRefactoringService::class);
+        $service->refactorUser($order->user);
+        $service->refactorSteamid($steamid);
+        if ($old)
+            $service->refactorSteamid($old);
+    }
 
-	public function returnOrder(Order $order)
-	{
-		$order->steamid = null;
-		$order->save();
-	}
+    public function returnOrder(Order $order)
+    {
+        $old = $order->steamid;
+        $order->steamid = null;
+        $order->save();
+
+        /** @var OrderRefactoringService $service */
+        $service = app(OrderRefactoringService::class);
+
+        $service->refactorSteamid($old);
+        $service->refactorUser($order->user);
+    }
 }

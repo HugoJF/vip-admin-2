@@ -5,9 +5,9 @@
             <div class="btn-group" role="group">
                 <a class="btn btn-primary btn-sm" href="{{ route('home') }}">Novo pedido</a>
                 @admin
-                    @if($viewRoute ?? false)
-                        <a class="btn btn-outline-dark btn-sm" href="{{ route('orders.store') }}">View orders</a>
-                    @endif
+                @if($viewRoute ?? false)
+                    <a class="btn btn-outline-dark btn-sm" href="{{ route('orders.store') }}">View orders</a>
+                @endif
                 @endadmin
             </div>
         </div>
@@ -45,6 +45,8 @@
                             <span class="badge badge-danger">Cancelado</span>
                         @elseif($order->expired)
                             <span class="badge badge-danger">Expirado</span>
+                        @elseif($order->paid && $order->activated && $order->starts_at->isFuture())
+                            <span class="badge badge-info" data-toggle="tooltip" data-placement="top" title="O pedido está ativo, porém seu período de início ainda não começou pois identificamos que já existe um pedido ativo no momento. Se você acha que isso é um erro, comunique nosso suporte!">Inativo</span>
                         @elseif($order->paid && $order->activated)
                             <span class="badge badge-success">Ativo</span>
                         @elseif($order->paid)
@@ -56,7 +58,14 @@
 
                     <!-- User -->
                     @admin
-                    <td>{{ $order->user->username ?? $order->user->name }}</td>
+
+                    <td>
+                        @if($order->steamid)
+                            <span class="badge badge-secondary">Transferido</span>
+                        @else
+                            <span>{{ $order->user->username ?? $order->user->name }}</span>
+                        @endif
+                    </td>
                     @endadmin
 
                     <!-- Created at -->
@@ -71,7 +80,7 @@
                             @endif
                             <a class="btn btn-outline-primary btn-sm" href="{{ route('orders.show', $order) }}">Detalhe</a>
                             @admin
-                                <a class="btn btn-outline-secondary btn-sm" href="{{ route('orders.edit', $order) }}">Editar</a>
+                            <a class="btn btn-outline-secondary btn-sm" href="{{ route('orders.edit', $order) }}">Editar</a>
                             @endadmin
                         </div>
                         {!! Form::close() !!}
