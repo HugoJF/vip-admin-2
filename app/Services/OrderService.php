@@ -25,14 +25,17 @@ class OrderService
 {
 	public function createOrder($user, $data, Product $product)
 	{
+	    /** @var PaymentSystem $paymentSystem */
 		$paymentSystem = app(PaymentSystem::class);
+
+		/** @var CouponService $couponService */
 		$couponService = app(CouponService::class);
 
 		$order = $this->createEmptyOrder($user, $product->duration);
 
 		$coupon = false;
 
-		if (array_key_exists('coupon', $data) && $data['coupon']) {
+		if ($data['coupon'] ?? false) {
 			$coupon = $couponService->findCoupon($data['coupon']);
 			if (!$coupon) {
 				throw new InvalidCouponException($data['coupon']);

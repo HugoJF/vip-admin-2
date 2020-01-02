@@ -33,12 +33,12 @@
                     <td>
                         <code class="break-normal">#{{ $order->id }}</code>
                     </td>
-                    
+
                     <!-- Duration -->
                     <td>
                         <span class="badge badge-primary">{{ $order->duration }} dias</span>
                     </td>
-                    
+
                     <!-- Status -->
                     <td>
                         @if($order->canceled)
@@ -53,15 +53,15 @@
                             <span class="badge badge-warning">Pendente</span>
                         @endif
                     </td>
-                    
+
                     <!-- User -->
                     @admin
                     <td>{{ $order->user->username ?? $order->user->name }}</td>
-                @endadmin
-                
-                <!-- Created at -->
+                    @endadmin
+
+                    <!-- Created at -->
                     <td>{{ $order->created_at->diffForHumans() }}</td>
-                    
+
                     <!-- Actions -->
                     <td>
                         {!! Form::open(['url' => route('orders.activate', $order), 'method' => 'PATCH', 'classs' => 'flex items-stretch w-100']) !!}

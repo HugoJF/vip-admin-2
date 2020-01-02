@@ -78,10 +78,14 @@
             @endif
             </tbody>
         </table>
-        
+
+        @if(!$order->activated && !$order->paid && !$order->canceled)
+            <a class="btn btn-outline-primary btn-block btn-lg" href="{{ $order->init_point }}">Pagar</a>
+        @endif
+
         @if(!$order->activated && $order->paid)
             {!! Form::open(['url' => route('orders.activate', $order), 'method' => 'PATCH']) !!}
-            <button class="btn btn-primary btn-block btn-lg">Ativar</button>
+            <button class="btn btn-success btn-block btn-lg">Ativar</button>
             {!! Form::close() !!}
         @endif
     @endcomponent
