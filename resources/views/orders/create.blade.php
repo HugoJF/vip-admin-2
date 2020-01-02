@@ -18,8 +18,8 @@
                     <input class="form-control" name="coupon" placeholder="Digite aqui seu cupom de desconto" type="text">
                     <br/>
                     <div class="btn-group btn-group-lg">
-                        <button name="auto-activates" value="true" class="btn btn-primary">Sim, manter ativado</button>
-                        <button name="auto-activates" value="false" class="btn btn-outline-secondary">Não, desativar</button>
+                        <button name="auto-activates" value="1" class="btn btn-primary">Sim, manter ativado</button>
+                        <button name="auto-activates" value="0" class="btn btn-outline-secondary">Não, desativar</button>
                     </div>
                 </div>
             </div>

@@ -50,7 +50,6 @@ class OrderController extends Controller
 	public function store(OrderService $service, OrderStoreRequest $request, Product $product)
 	{
 		$user = Auth::user();
-
 		$response = $service->createOrder($user, $request->validated(), $product);
 
 		return redirect($response->init_point);
