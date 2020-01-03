@@ -35,9 +35,10 @@ class ProductService
 
         /** @var Product $product */
         foreach ($products as $product) {
-            if ($product->filtered())
+            if ($product->filtered()) {
                 continue;
-            
+            }
+
             $duration = $product->duration;
 
             /** @var Product $actual */
@@ -46,6 +47,8 @@ class ProductService
                 $selected[ $duration ] = $product;
             }
         }
+
+        ksort($selected);
 
         return $selected;
     }

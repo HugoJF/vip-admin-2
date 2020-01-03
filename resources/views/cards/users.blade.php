@@ -15,6 +15,7 @@
             <th>Nome</th>
             <th>Tradelink</th>
             <th>Email</th>
+            <th>VIP</th>
             <th>Pedidos <small>(pagos/total)</small></th>
             <th>Cargo</th>
             <th>Created at</th>
@@ -28,7 +29,7 @@
                 <td>
                     <code>{{ $user->name ?? $user->username }}</code>
                 </td>
-                
+
                 <!-- Tradelink -->
                 <td>
                     @if($user->tradelink)
@@ -37,7 +38,7 @@
                         <span class="badge badge-danger">N/A</span>
                     @endif
                 </td>
-                
+
                 <!-- Email -->
                 <td>
                     @if($user->email)
@@ -46,12 +47,21 @@
                         <span class="badge badge-danger">N/A</span>
                     @endif
                 </td>
-                
+
+                <!-- VIP -->
+                <td>
+                    @if($user->currentVip() == 0)
+                        <span class="badge badge-danger">N/A</span>
+                    @else
+                        <span>✔</span>
+                    @endif
+                </td>
+
                 <!-- Pedidos -->
                 <td>
                     <span class="badge badge-primary">{{ $user->orders()->paid()->count() }} / {{ $user->orders()->count() }}</span>
                 </td>
-                
+
                 <!-- Cargo -->
                 <td>
                     @if($user->admin)
@@ -60,10 +70,10 @@
                         <span class="badge badge-dark">Usuário</span>
                     @endif
                 </td>
-                
+
                 <!-- Created at -->
                 <td><span title="{{ $user->created_at }}">{{ $user->created_at->diffForHumans() }}</span></td>
-                
+
                 <!-- Actions -->
                 <td>
                     {!! Form::open(['url' => route('users.admin', $user), 'method' => 'PATCH', 'style' => 'display: inline-block']) !!}
