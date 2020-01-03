@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Product;
+use App\Services\ProductService;
 
 class HomeController extends Controller
 {
-	public function home()
+	public function home(ProductService $service)
 	{
-		$products = Product::all();
+		$products = $service->getHomeProducts();
 
 		return view('home', compact('products'));
 	}
