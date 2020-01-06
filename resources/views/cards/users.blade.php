@@ -50,7 +50,7 @@
 
                 <!-- VIP -->
                 <td>
-                    @if($user->currentVip() == 0)
+                    @if(!$user->currentVip())
                         <span class="badge badge-danger">N/A</span>
                     @else
                         <span>✔</span>

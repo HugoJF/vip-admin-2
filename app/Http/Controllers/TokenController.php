@@ -77,7 +77,12 @@ class TokenController extends Controller
 
 	public function store(TokenStoreRequest $request)
 	{
-		$token = Token::create($request->validated());
+		$token = Token::make();
+
+		$token->fill($request->validated());
+		$token->reason()->associate(auth()->user());
+
+		$token->save();
 
 		return redirect()->route('tokens.show', $token);
 	}
