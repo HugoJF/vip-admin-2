@@ -124,7 +124,9 @@ class OrderController extends Controller
     public function transfer(OrderService $service, Request $request, Order $order)
     {
         if (empty($request->input('steamid'))) {
-            $service->returnOrder($order);
+            if (!$service->returnOrder($order)) {
+                return back();
+            }
 
             flash()->success('Pedido retornado para sua conta!');
         }

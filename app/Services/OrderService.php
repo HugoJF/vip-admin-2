@@ -157,16 +157,17 @@ class OrderService
             return false;
         }
 
-        $old = $order->steamid;
-        $order->steamid = $steamid;
-        $order->save();
-
-        /** @var OrderRefactoringService $service */
-        $service = app(OrderRefactoringService::class);
-
         DB::beginTransaction();
 
         try {
+
+            $old = $order->steamid;
+            $order->steamid = $steamid;
+            $order->save();
+
+            /** @var OrderRefactoringService $service */
+            $service = app(OrderRefactoringService::class);
+
             $service->refactorUser($order->user);
             $service->refactorSteamid($steamid);
             if ($old)
@@ -186,14 +187,23 @@ class OrderService
 
     public function returnOrder(Order $order)
     {
-        $old = $order->steamid;
-        $order->steamid = null;
-        $order->save();
+        DB::beginTransaction();
+        try {
+            $old = $order->steamid;
+            $order->steamid = null;
+            $order->save();
 
-        /** @var OrderRefactoringService $service */
-        $service = app(OrderRefactoringService::class);
+            /** @var OrderRefactoringService $service */
+            $service = app(OrderRefactoringService::class);
+            $service->refactorSteamid($old);
+            $service->refactorUser($order->user);
+        } catch (Exception $e) {
+            DB::rollBack();
 
-        $service->refactorSteamid($old);
-        $service->refactorUser($order->user);
+            flash()->error("Erro ao refatorar pedidos transferidos!");
+
+            return false;
+        }
+        DB::commit();
     }
 }

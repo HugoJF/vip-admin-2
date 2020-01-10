@@ -82,7 +82,7 @@ class OrderRefactoringService
             } else {
                 $duration = $order->starts_at->diff($order->ends_at);
             }
-            
+
             $order->starts_at = $base;
             $base->add($duration);
             $order->ends_at = $base;
