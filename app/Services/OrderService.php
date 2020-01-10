@@ -19,7 +19,9 @@ use App\Order;
 use App\Product;
 use App\User;
 use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use InvalidArgumentException;
 use SteamID;
 
 class OrderService
@@ -142,26 +144,44 @@ class OrderService
      * @param Order $order
      * @param       $steamid
      *
-     * @return void
-     * @throws InvalidSteamIdException
+     * @return bool
      */
     public function transferOrder(Order $order, $steamid)
     {
         try {
             $steamid = steamid64($steamid);
-        } catch (\InvalidArgumentException $e) {
-            throw new InvalidSteamIdException($steamid);
+        } catch (InvalidArgumentException $e) {
+            $i = ($steamid);
+            flash()->error("<strong>$i</strong> não é uma SteamID válida!");
+
+            return false;
         }
+
         $old = $order->steamid;
         $order->steamid = $steamid;
         $order->save();
 
         /** @var OrderRefactoringService $service */
         $service = app(OrderRefactoringService::class);
-        $service->refactorUser($order->user);
-        $service->refactorSteamid($steamid);
-        if ($old)
-            $service->refactorSteamid($old);
+
+        DB::beginTransaction();
+
+        try {
+            $service->refactorUser($order->user);
+            $service->refactorSteamid($steamid);
+            if ($old)
+                $service->refactorSteamid($old);
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            flash()->error("Erro ao refatorar pedidos transferidos!");
+
+            return false;
+        }
+
+        DB::commit();
+
+        return true;
     }
 
     public function returnOrder(Order $order)
