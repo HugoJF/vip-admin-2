@@ -72,11 +72,17 @@ class OrderRefactoringService
         $base = now();
         /** @var Order $order */
         foreach ($orders as $order) {
+            // If order is expired, don't touch it
+            if ($order->ends_at->isPast())
+                continue;
+
+            // Check if order has already been started. If it's compute only the remaining period
             if ($order->starts_at->isPast()) {
                 $duration = now()->diff($order->ends_at);
             } else {
                 $duration = $order->starts_at->diff($order->ends_at);
             }
+            
             $order->starts_at = $base;
             $base->add($duration);
             $order->ends_at = $base;
