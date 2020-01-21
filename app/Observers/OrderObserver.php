@@ -3,38 +3,33 @@
 namespace App\Observers;
 
 use App\Order;
+use Exception;
 
 class OrderObserver
 {
-	/**
-	 * Handle the app order "created" event.
-	 *
-	 * @param  \App\Order $order
-	 *
-	 * @return void
-	 */
-	public function retrieved(Order $order)
-	{
-//		if (!$order->paid)
-//			$order->recheck();
-	}
+    public function creating(Order $order)
+    {
+        // Do nothing if an ID was already assigned
+        if ($order->id)
+            return;
 
-	public function creating(Order $order)
-	{
-		if ($order->id)
-			return;
-		$found = false;
-		$id = null;
+        $id = null;
+        $attempts = 0;
+        $maxAttempts = config('vip-admin.unique-order-id-max-attempts', 30);
 
-		while (!$found) {
-			$id = random_id(5);
+        while ($attempts++ < $maxAttempts) {
+            $id = random_id(5);
 
-			$check = Order::find($id);
+            $exists = Order::query()->find($id);
 
-			if (!$check)
-				$found = true;
-		}
+            // Stop trying to find new IDs if nothing was found
+            if (!$exists)
+                break;
+        }
 
-		$order->id = $id;
-	}
+        if ($attempts >= $maxAttempts)
+            throw new Exception("Failed to find an ID after $attempts tries.");
+
+        $order->id = $id;
+    }
 }
