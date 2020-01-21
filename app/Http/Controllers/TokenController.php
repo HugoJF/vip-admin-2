@@ -9,22 +9,24 @@ use App\Http\Requests\TokenUpdateRequest;
 use App\Order;
 use App\Token;
 use App\TokenForm;
-use Illuminate\Http\Request;
+use Exception;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 use Kris\LaravelFormBuilder\FormBuilder;
 
 class TokenController extends Controller
 {
 	public function index()
 	{
-		$user = Auth::user();
+		$user = auth()->user();
 
 		if ($user->admin) {
-			$tokens = Token::with(['user'])->get();
+			$tokens = Token::query();
 		} else {
-			$tokens = $user->tokens()->with(['user'])->get();
+			$tokens = $user->tokens();
 		}
+
+		$tokens = $tokens->with(['user'])->get();
 
 		return view('tokens.index', compact('tokens'));
 	}
@@ -42,19 +44,29 @@ class TokenController extends Controller
 		if ($token->expires_at && $token->expires_at->isPast())
 			throw new TokenExpiredException('Expired tokens cannot be used');
 
-		$order = Order::make();
+		// TODO: move to service layer
+		DB::beginTransaction();
 
-		$order->id = 'to' . $token->id;
-		$order->duration = $token->duration;
+        $order = new Order();
 
-		$order->paid = true;
-		$order->canceled = false;
+		 try {
 
-		$order->user()->associate(Auth::user());
-		$token->order()->associate($order);
+             $order->id = "to$token->id";
+             $order->duration = $token->duration;
 
-		$order->save();
-		$token->save();
+             $order->paid = true;
+             $order->canceled = false;
+
+             $order->user()->associate(auth()->user());
+             $token->order()->associate($order);
+
+             $order->save();
+             $token->save();
+         } catch (Exception $e) {
+		     DB::rollBack();
+         }
+
+         DB::commit();
 
 		flash()->success('Token registrado com sucesso!');
 
@@ -77,7 +89,7 @@ class TokenController extends Controller
 
 	public function store(TokenStoreRequest $request)
 	{
-		$token = Token::make();
+		$token = new Token();
 
 		$token->fill($request->validated());
 		$token->reason()->associate(auth()->user());
