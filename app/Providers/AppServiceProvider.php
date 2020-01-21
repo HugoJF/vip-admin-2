@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Classes\EFlash;
 use App\Observers\OrderObserver;
 use App\Order;
 use Carbon\Carbon;
@@ -19,7 +20,9 @@ class AppServiceProvider extends ServiceProvider
 	 */
 	public function register()
 	{
-		//
+        $this->app->singleton('eflash', function () {
+            return $this->app->make(EFlash::class);
+        });
 	}
 
 	/**
@@ -65,7 +68,7 @@ class AppServiceProvider extends ServiceProvider
 		Blade::if ('admin', function () {
 			return auth()->check() && auth()->user()->admin === true;
 		});
-		
+
 		Blade::if ('affiliate', function () {
 			return auth()->check() && auth()->user()->affiliate === true;
 		});

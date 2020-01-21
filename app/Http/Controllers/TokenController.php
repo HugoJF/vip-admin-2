@@ -6,12 +6,9 @@ use App\Exceptions\AlreadyUsedTokenException;
 use App\Exceptions\TokenExpiredException;
 use App\Http\Requests\TokenStoreRequest;
 use App\Http\Requests\TokenUpdateRequest;
-use App\Order;
 use App\Services\TokenService;
 use App\Token;
 use App\TokenForm;
-use Exception;
-use Illuminate\Support\Facades\DB;
 use Kris\LaravelFormBuilder\FormBuilder;
 
 class TokenController extends Controller
@@ -70,8 +67,7 @@ class TokenController extends Controller
     {
         $token = $service->create($request->validated());
 
-        $id = e($token->id);
-        flash()->success("Token <strong>$id</strong> criado com sucesso!");
+        flash()->success("Token <strong>%s</strong> criado com sucesso!", $token->id);
 
         return redirect()->route('tokens.show', $token);
     }
@@ -80,8 +76,7 @@ class TokenController extends Controller
     {
         $service->update($token, $request->validated());
 
-        $id = e($token->id);
-        flash()->success("Token <strong>$id</strong> atualizado com sucesso!");
+        eflash()->success("Token <strong>%s</strong> atualizado com sucesso!", $token->id);
 
         return redirect()->route('tokens.show', $token);
     }
@@ -90,8 +85,7 @@ class TokenController extends Controller
     {
         $service->delete($token);
 
-        $id = e($token->id);
-        flash()->success("Token <strong>$id</strong> removido com sucesso!");
+        eflash()->success("Token <strong>%s</strong> removido com sucesso!", $token->id);
 
         return redirect()->route('tokens.index');
     }
