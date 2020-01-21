@@ -67,7 +67,7 @@ class TokenController extends Controller
     {
         $token = $service->create($request->validated());
 
-        flash()->success("Token <strong>%s</strong> criado com sucesso!", $token->id);
+        eflash()->success("Token <strong>%s</strong> criado com sucesso!", $token->id);
 
         return redirect()->route('tokens.show', $token);
     }
