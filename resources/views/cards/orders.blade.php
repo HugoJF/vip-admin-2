@@ -58,11 +58,12 @@
 
                     <!-- User -->
                     @admin
-
                     <td>
-                        <span>{{ $order->user->username ?? $order->user->name }}</span>
                         @if($order->steamid)
                             <span title="Pedido transferido para outro usuário">📩</span>
+                            <span class="badge badge-secondary">{{ $order->user->username ?? $order->user->name }}</span>
+                        @else
+                            <span>{{ $order->user->username ?? $order->user->name }}</span>
                         @endif
                     </td>
                     @endadmin
