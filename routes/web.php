@@ -95,12 +95,12 @@ Route::middleware(['admin'])->group(function () {
 
 Route::middleware(['auth', 'terms'])->group(function () {
 	Route::get('orders', 'OrderController@index')->name('orders.index')->middleware('can:list,App\Order');
-	Route::get('orders/create/{product}', 'OrderController@create')->name('orders.create')->middleware('can:store,App\Order');
+	Route::get('orders/create/{product}', 'OrderController@create')->name('orders.create')->middleware(['can:store,App\Order', 'can:view,product']);
 	Route::get('orders/{order}', 'OrderController@show')->name('orders.show')->middleware('can:view,order');
 	Route::get('orders/{order}/edit', 'OrderController@edit')->name('orders.edit')->middleware('can:update,order');
 	Route::get('orders/{order}/gift', 'OrderController@gift')->name('orders.gift')->middleware('can:transfer,order');
 
-	Route::post('orders/{product}', 'OrderController@store')->name('orders.store')->middleware('can:store,App\Order');
+	Route::post('orders/{product}', 'OrderController@store')->name('orders.store')->middleware(['can:store,App\Order', 'can:view,product']);
 
 	Route::patch('orders/{order}/activate', 'OrderController@activate')->name('orders.activate')->middleware('can:activate,order');
 	Route::patch('orders/{order}/transfer', 'OrderController@transfer')->name('orders.transfer')->middleware('can:transfer,order');
