@@ -2,29 +2,26 @@
 
 namespace App\Exceptions;
 
-use Exception;
-use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use App\Token;
 
-class AlreadyUsedTokenException extends Exception implements HttpExceptionInterface
+class AlreadyUsedTokenException extends FlashException
 {
-    //
-	/**
-	 * Returns the status code.
-	 *
-	 * @return int An HTTP response status code
-	 */
-	public function getStatusCode()
-	{
-		return 400;
-	}
+    protected $token;
 
-	/**
-	 * Returns response headers.
-	 *
-	 * @return array Response headers
-	 */
-	public function getHeaders()
-	{
-		return [];
-	}
+    public function __construct(Token $token)
+    {
+        $this->token = $token;
+        parent::__construct();
+    }
+
+    public function flash()
+    {
+        $id = e($this->token->id);
+        flash()->error("Token <strong>$id</strong> já foi utilizado!");
+    }
+
+    public function getResponse()
+    {
+        return back();
+    }
 }

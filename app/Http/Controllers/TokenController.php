@@ -10,7 +10,6 @@ use App\Order;
 use App\Token;
 use App\TokenForm;
 use Exception;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Kris\LaravelFormBuilder\FormBuilder;
 
@@ -38,11 +37,11 @@ class TokenController extends Controller
 
     public function use(Token $token)
     {
-        if ($token->order !== null)
-            throw new AlreadyUsedTokenException('Token already used.');
+        if ($token->used)
+            throw new AlreadyUsedTokenException($token);
 
-        if ($token->expires_at && $token->expires_at->isPast())
-            throw new TokenExpiredException('Expired tokens cannot be used');
+        if ($token->expired)
+            throw new TokenExpiredException($token);
 
         // TODO: move to service layer
         DB::beginTransaction();
