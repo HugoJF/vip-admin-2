@@ -63,6 +63,12 @@ class TokenController extends Controller
             $token->save();
         } catch (Exception $e) {
             DB::rollBack();
+            report($e);
+            $message = e($e->getMessage());
+
+            flash()->error("Erro ao registrar uso do token: $message");
+
+            return back();
         }
 
         DB::commit();
