@@ -12,6 +12,11 @@ class ProductPolicy extends BasePolicy
 		return false;
 	}
 
+    public function view(User $user, Product $product)
+    {
+        return true;
+	}
+
 	public function store(User $user)
 	{
 		return false;
