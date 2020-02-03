@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Admin;
+use App\Classes\VipSynchronizer;
 use App\Events\OrderExpired;
 use App\Events\OrderSynchronized;
 use App\Order;
@@ -15,171 +16,168 @@ use Illuminate\Support\Facades\DB;
 
 class SynchronizeServer implements ShouldQueue
 {
-	use InteractsWithQueue;
+    use InteractsWithQueue;
 
-	/**
-	 * Handle the event.
-	 *
-	 * @param object $event
-	 *
-	 * @return void
-	 */
-	public function handle($event)
-	{
-		$expiredOrders = Order::expired()->synced()->get();
-		$this->expireOrders($expiredOrders);
-		info('Expiring orders', ['orders' => $expiredOrders]);
+    /**
+     * @var string
+     */
+    private $vipFlag;
 
-		$pendingOrders = Order::pending()->get();
-		$this->syncOrders($pendingOrders);
-		info('Syncing orders', ['orders' => $pendingOrders]);
+    /**
+     * @var string
+     */
+    private $hiddenFlagsFlag;
 
-		$currentOrders = Order::active()->get();
-		$admins = Admin::all();
-		info('Current orders and admins', compact('currentOrders', 'admins'));
+    private $current;
 
-		$this->updateDatabase($currentOrders, $admins);
-	}
+    private $expected;
 
-	private function expireOrders($expiredOrders)
-	{
-		foreach ($expiredOrders as $order) {
-			$this->expireOrder($order);
-		}
-	}
+    public function __construct()
+    {
+        $this->vipFlag = config('vip-admin.vip-flag', 'a');
+        $this->hiddenFlagsFlag = config('vip-admin.hidden-flags-flag', 'o');
+    }
 
-	private function expireOrder(Order $order)
-	{
-		$order->synced_at = null;
-		$order->save();
+    protected function loadCurrent()
+    {
+        $existing = DB::connection('sm_admins')
+                      ->table('sm_admins')
+                      ->select(['identity', 'name', 'flags'])
+                      ->get()
+                      ->unique('identity');
 
-		event(new OrderExpired($order));
-	}
+        $this->current = $existing->mapWithKeys(function ($r) {
+            return [$r->identity => [
+                'username' => $r->name,
+                'flags'    => $r->flags,
+            ]];
+        });
+    }
 
-	private function syncOrders($pendingOrders)
-	{
-		// Insert order into database
-		foreach ($pendingOrders as $order) {
-			$this->syncOrder($order);
-		}
-	}
+    protected function loadExpected(): void
+    {
+        $vips = $this->loadExpectedVips()->toArray();
+        $admins = $this->loadExpectedAdmins()->toArray();
 
-	public function syncOrder(Order $order)
-	{
-		$order->synced_at = now();
-		$order->save();
+        // Get VIPs that are also admins
+        $intersect = array_intersect_key($vips, $admins);
+        $result = array_merge($vips, $admins);
 
-		event(new OrderSynchronized($order));
-	}
+        // Merge VIP and admin flags
+        foreach ($intersect as $id => $flag) {
+            $result[ $id ] = merge_sm_flags($vips[ $id ], $admins[ $id ]);
+        }
 
-	private function mapOrdersToInfo($orders)
-	{
-		// Map SteamID => Username to remove duplicates
-		return $orders->mapWithKeys(function ($order) {
-			$id = $order->steamid ?? $order->user->steamid;
+        $this->expected = collect($result);
+    }
 
-			$flags = config('vip-admin.vip-flag', 'a');
-			if ($order->user->hidden_flags)
-				$flags .= config('vip-admin.hidden-flags-flag', 'o');
+    protected function loadExpectedVips(): Collection
+    {
+        $orders = Order::active()->get();
 
-			return [steamid2($id) => [
-				'username' => $order->user->username,
-				'flags'    => $flags,
-			]];
-		});
-	}
+        // Map with SteamID as key to remove duplicates
+        // TODO: merge duplicates (map, groupBy, map)
+        return $orders->mapWithKeys(function ($order) {
+            // If Order is not transferred, use owner SteamID
+            $id = $order->steamid ?? $order->user->steamid;
 
-	private function mapAdminsToInfo($admins)
-	{
-		$ids = $admins->map(function (Admin $admin) {
-			return steamid64($admin->steamid);
-		});
-		/** @var Collection $users */
-		$users = User::query()->whereIn('steamid', $ids)->get();
+            // Build user flags
+            $hidden = $order->user->hidden_flags;
+            $flags = merge_sm_flags($this->vipFlag, $hidden ? $this->hiddenFlagsFlag : '');
 
-		return $admins->mapWithKeys(function (Admin $admin) use ($users) {
-			$user = $users->firstWhere('steamid', steamid64($admin->steamid));
-			$flags = $admin->flags;
-			if ($user && $user->hidden_flags)
-				$flags = merge_sm_flags($flags, config('vip-admin.hidden-flags-flag', 'o'));
+            return [steamid2($id) => [
+                'username' => $order->user->username,
+                'flags'    => $flags,
+            ]];
+        });
+    }
 
-			return [steamid2($admin->steamid) => [
-				'username' => $admin->username,
-				'flags'    => $flags,
-			]];
-		});
-	}
+    protected function loadExpectedAdmins(): Collection
+    {
+        $admins = Admin::all();
 
-	private function fetchCurrentDatabase()
-	{
-		$existing = DB::connection('sm_admins')->table('sm_admins')->select(['identity', 'flags'])->get()->unique('identity');
+        // Get list of admin IDs
+        $ids = $admins->map(function (Admin $admin) {
+            return steamid64($admin->steamid);
+        });
 
-		return $existing->mapWithKeys(function ($r) {
-			return [$r->identity => $r->flags];
-		});
-	}
+        // Check admins that are also a User
+        /** @var Collection $users */
+        $users = User::query()->whereIn('steamid', $ids)->get();
 
-	private function updateDatabase($currentOrders, $admins)
-	{
-		$vips = $this->mapOrdersToInfo($currentOrders)->toArray();
-		$adms = $this->mapAdminsToInfo($admins)->toArray();
+        // TODO: also merge duplicates
+        return $admins->mapWithKeys(function (Admin $admin) use ($users) {
+            $user = $users->firstWhere('steamid', steamid64($admin->steamid));
 
-		$inter = array_intersect_key($vips, $adms);
-		$result = array_merge($vips, $adms);
+            $hidden = $user->hidden_flags ?? false;
+            $flags = merge_sm_flags($admin->flags, $hidden ? $this->hiddenFlagsFlag : '');
 
-		foreach ($inter as $id => $flag) {
-			$result[ $id ] = merge_sm_flags($vips[ $id ], $adms[ $id ]);
-		}
+            return [steamid2($admin->steamid) => [
+                'username' => $admin->username,
+                'flags'    => $flags,
+            ]];
+        });
+    }
 
-		$current = $this->fetchCurrentDatabase()->toArray();
+    public function handle($event): void
+    {
+        $this->loadCurrent();
+        $this->loadExpected();
 
-		$pending = array_diff_key($result, $current);
-		$update = array_intersect_ukey($result, $current, function ($a, $b) {
-			return strcmp($a, $b);
-		});
-		$expired = array_diff_key($current, $result);
+        $current = $this->mapIdToFlags($this->current)->toArray();
+        $expected = $this->mapIdToFlags($this->expected)->toArray();
 
-		$this->updateAdmins($update);
-		$this->removeAdmins($expired);
-		$this->addAdmins($pending);
-	}
+        $diff = new VipSynchronizer($current, $expected);
 
-	private function updateAdmins($data)
-	{
-		foreach ($data as $id => $d) {
-			$this->updateAdmin($id, $d['username'], $d['flags']);
-		}
-	}
+        dd([
+            'update' => $diff->getNeedsUpdateList(),
+            'remove' => $diff->getNeedsRemovalList(),
+            'add'    => $diff->getNeedsAditionList(),
+        ]);
 
-	private function updateAdmin($steamid, $username, $flag): void
-	{
-		DB::connection('sm_admins')->table('sm_admins')->where('identity', $steamid)->update([
-			'flags' => $flag,
-		]);
-	}
+        foreach ($diff->getNeedsUpdateList() as $id => $flags) {
+            $data = $this->expected[ $id ];
+            $this->updateAdmin($id, $data['username'], $flags);
+        }
 
-	private function addAdmins($data)
-	{
-		foreach ($data as $id => $d) {
-			$this->addAdmin($id, $d['username'], $d['flags']);
-		}
-	}
+        foreach ($diff->getNeedsAditionList() as $id => $flags) {
+            $data = $this->expected[ $id ];
+            $this->addAdmin($id, $data['username'], $flags);
+        }
 
-	private function addAdmin($steamid, $username, $flag): void
-	{
-	    // Strip non alpha-numeric chars from username
-	    $cleanedUsername = preg_replace('/[^A-Za-z0-9_-]/', '_', $username);
-		DB::connection('sm_admins')->table('sm_admins')->insert([
-			'authtype' => 'steam',
-			'identity' => $steamid,
-			'name'     => $cleanedUsername,
-			'flags'    => $flag,
-			'immunity' => 50,
-		]);
-	}
+        $this->removeAdmins(array_keys($diff->getNeedsRemovalList()));
+    }
 
-	private function removeAdmins($ids): void
-	{
-		DB::connection('sm_admins')->table('sm_admins')->whereIn('identity', $ids)->delete();
-	}
+    protected function mapIdToFlags(Collection $collection): Collection
+    {
+        return $collection->map(function ($item) {
+            return $item['flags'];
+        });
+    }
+
+    private function updateAdmin($steamid, $username, $flag): void
+    {
+        DB::connection('sm_admins')->table('sm_admins')->where('identity', $steamid)->update([
+            'flags' => $flag,
+        ]);
+    }
+
+    private function addAdmin($steamid, $username, $flag): void
+    {
+        // Strip non alpha-numeric chars from username
+        $cleanedUsername = preg_replace('/[^A-Za-z0-9_-]/', '_', $username);
+
+        DB::connection('sm_admins')->table('sm_admins')->insert([
+            'authtype' => 'steam',
+            'identity' => $steamid,
+            'name'     => $cleanedUsername,
+            'flags'    => $flag,
+            'immunity' => 50,
+        ]);
+    }
+
+    private function removeAdmins($ids): void
+    {
+        DB::connection('sm_admins')->table('sm_admins')->whereIn('identity', $ids)->delete();
+    }
 }
