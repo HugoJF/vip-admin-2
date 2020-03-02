@@ -33,7 +33,7 @@
                 </td>
 
                 <!-- Tradelink -->
-                <td>
+                <td title="Tradelink">
                     @if($user->tradelink)
                         <a class="badge badge-dark" href="{{ $user->tradelink }}">Tradelink</a>
                     @else
@@ -42,7 +42,7 @@
                 </td>
 
                 <!-- Email -->
-                <td>
+                <td title="Email">
                     @if($user->email)
                         <span>✔</span>
                     @else
@@ -51,7 +51,7 @@
                 </td>
 
                 <!-- VIP -->
-                <td>
+                <td title="VIP">
                     @if(!$user->currentVip())
                         <span class="badge badge-danger">N/A</span>
                     @else
