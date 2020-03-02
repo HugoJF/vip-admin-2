@@ -54,7 +54,10 @@ class OrderService
 
         if ($response->status !== 201) {
             Log::error('Invalid PaymentSystem response', compact('response'));
-            throw new Exception('Invalid PaymentSystem response');
+            $e = new Exception('Invalid PaymentSystem response');
+            report($e);
+
+            return null;
         }
 
         $response = $response->content;

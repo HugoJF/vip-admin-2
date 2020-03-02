@@ -51,7 +51,8 @@ class OrderController extends Controller
     {
         $user = Auth::user();
         $response = $service->createOrder($user, $request->validated(), $product);
-
+        // TODO: move flashexceptions to flash directory
+        // TODO: throw flash on payment system
         return redirect($response->init_point);
     }
 
