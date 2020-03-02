@@ -129,12 +129,6 @@ class SynchronizeServer implements ShouldQueue
 
         $diff = new VipSynchronizer($current, $expected);
 
-        dd([
-            'update' => $diff->getNeedsUpdateList(),
-            'remove' => $diff->getNeedsRemovalList(),
-            'add'    => $diff->getNeedsAditionList(),
-        ]);
-
         foreach ($diff->getNeedsUpdateList() as $id => $flags) {
             $data = $this->expected[ $id ];
             $this->updateAdmin($id, $data['username'], $flags);
