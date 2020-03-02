@@ -19,6 +19,7 @@
                 <th>ID</th>
                 <th>Duration</th>
                 <th>Status</th>
+                <th>Transferred</th>
                 @admin
                 <th>User</th>
                 @endadmin
@@ -56,15 +57,20 @@
                         @endif
                     </td>
 
-                    <!-- User -->
-                    @admin
+                    <!-- Transferred -->
                     <td>
                         @if($order->steamid)
                             <span title="Pedido transferido para outro usuário">📩</span>
-                            <span class="badge badge-secondary">{{ $order->user->username ?? $order->user->name }}</span>
+                            <span class="badge badge-primary">{{ $order->steamid }}</span>
                         @else
-                            <span>{{ $order->user->username ?? $order->user->name }}</span>
+                            <span class="badge badge-dark">Não</span>
                         @endif
+                    </td>
+
+                    <!-- User -->
+                    @admin
+                    <td>
+                        <a href="{{ route('users.show', $order->user) }}">{{ $order->user->name ?? $order->user->username }}</a>
                     </td>
                     @endadmin
 

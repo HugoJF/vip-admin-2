@@ -113,8 +113,14 @@ Breadcrumbs::for ('tokens.show', function ($trail, $token) {
 
 // Users
 Breadcrumbs::for ('users.index', function ($trail) {
-	$trail->parent('home');
-	$trail->push('Usuários', route('users.index'));
+    $trail->parent('home');
+    $trail->push('Usuários', route('users.index'));
+});
+
+// Users > Show
+Breadcrumbs::for ('users.show', function ($trail, $user) {
+    $trail->parent('users.index');
+    $trail->push($user->name ?? $user->username, route('users.show', $user));
 });
 
 // Coupons

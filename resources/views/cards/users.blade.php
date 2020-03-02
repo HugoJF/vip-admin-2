@@ -78,6 +78,7 @@
 
                 <!-- Actions -->
                 <td>
+                    <a class="btn btn-outline-primary btn-sm" href="{{ route('users.show', $user) }}">View</a>
                     {!! Form::open(['url' => route('users.admin', $user), 'method' => 'PATCH', 'style' => 'display: inline-block']) !!}
                     <div class="btn-group" role="group">
                         <button class="btn btn-primary btn-sm">Toggle admin</button>

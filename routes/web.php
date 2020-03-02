@@ -158,6 +158,7 @@ Route::middleware(['auth', 'terms'])->group(function () {
 
 Route::middleware(['admin'])->group(function () {
 	Route::get('users', 'UserController@index')->name('users.index')->middleware('can:list,App\User');
+	Route::get('users/{user}', 'UserController@show')->name('users.show')->middleware('can:view,user');
 
 	Route::patch('users/{user}/admin', 'UserController@toggleAdmin')->name('users.admin')->middleware('can:admin,user');
 	Route::patch('users/{user}/affiliate', 'UserController@toggleAffiliate')->name('users.affiliate')->middleware('can:affiliate,user');

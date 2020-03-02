@@ -7,18 +7,23 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 
 class UserPolicy extends BasePolicy
 {
-	public function list(User $user, User $other)
-	{
-		return false;
-	}
+    public function list(User $user)
+    {
+        return false;
+    }
 
-	public function admin(User $user, User $other)
-	{
-		return false;
-	}
+    public function view(User $user, User $other)
+    {
+        return $user->id === $other->id;
+    }
 
-	public function affiliate(User $user, User $other)
-	{
-		return false;
-	}
+    public function admin(User $user, User $other)
+    {
+        return false;
+    }
+
+    public function affiliate(User $user, User $other)
+    {
+        return false;
+    }
 }
