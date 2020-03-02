@@ -3,21 +3,21 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+
     <title>@yield('title', 'Home') | VIP Servidores de_nerdTV</title>
-    
+
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-    
+
     <!-- Bootstrap core CSS -->
     <link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <!-- TempusDominus -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css"/>
-    
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    
+
     <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 </head>
@@ -32,13 +32,7 @@
     </div>
     <ul class="navbar-nav flex-shrink">
         <li class="h-full flex items-stretch text-nowrap">
-            @auth
-                {{--<a href="{{ route('servers.region') }}" class="trans p-3 no-underline text-gray-400 hover:bg-gray-700">--}}
-                {{--<span class="mr-1 inline text-gray-400" data-feather="plus"></span>--}}
-                {{--<span>Criar servidor</span>--}}
-                {{--</a>--}}
-            @endauth
-            <a href="{{ route('faq') }}" class="trans flex flex-grow justify-center items-center p-3 no-underline text-gray-400 hover:bg-gray-700">
+            <a href="https://denerdtv.com/faq/" class="trans flex flex-grow justify-center items-center p-3 no-underline text-gray-400 hover:bg-gray-700">
                 <span class="mr-1 inline text-gray-400" data-feather="help-circle"></span>
                 <span>FAQ</span>
             </a>
@@ -95,18 +89,18 @@
                         </div>
                     @endauth
                 </div>
-                
+
                 @auth
                     @php
                         $alerts = auth()->user()->getAlerts();
                     @endphp
-                    
+
                     @if($alerts->count() !== 0)
                         <h6 class="flex justify-between items-center px-3 mt-8 mb-4 uppercase font-normal tracking-wider text-gray-700">
                             <span>Alertas</span>
                             <span class="ml-4 mt-px flex-grow border-b border-dashed border-gray-800"></span>
                         </h6>
-                        
+
                         <ul class="flex flex-col items-center">
                             @foreach ($alerts as $alert)
                                 <li><a href="{{ $alert['url'] }}" class="badge badge-{{ $alert['level'] }}">{{ $alert['message'] }}</a></li>
@@ -114,14 +108,14 @@
                         </ul>
                     @endif
                 @endauth
-                
+
                 @auth
                 <a class="flex justify-between items-center px-3 mb-4 uppercase font-normal tracking-wider text-gray-700" data-toggle="collapse" href="#menu">
                     <span class="md:hidden" data-feather="menu"></span>
                     <span>Menu</span>
                     <span class="ml-4 mt-px flex-grow border-b border-dashed border-gray-800"></span>
                 </a>
-                
+
                 <!-- Home -->
                 <div id="menu" class="collapse">
                     <ul class="collapse pl-0 mb-0 flex flex-col text-sm">
@@ -135,7 +129,7 @@
                                 <span class="group-hover:text-white" data-toggle="modal" data-target="#homeHelpModal" data-feather="help-circle"></span>
                             </a>
                         </li>
-                        
+
                         <!-- Orders -->
                         <li class="flex justify-between my-2 ml-3">
                             <a href="{{ route('orders.index') }}" class="flex items-center text-gray-500 no-underline text-base group">
@@ -146,7 +140,7 @@
                                 <span class="group-hover:text-white" data-toggle="modal" data-target="#ordersHelpModal" data-feather="help-circle"></span>
                             </a>
                         </li>
-                        
+
                         <!-- Tokens -->
                         <li class="flex justify-between my-2 ml-3">
                             <a href="{{ route('tokens.index') }}" class="flex items-center text-gray-500 no-underline text-base group">
@@ -157,7 +151,7 @@
                                 <span class="group-hover:text-white" data-toggle="modal" data-target="#tokensHelpModal" data-feather="help-circle"></span>
                             </a>
                         </li>
-                        
+
                         <!-- Usuários -->
                         @admin
                         <li class="flex justify-between my-2 ml-3">
@@ -170,7 +164,7 @@
                             </a>
                         </li>
                         @endadmin
-                        
+
                         @affiliate
                     <!-- Afiliados -->
                         <li class="flex justify-between my-2 ml-3">
@@ -183,7 +177,7 @@
                             </a>
                         </li>
                         @endaffiliate
-    
+
                         <!-- Produtos -->
                         @admin
                         <li class="flex justify-between my-2 ml-3">
@@ -196,7 +190,7 @@
                             </a>
                         </li>
                         @endadmin
-    
+
                         <!-- Cupons -->
                         @admin
                         <li class="flex justify-between my-2 ml-3">
@@ -209,7 +203,7 @@
                             </a>
                         </li>
                         @endadmin
-    
+
                         <!-- Admins -->
                         @admin
                         <li class="flex justify-between my-2 ml-3">
@@ -233,31 +227,31 @@
                 <div id="links" class="collapse">
                     <ul class="pl-0 mb-0 flex flex-col text-sm">
                         <li class="my-2 ml-3 group">
-                            <a class="flex items-center text-gray-500 no-underline text-sm group-hover:text-gray-400" href="#">
+                            <a class="flex items-center text-gray-500 no-underline text-sm group-hover:text-gray-400" href="https://denerdtv.com/como-comprar-vip-com-skins/">
                                 <span class="flex-shrink-0 mr-1 w-4 h-4" data-feather="chevron-right"></span>
                                 Como comprar VIP com skins <span class="sr-only">(current)</span>
                             </a>
                         </li>
                         <li class="my-2 ml-3 group">
-                            <a class="flex items-center text-gray-500 no-underline text-sm group-hover:text-gray-400" href="#">
+                            <a class="flex items-center text-gray-500 no-underline text-sm group-hover:text-gray-400" href="https://denerdtv.com/como-comprar-vip-com-mercadopago/">
                                 <span class="flex-shrink-0 mr-1 w-4 h-4" data-feather="chevron-right"></span>
                                 Como comprar VIP com MercadoPago
                             </a>
                         </li>
                         <li class="my-2 ml-3 group">
-                            <a class="flex items-center text-gray-500 no-underline text-sm group-hover:text-gray-400" href="#">
+                            <a class="flex items-center text-gray-500 no-underline text-sm group-hover:text-gray-400" href="https://denerdtv.com/como-comprar-vip-com-paypal/">
                                 <span class="flex-shrink-0 mr-1 w-4 h-4" data-feather="chevron-right"></span>
                                 Como comprar VIP com PayPal
                             </a>
                         </li>
                         <li class="my-2 ml-3 group">
-                            <a class="flex items-center text-gray-500 no-underline text-sm group-hover:text-gray-400" href="#">
+                            <a class="flex items-center text-gray-500 no-underline text-sm group-hover:text-gray-400" href="https://denerdtv.com/faq/">
                                 <span class="flex-shrink-0 mr-1 w-4 h-4" data-feather="chevron-right"></span>
                                 Perguntas frequentes
                             </a>
                         </li>
                         <li class="my-2 ml-3 group">
-                            <a class="flex items-center text-gray-500 no-underline text-sm group-hover:text-gray-400" href="#">
+                            <a class="flex items-center text-gray-500 no-underline text-sm group-hover:text-gray-400" href="https://denerdtv.com/discord">
                                 <span class="flex-shrink-0 mr-1 w-4 h-4" data-feather="chevron-right"></span>
                                 Suporte
                             </a>
@@ -285,7 +279,7 @@
             </div>
             <div class="text-gray-800 pt-8 p-1 md:p-8 overflow-x-hidden">
                 @include('flash::message')
-                
+
                 @yield('content')
             </div>
         </main>
