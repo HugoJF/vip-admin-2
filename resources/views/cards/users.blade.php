@@ -27,7 +27,9 @@
             <tr>
                 <!-- Nome -->
                 <td>
-                    <code>{{ $user->name ?? $user->username }}</code>
+                    <a href="https://steamcommunity.com/profiles/{{ $user->steamid }}">
+                        <code>{{ $user->name ?? $user->username }}</code>
+                    </a>
                 </td>
 
                 <!-- Tradelink -->
