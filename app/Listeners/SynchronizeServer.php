@@ -73,7 +73,12 @@ class SynchronizeServer implements ShouldQueue
 
     protected function loadExpectedVips(): Collection
     {
-        $orders = Order::active()->get();
+        $orders = Order::query()
+            ->paid()
+            ->valid()
+            ->started()
+            ->notExpired()
+            ->get();
 
         // Map with SteamID as key to remove duplicates
         // TODO: merge duplicates (map, groupBy, map)
