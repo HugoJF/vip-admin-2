@@ -22,10 +22,12 @@
                     @endif
                 </td>
             </tr>
+
             <tr>
                 <td>Username</td>
                 <td>{{ $user->username }}</td>
             </tr>
+
             <tr>
                 <td>Tradelink</td>
                 <td>
@@ -34,6 +36,7 @@
                     </a>
                 </td>
             </tr>
+
             <tr>
                 <td>Pedidos</td>
                 <td>
@@ -42,13 +45,17 @@
                     </span>
                 </td>
             </tr>
+
+            @php
+                $currentVip = $user->currentVip();
+            @endphp
             <tr>
                 <td>VIP</td>
                 <td>
-                    @if(!$user->currentVip())
+                    @if(!$currentVip)
                         <span class="badge badge-danger">N/A</span>
                     @else
-                        <span>✔</span>
+                        <span class="badge badge-success">{{ $currentVip }} dias</span>
                     @endif
                 </td>
             </tr>
