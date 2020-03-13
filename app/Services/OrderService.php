@@ -87,13 +87,16 @@ class OrderService
 
     public function buildOrderDetails(Order $order, User $user, Product $product, $coupon)
     {
-        $ratio = 1;
-        if ($coupon instanceof Coupon)
+        if ($coupon instanceof Coupon) {
             $ratio = 1 - $coupon->discount;
+        } else {
+            $ratio = 1;
+        }
 
         $details['reason'] = "VIP de $product->duration dias nos servidores de_nerdTV";
-        $details['return_url'] = url("/orders/{$order->id}");
-        $details['cancel_url'] = url("/orders/{$order->id}");
+        $details['return_url'] = route('orders.show', $order);
+        $details['cancel_url'] = route('orders.show', $order);
+        $details['webhook_url'] = route('api.orders.webhook', $order);
         $details['preset_amount'] = round($product->cost * $ratio);
         $details['reason'] = 'VIP servidores de_nerdTV';
         $details['product_name_singular'] = 'dia';
@@ -208,5 +211,7 @@ class OrderService
             return false;
         }
         DB::commit();
+
+        return true;
     }
 }
