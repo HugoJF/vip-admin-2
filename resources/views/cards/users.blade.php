@@ -51,14 +51,11 @@
                 </td>
 
                 <!-- VIP -->
-                @php
-                    $currentVip =$user->currentVip();
-                @endphp
                 <td title="VIP">
-                    @if(!$currentVip)
+                    @if(!$duration = $user->currentVip())
                         <span class="badge badge-danger">N/A</span>
                     @else
-                        <span class="badge badge-success">{{ $currentVip }} dias</span>
+                        <span class="badge badge-success">{{ $duration }} dias</span>
                     @endif
                 </td>
 

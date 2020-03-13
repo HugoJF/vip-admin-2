@@ -32,15 +32,7 @@
             <tr>
                 <td>Estado</td>
                 <td>
-                    @if($order->canceled)
-                        <span class="badge badge-danger">Cancelado</span>
-                    @elseif($order->paid && $order->activated)
-                        <span class="badge badge-success">Ativo</span>
-                    @elseif($order->paid)
-                        <span class="badge badge-primary">Pago</span>
-                    @else
-                        <span class="badge badge-warning">Pendente</span>
-                    @endif
+                    @include('orders.status-badge')
                 </td>
             </tr>
             <tr>
