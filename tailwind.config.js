@@ -221,6 +221,7 @@ module.exports = {
         },
         fontFamily: {
             sans: [
+                'Cairo',
                 '-apple-system',
                 'BlinkMacSystemFont',
                 '"Segoe UI"',
