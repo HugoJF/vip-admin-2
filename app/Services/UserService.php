@@ -32,7 +32,12 @@ class UserService
 
 	public function getOrderBasePoint(User $user)
 	{
-		$lastOrder = $user->orders()->active()->first();
+		$lastOrder = $user
+            ->orders()
+            ->paid()
+            ->valid()
+            ->notTransferred()
+            ->first();
 
 		if ($lastOrder)
 			return $lastOrder->ends_at;

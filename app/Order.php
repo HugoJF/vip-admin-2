@@ -106,6 +106,16 @@ class Order extends Model
 		return $query->where('ends_at', '>=', now());
 	}
 
+    public function scopeNotTransferred(Builder $query)
+    {
+        return $query->whereNull('steamid');
+    }
+
+    public function scopeTransferred(Builder $query)
+    {
+        return $query->whereNotNull('steamid');
+    }
+
 	public function scopeExpired(Builder $query)
 	{
 		return $query->where('ends_at', '<', now());
