@@ -18,6 +18,7 @@
             <tr>
                 <th>ID</th>
                 <th>Duration</th>
+                <th>Remaining</th>
                 <th>Status</th>
                 <th>Transferred</th>
                 @admin
@@ -42,9 +43,27 @@
                         <span class="badge badge-primary">{{ $order->duration }} dias</span>
                     </td>
 
+                    <!-- Remaining -->
+                    <td>
+                        @if(
+	                        $order->starts_at &&
+	                        $order->ends_at &&
+	                        $order->ends_at->isFuture() &&
+	                        $remaining = $order->remaining
+	                        )
+                            <span class="badge badge-primary">
+                                {{ $remaining }} {{ $remaining === 1 ? 'dia' : 'dias' }}
+                            </span>
+                        @else
+                            <span class="badge badge-secondary">
+                                N/A
+                            </span>
+                        @endif
+                    </td>
+
                     <!-- Status -->
                     <td>
-                       @include('orders.status-badge')
+                        @include('orders.status-badge')
                     </td>
 
                     <!-- Transferred -->

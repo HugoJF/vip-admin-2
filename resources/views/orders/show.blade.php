@@ -30,6 +30,19 @@
                 <td><span class="badge badge-primary">{{ $order->duration }} dias</span></td>
             </tr>
             <tr>
+                <td>Restante</td>
+                <td>
+                    @if($remaining = $order->remaining)
+                        <span class="badge badge-primary">
+                            {{ $remaining }}
+                            {{ $remaining === 1 ? 'dia' : 'dias' }}
+                        </span>
+                    @else
+                        <span class="badge badge-secondary">N/A</span>
+                    @endif
+                </td>
+            </tr>
+            <tr>
                 <td>Estado</td>
                 <td>
                     @include('orders.status-badge')
@@ -38,11 +51,11 @@
             <tr>
                 <td>Transferido</td>
                 <td>
-                @if($order->steamid)
-                   <span class="badge badge-primary">{{ $order->steamid }}</span>
-                @else
-                    <span class="badge badge-dark">Não</span>
-                @endif
+                    @if($order->steamid)
+                        <span class="badge badge-primary">{{ $order->steamid }}</span>
+                    @else
+                        <span class="badge badge-dark">Não</span>
+                    @endif
                 </td>
             </tr>
             <tr>
