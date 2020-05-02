@@ -268,13 +268,6 @@
         </nav>
         <main role="main" class="w-full md:w-2/3 lg:w-4/5 ml-auto">
             <div class="flex items-center py-3 px-8 bg-gray-100 text-gray-600 border-b border-gray-400">
-                <!--
-                <span>Home</span>
-                <span class="mr-1 w-4 h-4 inline text-gray-700" data-feather="chevron-right"></span>
-                <span>Pedidos</span>
-                <span class="mr-1 w-4 h-4 inline text-gray-700" data-feather="chevron-right"></span>
-                <span>#203238458</span>
-                -->
                 {{ Breadcrumbs::render() }}
             </div>
             <div class="text-gray-800 pt-8 p-1 md:p-8 overflow-x-hidden">
