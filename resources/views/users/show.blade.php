@@ -1,5 +1,26 @@
 @extends('layouts.app')
 
+@push('modals')
+    <div id="userRefactor" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Refatoração de pedidos de usuário</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    {!! Form::open(['method' => 'PATCH', 'url' => route('users.refactor', $user)]) !!}
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Refatorar</button>
+                    {!! Form::close() !!}
+                </div>
+            </div>
+        </div>
+    </div>
+@endpush
+
 @section('content')
     <h1 class="text-center">Usuário <code>{{ $user->name ?? $user->username }}</code></h1>
     <br/>
@@ -7,7 +28,14 @@
         @slot('title')
             <div class="d-flex items-center justify-between">
                 <span>Detalhes</span>
-                <div class="btn-group"></div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Ações
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#userRefactor">Refatorar</a>
+                    </div>
+                </div>
             </div>
         @endslot
         <table class="table">
@@ -24,7 +52,7 @@
                     @endif
                 </td>
             </tr>
-            
+
             <!-- Email -->
             <tr>
                 <td>Email</td>

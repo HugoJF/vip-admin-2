@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\AffiliateCodeAlreadyLoggedException;
 use App\Services\AffiliateService;
+use App\Services\OrderRefactoringService;
 use App\Services\UserService;
 use App\User;
 use Illuminate\Support\Facades\Auth;
@@ -71,5 +72,17 @@ class UserController extends Controller
         $user->load(['orders']);
 
         return view('users.show', compact('user'));
+    }
+
+    public function refactor(User $user)
+    {
+        /** @var OrderRefactoringService $service */
+        $service = app(OrderRefactoringService::class);
+
+        $service->refactorUser($user);
+
+        flash()->success("Pedidos do usuário <strong>{$user->steamid}</strong> refatorado!");
+
+        return back();
     }
 }

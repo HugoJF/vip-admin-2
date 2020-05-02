@@ -55,8 +55,8 @@ Route::get('auth/logout', 'AuthController@logout')->name('auth.logout');
 */
 
 Route::middleware(['auth'])->group(function () {
-	Route::get('settings', 'UserSettingController@edit')->name('settings');
-	Route::patch('settings', 'UserSettingController@update')->name('settings');
+    Route::get('settings', 'UserSettingController@edit')->name('settings');
+    Route::patch('settings', 'UserSettingController@update')->name('settings');
 });
 
 /*
@@ -66,7 +66,7 @@ Route::middleware(['auth'])->group(function () {
 */
 
 Route::middleware(['auth'])->group(function () {
-	Route::get('search', 'SearchController@search')->name('search');
+    Route::get('search', 'SearchController@search')->name('search');
 });
 
 /*
@@ -76,15 +76,15 @@ Route::middleware(['auth'])->group(function () {
 */
 
 Route::middleware(['admin'])->group(function () {
-	Route::get('products', 'ProductController@index')->name('products.index')->middleware('can:list,App\Product');
-	Route::get('products/create', 'ProductController@create')->name('products.create')->middleware('can:store,App\Product');
-	Route::get('products/{product}/edit', 'ProductController@edit')->name('products.edit')->middleware('can:update,product');
+    Route::get('products', 'ProductController@index')->name('products.index')->middleware('can:list,App\Product');
+    Route::get('products/create', 'ProductController@create')->name('products.create')->middleware('can:store,App\Product');
+    Route::get('products/{product}/edit', 'ProductController@edit')->name('products.edit')->middleware('can:update,product');
 
-	Route::post('products', 'ProductController@store')->name('products.store')->middleware('can:store,App\Product');
+    Route::post('products', 'ProductController@store')->name('products.store')->middleware('can:store,App\Product');
 
-	Route::patch('products/{product}', 'ProductController@update')->name('products.update')->middleware('can:update,product');
+    Route::patch('products/{product}', 'ProductController@update')->name('products.update')->middleware('can:update,product');
 
-	Route::delete('products/{product}', 'ProductController@destroy')->name('products.destroy')->middleware('can:destroy,product');
+    Route::delete('products/{product}', 'ProductController@destroy')->name('products.destroy')->middleware('can:destroy,product');
 });
 
 /*
@@ -94,17 +94,17 @@ Route::middleware(['admin'])->group(function () {
 */
 
 Route::middleware(['auth', 'terms'])->group(function () {
-	Route::get('orders', 'OrderController@index')->name('orders.index')->middleware('can:list,App\Order');
-	Route::get('orders/create/{product}', 'OrderController@create')->name('orders.create')->middleware(['can:store,App\Order', 'can:view,product']);
-	Route::get('orders/{order}', 'OrderController@show')->name('orders.show')->middleware('can:view,order');
-	Route::get('orders/{order}/edit', 'OrderController@edit')->name('orders.edit')->middleware('can:update,order');
-	Route::get('orders/{order}/gift', 'OrderController@gift')->name('orders.gift')->middleware('can:transfer,order');
+    Route::get('orders', 'OrderController@index')->name('orders.index')->middleware('can:list,App\Order');
+    Route::get('orders/create/{product}', 'OrderController@create')->name('orders.create')->middleware(['can:store,App\Order', 'can:view,product']);
+    Route::get('orders/{order}', 'OrderController@show')->name('orders.show')->middleware('can:view,order');
+    Route::get('orders/{order}/edit', 'OrderController@edit')->name('orders.edit')->middleware('can:update,order');
+    Route::get('orders/{order}/gift', 'OrderController@gift')->name('orders.gift')->middleware('can:transfer,order');
 
-	Route::post('orders/{product}', 'OrderController@store')->name('orders.store')->middleware(['can:store,App\Order', 'can:view,product']);
+    Route::post('orders/{product}', 'OrderController@store')->name('orders.store')->middleware(['can:store,App\Order', 'can:view,product']);
 
-	Route::patch('orders/{order}/activate', 'OrderController@activate')->name('orders.activate')->middleware('can:activate,order');
-	Route::patch('orders/{order}/transfer', 'OrderController@transfer')->name('orders.transfer')->middleware('can:transfer,order');
-	Route::patch('orders/{order}', 'OrderController@update')->name('orders.update')->middleware('can:update,order');
+    Route::patch('orders/{order}/activate', 'OrderController@activate')->name('orders.activate')->middleware('can:activate,order');
+    Route::patch('orders/{order}/transfer', 'OrderController@transfer')->name('orders.transfer')->middleware('can:transfer,order');
+    Route::patch('orders/{order}', 'OrderController@update')->name('orders.update')->middleware('can:update,order');
 });
 
 /*
@@ -114,7 +114,7 @@ Route::middleware(['auth', 'terms'])->group(function () {
 */
 
 Route::middleware(['auth', 'affiliate', 'affiliate.code', 'terms'])->group(function () {
-	Route::get('affiliates', 'AffiliateController@index')->name('affiliates.index');
+    Route::get('affiliates', 'AffiliateController@index')->name('affiliates.index');
 });
 
 /*
@@ -124,15 +124,15 @@ Route::middleware(['auth', 'affiliate', 'affiliate.code', 'terms'])->group(funct
 */
 
 Route::middleware(['admin'])->group(function () {
-	Route::get('admins', 'AdminController@index')->name('admins.index')->middleware('can:list,App\Admin');
-	Route::get('admins/create', 'AdminController@create')->name('admins.create')->middleware('can:store,App\Admin');
-	Route::get('admins/{admin}/edit', 'AdminController@edit')->name('admins.edit')->middleware('can:update,admin');
+    Route::get('admins', 'AdminController@index')->name('admins.index')->middleware('can:list,App\Admin');
+    Route::get('admins/create', 'AdminController@create')->name('admins.create')->middleware('can:store,App\Admin');
+    Route::get('admins/{admin}/edit', 'AdminController@edit')->name('admins.edit')->middleware('can:update,admin');
 
-	Route::post('admins', 'AdminController@store')->name('admins.store')->middleware('can:store,App\Admin');
+    Route::post('admins', 'AdminController@store')->name('admins.store')->middleware('can:store,App\Admin');
 
-	Route::patch('admins/{admin}', 'AdminController@update')->name('admins.update')->middleware('can:update,admin');
+    Route::patch('admins/{admin}', 'AdminController@update')->name('admins.update')->middleware('can:update,admin');
 
-	Route::delete('admins/{admin}', 'AdminController@destroy')->name('admins.destroy')->middleware('can:destroy,admin');
+    Route::delete('admins/{admin}', 'AdminController@destroy')->name('admins.destroy')->middleware('can:destroy,admin');
 });
 
 /*
@@ -142,12 +142,12 @@ Route::middleware(['admin'])->group(function () {
 */
 
 Route::middleware(['auth', 'terms'])->group(function () {
-	Route::get('tokens', 'TokenController@index')->name('tokens.index')->middleware('can:list,App\Token');
-	Route::get('tokens/create', 'TokenController@create')->name('tokens.create')->middleware('can:store,App\Token');
-	Route::get('tokens/{token}', 'TokenController@show')->name('tokens.show')->middleware('can:view,token');
+    Route::get('tokens', 'TokenController@index')->name('tokens.index')->middleware('can:list,App\Token');
+    Route::get('tokens/create', 'TokenController@create')->name('tokens.create')->middleware('can:store,App\Token');
+    Route::get('tokens/{token}', 'TokenController@show')->name('tokens.show')->middleware('can:view,token');
 
-	Route::post('tokens/{token}', 'TokenController@use')->name('tokens.use')->middleware('can:use,token');
-	Route::post('tokens', 'TokenController@store')->name('tokens.store')->middleware('can:store,App\Token');
+    Route::post('tokens/{token}', 'TokenController@use')->name('tokens.use')->middleware('can:use,token');
+    Route::post('tokens', 'TokenController@store')->name('tokens.store')->middleware('can:store,App\Token');
 });
 
 /*
@@ -157,11 +157,12 @@ Route::middleware(['auth', 'terms'])->group(function () {
 */
 
 Route::middleware(['admin'])->group(function () {
-	Route::get('users', 'UserController@index')->name('users.index')->middleware('can:list,App\User');
-	Route::get('users/{user}', 'UserController@show')->name('users.show')->middleware('can:view,user');
+    Route::get('users', 'UserController@index')->name('users.index')->middleware('can:list,App\User');
+    Route::get('users/{user}', 'UserController@show')->name('users.show')->middleware('can:view,user');
 
-	Route::patch('users/{user}/admin', 'UserController@toggleAdmin')->name('users.admin')->middleware('can:admin,user');
-	Route::patch('users/{user}/affiliate', 'UserController@toggleAffiliate')->name('users.affiliate')->middleware('can:affiliate,user');
+    Route::patch('users/{user}/admin', 'UserController@toggleAdmin')->name('users.admin')->middleware('can:admin,user');
+    Route::patch('users/{user}/affiliate', 'UserController@toggleAffiliate')->name('users.affiliate')->middleware('can:affiliate,user');
+    Route::patch('users/{user}/refactor', 'UserController@refactor')->name('users.refactor')->middleware('can:refactor,user');
 });
 
 /*
@@ -171,14 +172,14 @@ Route::middleware(['admin'])->group(function () {
 */
 
 Route::middleware(['admin'])->group(function () {
-	Route::get('index', 'CouponController@index')->name('coupons.index')->middleware('can:list,App\Coupon');
+    Route::get('index', 'CouponController@index')->name('coupons.index')->middleware('can:list,App\Coupon');
 
-	Route::get('create', 'CouponController@create')->name('coupons.create')->middleware('can:create,App\Coupon');
-	Route::get('edit/{coupon}', 'CouponController@edit')->name('coupons.edit')->middleware('can:edit,coupon');
+    Route::get('create', 'CouponController@create')->name('coupons.create')->middleware('can:create,App\Coupon');
+    Route::get('edit/{coupon}', 'CouponController@edit')->name('coupons.edit')->middleware('can:edit,coupon');
 
-	Route::post('/', 'CouponController@store')->name('coupons.store')->middleware('can:store,App\Coupon');
+    Route::post('/', 'CouponController@store')->name('coupons.store')->middleware('can:store,App\Coupon');
 
-	Route::patch('{coupon}', 'CouponController@update')->name('coupons.update')->middleware('can:update,coupon');
+    Route::patch('{coupon}', 'CouponController@update')->name('coupons.update')->middleware('can:update,coupon');
 
-	Route::delete('{coupon}', 'CouponController@destroy')->name('coupons.destroy')->middleware('can:destroy,coupon');
+    Route::delete('{coupon}', 'CouponController@destroy')->name('coupons.destroy')->middleware('can:destroy,coupon');
 });

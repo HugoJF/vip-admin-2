@@ -45,12 +45,7 @@
 
                     <!-- Remaining -->
                     <td>
-                        @if(
-	                        $order->starts_at &&
-	                        $order->ends_at &&
-	                        $order->ends_at->isFuture() &&
-	                        $remaining = $order->remaining
-	                        )
+                        @if($remaining = $order->remaining)
                             <span class="badge badge-primary">
                                 {{ $remaining }} {{ $remaining === 1 ? 'dia' : 'dias' }}
                             </span>
