@@ -32,7 +32,9 @@
                 <tr>
                     <!-- ID -->
                     <td>
-                        <code class="break-normal">#{{ $order->id }}</code>
+                        <a href="{{ route('orders.show', $order) }}">
+                            <code class="break-normal">#{{ $order->id }}</code>
+                        </a>
                     </td>
 
                     <!-- Duration -->
