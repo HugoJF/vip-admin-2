@@ -36,6 +36,7 @@ class UserService
             ->orders()
             ->paid()
             ->valid()
+            ->started()
             ->notTransferred()
             ->first();
 
