@@ -37,6 +37,7 @@ class UserService
             ->paid()
             ->valid()
             ->started()
+            ->notExpired()
             ->notTransferred()
             ->first();
 
