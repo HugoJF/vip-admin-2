@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Jobs\PingHealthChecks;
 use App\Jobs\RecheckPendingOrders;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -29,6 +30,7 @@ class Kernel extends ConsoleKernel
 		// $schedule->command('inspire')
 		//          ->hourly();
 
+        $schedule->job(new PingHealthChecks())->everyMinute();
 		$schedule->job(new RecheckPendingOrders())->everyMinute();
 	}
 
