@@ -14,11 +14,6 @@ class PingHealthChecks implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * @var Client
-     */
-    protected $client;
-
-    /**
      * The number of times the job may be attempted.
      *
      * @var int
@@ -26,24 +21,16 @@ class PingHealthChecks implements ShouldQueue
     public $tries = 5;
 
     /**
-     * Create a new job instance.
+     * Execute the job.
      *
      * @param Client $client
-     */
-    public function __construct(Client $client)
-    {
-        $this->client = $client;
-    }
-
-    /**
-     * Execute the job.
      *
      * @return void
      */
-    public function handle()
+    public function handle(Client $client)
     {
         if ($id = config('health-checks.id')) {
-            $this->client->get("https://hc-ping.com/$id");
+            $client->get("https://hc-ping.com/$id");
         }
     }
 }
