@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'url' => env('HEALTHCHECKSIO_ID')
+    'id' => env('HEALTHCHECKSIO_ID')
 ];
