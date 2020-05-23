@@ -33,6 +33,8 @@ Route::get('faq', 'HomeController@faq')->name('faq');
 Route::get('terms', 'HomeController@terms')->name('terms');
 Route::get('a/{code}', 'UserController@affiliate')->name('affiliate');
 
+Route::middleware(['admin'])->get('clients', 'HomeController@clients')->name('clients');
+
 /*
 |--------------------------------------------------------------------------
 | Authentication
