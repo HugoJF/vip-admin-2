@@ -92,7 +92,7 @@ class Order extends Model
             return null;
         }
 
-        return $this->ends_at->diffInDays(now()) + 1;
+        return $this->ends_at->diffInDays($this->starts_at) + 1;
     }
 
     public function scopePaid(Builder $query)
