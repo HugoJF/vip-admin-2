@@ -92,7 +92,13 @@ class Order extends Model
             return null;
         }
 
-        return $this->ends_at->diffInDays($this->starts_at) + 1;
+        // If Order has not started, then compute the exact period remaining (essentially the duration).
+        // If Order has started, then compute the actual remaining period, and +1 because 23h59 = 0 days
+        if ($this->starts_at->isFuture()) {
+            return $this->ends_at->diffInDays($this->starts_at);
+        } else {
+            return $this->ends_at->diffInDays(now()) + 1;
+        }
     }
 
     public function scopePaid(Builder $query)
