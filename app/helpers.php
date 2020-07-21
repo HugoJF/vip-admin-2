@@ -49,10 +49,3 @@ if (!function_exists('steamid3')) {
         return steamid($id)->RenderSteam3();
     }
 }
-
-if (!function_exists('eflash')) {
-    function eflash()
-    {
-        return app('eflash');
-    }
-}
