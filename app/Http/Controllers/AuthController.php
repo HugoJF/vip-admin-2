@@ -38,7 +38,7 @@ class AuthController extends Controller
             if (!is_null($info)) {
                 $user = $service->findOrNewUser($info);
 
-                Auth::login($user, true);
+                auth()->login($user, true);
 
                 return redirect($this->redirectURL); // redirect to site
             }

@@ -8,9 +8,9 @@ class InvalidCouponException extends FlashException
 {
     protected $coupon;
 
-    public function __construct($coupon = null, $message = "", $code = 0, Throwable $previous = null)
+    public function __construct($coupon = null)
     {
-        parent::__construct($message, $code, $previous);
+        parent::__construct();
 
         $this->coupon = $coupon;
     }
@@ -18,10 +18,10 @@ class InvalidCouponException extends FlashException
     public function flash()
     {
         if ($this->coupon) {
-            $coupon = e($this->coupon);
-            flash()->error("Cupom <strong>$coupon</strong> não é válido!");
-        } else
+            eflash()->error("Cupom <strong>%s</strong> não é válido!", $this->coupon);
+        } else {
             flash()->error('Cupom inválido!');
+        }
     }
 
     public function getResponse()

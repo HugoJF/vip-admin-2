@@ -35,11 +35,13 @@ class TokenController extends Controller
 
     public function use(TokenService $service, Token $token)
     {
-        if ($token->used)
+        if ($token->used) {
             throw new AlreadyUsedTokenException($token);
+        }
 
-        if ($token->expired)
+        if ($token->expired) {
             throw new TokenExpiredException($token);
+        }
 
         $order = $service->use($token);
 

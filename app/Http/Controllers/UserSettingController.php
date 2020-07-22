@@ -11,7 +11,7 @@ class UserSettingController extends Controller
 {
     public function edit(HomeForms $forms)
     {
-        $user = Auth::user();
+        $user = auth()->user();
         $form = $forms->settings($user);
 
         return view('form', [
@@ -23,7 +23,7 @@ class UserSettingController extends Controller
 
     public function update(UserSettingsUpdateRequest $request)
     {
-        $user = Auth::user();
+        $user = auth()->user();
 
         $user->fill($request->validated() + ['hidden_flags' => 0, 'terms' => 0]);
 

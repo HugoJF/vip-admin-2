@@ -87,14 +87,17 @@ class OrderController extends Controller
      */
     public function activate(OrderService $service, Order $order)
     {
-        if ($order->canceled)
-            throw new OrderCanceledException();
+        if ($order->canceled) {
+            throw new OrderCanceledException;
+        }
 
-        if ($order->activated)
-            throw new OrderAlreadyActivatedException();
+        if ($order->activated) {
+            throw new OrderAlreadyActivatedException;
+        }
 
-        if (!$order->paid)
-            throw new OrderNotPaidException();
+        if (!$order->paid) {
+            throw new OrderNotPaidException;
+        }
 
         $service->activateOrder($order);
 

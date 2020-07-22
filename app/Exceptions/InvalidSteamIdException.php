@@ -6,8 +6,7 @@ class InvalidSteamIdException extends FlashException
 {
     public function flash()
     {
-        $message = e($this->message);
-        flash()->error("<strong>$message</strong> não é uma SteamID válida!");
+        eflash()->error("<strong>%s</strong> não é uma SteamID válida!", $this->message);
     }
 
     public function getResponse()

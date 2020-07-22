@@ -22,11 +22,11 @@ class UserController extends Controller
     {
         $service->toggleAdmin($user);
 
-        $username = e($user->username);
-        if ($user->admin)
-            flash()->success("<strong>$username</strong> promovido para administrador!");
-        else
-            flash()->success("<strong>$username</strong> removido dos administradores");
+        if ($user->admin) {
+            eflash()->success("<strong>%s</strong> promovido para administrador!", $user->username);
+        } else {
+            eflash()->success("<strong>%s</strong> removido dos administradores", $user->username);
+        }
 
         return back();
     }
@@ -35,11 +35,11 @@ class UserController extends Controller
     {
         $service->toggleAffiliate($user);
 
-        $username = e($user->username);
-        if ($user->affiliate)
-            flash()->success("<strong>$username</strong> adicionado para lista de afiliados");
-        else
-            flash()->success("<strong>$username</strong> removido da lista de afiliados");
+        if ($user->affiliate) {
+            eeflash()->success("<strong>%s</strong> adicionado para lista de afiliados", $user->username);
+        } else {
+            flash()->success("<strong>%s</strong> removido da lista de afiliados", $user->username);
+        }
 
         return back();
     }
@@ -53,13 +53,12 @@ class UserController extends Controller
      */
     public function affiliate(AffiliateService $service, $code)
     {
-        if (Auth::check()) {
+        if (auth()->check()) {
             throw new AffiliateCodeAlreadyLoggedException();
         }
 
         if ($service->attachAffiliateCode($code)) {
-            $code = e($code);
-            flash()->success("Código <strong>$code</strong> registrado!");
+            eflash()->success("Código <strong>%s</strong> registrado!", $code);
         } else {
             flash()->error('Código de afiliado inválido!');
         }

@@ -17,9 +17,7 @@ class TokenExpiredException extends FlashException
 
     public function flash()
     {
-        $id = e($this->token->id);
-
-        flash()->error("Token <strong>$id</strong> já expirou!");
+        eflash()->error("Token <strong>%s</strong> já expirou!", $this->token->id);
     }
 
     public function getResponse()

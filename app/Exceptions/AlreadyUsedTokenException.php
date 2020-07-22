@@ -16,8 +16,7 @@ class AlreadyUsedTokenException extends FlashException
 
     public function flash()
     {
-        $id = e($this->token->id);
-        flash()->error("Token <strong>$id</strong> já foi utilizado!");
+        eflash()->error("Token <strong>%s</strong> já foi utilizado!", $this->token->id);
     }
 
     public function getResponse()
