@@ -10,7 +10,7 @@ namespace App\Services\Forms;
 
 use App\Forms\OrderForm;
 use App\Order;
-use App\OrderTransferForm;
+use App\Forms\OrderTransferForm;
 
 class OrderForms extends ServiceForms
 {

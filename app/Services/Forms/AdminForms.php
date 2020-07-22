@@ -9,7 +9,7 @@
 namespace App\Services\Forms;
 
 use App\Admin;
-use App\AdminForm;
+use App\Forms\AdminForm;
 
 class AdminForms extends ServiceForms
 {

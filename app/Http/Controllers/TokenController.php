@@ -8,7 +8,7 @@ use App\Http\Requests\TokenStoreRequest;
 use App\Http\Requests\TokenUpdateRequest;
 use App\Services\TokenService;
 use App\Token;
-use App\TokenForm;
+use App\Forms\TokenForm;
 use Kris\LaravelFormBuilder\FormBuilder;
 
 class TokenController extends Controller

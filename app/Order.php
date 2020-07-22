@@ -13,8 +13,10 @@ use Spatie\Searchable\SearchResult;
 class Order extends Model implements Searchable
 {
     public $incrementing = false;
+
     protected $fillable = ['duration', 'starts_at', 'ends_at', 'user_id', 'paid', 'canceled', 'steamid'];
     protected $with = ['user'];
+
     protected $casts = [
         'created_at'     => 'datetime',
         'updated_at'     => 'datetime',
