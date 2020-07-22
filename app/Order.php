@@ -9,38 +9,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\QueriesRelationships;
 use Illuminate\Database\Eloquent\Model;
 use Nicolaslopezj\Searchable\SearchableTrait;
+use Spatie\Searchable\Searchable;
+use Spatie\Searchable\SearchResult;
 
-class Order extends Model
+class Order extends Model implements Searchable
 {
-    use SearchableTrait;
-
-    protected $searchable = [
-        /**
-         * Columns and their priority in search results.
-         * Columns with higher values are more important.
-         * Columns with equal values have equal importance.
-         *
-         * @var array
-         */
-        'columns' => [
-            'orders.id'             => 30,
-            'orders.reference'      => 30,
-            'orders.duration'       => 20,
-            'orders.paid'           => 10,
-            'orders.canceled'       => 10,
-            'orders.auto_activates' => 10,
-            'users.email'           => 30,
-            'users.steamid'         => 20,
-            'users.username'        => 20,
-            'users.name'            => 20,
-            'users.tradelink'       => 10,
-            'users.admin'           => 10,
-        ],
-        'joins'   => [
-            'users' => ['orders.user_id', 'users.id'],
-        ],
-    ];
-
     protected $fillable = ['duration', 'starts_at', 'ends_at', 'user_id', 'paid', 'canceled', 'steamid'];
 
     protected $with = ['user'];
@@ -199,5 +172,14 @@ class Order extends Model
 
         $this->touch();
         $this->save();
+    }
+
+    public function getSearchResult(): SearchResult
+    {
+        return new SearchResult(
+            $this,
+            $this->id,
+            route('orders.show', $this)
+        );
     }
 }

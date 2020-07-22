@@ -7,6 +7,11 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 
 class UserPolicy extends BasePolicy
 {
+    public function search(User $user, User $other)
+    {
+        return false;
+    }
+
     public function list(User $user)
     {
         return false;

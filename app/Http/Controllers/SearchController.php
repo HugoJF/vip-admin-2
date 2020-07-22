@@ -10,13 +10,21 @@ class SearchController extends Controller
 {
 	public function search(SearchService $service, Request $request)
 	{
-		$user = Auth::user();
+        $mapping = [
+            'orders'      => [
+                'title'    => 'Orders',
+                'view'     => 'cards.orders',
+                'variable' => 'orders',
+            ],
+            'users' => [
+                'title'    => 'Users',
+                'view'     => 'cards.users',
+                'variable' => 'users',
+            ],
+        ];
 
-		$term = $request->input('term');
+	    $result = $service->search($request->input('term'));
 
-		$users = $service->searchUsers($user, $term);
-		$orders = $service->searchOrders($user, $term);
-
-		return view('search', compact('term', 'users', 'orders'));
+	    return view('search', compact('result', 'mapping'));
 	}
 }

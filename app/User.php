@@ -12,9 +12,11 @@ use HugoJF\ModelWarnings\Traits\HasWarnings;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Nicolaslopezj\Searchable\SearchableTrait;
+use Spatie\Searchable\Searchable;
+use Spatie\Searchable\SearchResult;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable implements JWTSubject, Searchable
 {
     use HasWarnings;
     use Notifiable;
@@ -132,5 +134,14 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function getSearchResult(): SearchResult
+    {
+        return new SearchResult(
+            $this,
+            $this->name ?? $this->username,
+            route('users.show', $this)
+        );
     }
 }

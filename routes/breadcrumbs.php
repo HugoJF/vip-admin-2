@@ -5,8 +5,12 @@ Breadcrumbs::for ('home', function ($trail) {
 	$trail->push('Início', route('home'));
 });
 // Login
-Breadcrumbs::for ('asd', function ($trail) {
-	$trail->push('Início', route('asd'));
+Breadcrumbs::for ('login', function ($trail) {
+	$trail->push('Login', route('login'));
+});
+// Search
+Breadcrumbs::for ('search', function ($trail) {
+	$trail->push('Busca', route('home'));
 });
 
 // Settings

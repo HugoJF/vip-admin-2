@@ -8,6 +8,11 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 
 class OrderPolicy extends BasePolicy
 {
+    public function search(User $user, Order $order)
+    {
+        return $order->user_id === $user->id;
+    }
+
 	public function list(User $user)
 	{
 		return true;

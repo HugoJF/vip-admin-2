@@ -10,18 +10,35 @@ namespace App\Services;
 
 use App\Order;
 use App\User;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Gate;
+use Spatie\Searchable\Search;
 
 class SearchService
 {
-	public function searchUsers($user, $term)
+    public function search(string $term)
 	{
-		return $user->admin ? User::search($term)->get() : null;
-	}
+        $search = (new Search)
+            ->registerModel(Order::class, 'id', 'steamid', 'starts_at', 'ends_at', 'synced_at', 'reference');
 
-	public function searchOrders($user, $term)
-	{
-		$orders = $user->admin ? Order::query() : $user->orders();
+        if (auth()->user()->admin) {
+            $search->registerModel(User::class, 'name', 'username', 'tradelink', 'steamid', 'email');
+        }
 
-		return $orders->search($term)->get();
+        $result = $search->search($term);
+
+        // Pluck Models from each type group
+        $result = $result->groupByType()->mapWithKeys(function (Collection $items, $type) {
+            return [$type => $items->pluck('searchable')];
+        });
+
+        // Filter Models that user should not be able to see
+        $result = $result->mapWithKeys(function (Collection $items, $type) {
+            return [$type => $items->filter(function ($model) use ($type) {
+                return Gate::allows('search', $model);
+            })];
+        });
+
+        return $result;
 	}
 }

@@ -1,20 +1,14 @@
+
 @extends('layouts.app')
 
 @section('content')
-    <h1>Resultados da busca por <code>{{ $term }}</code></h1>
-    
-    @if(isset($users))
-        <br/>
-        @include('cards.users')
-    @endif
-    
-    @if(isset($tokens))
-        <br/>
-        @include('cards.tokens')
-    @endif
-    
-    @if(isset($orders))
-        <br/>
-        @include('cards.orders')
-    @endif
+    <h1>Resultado da busca por: <strong>{{ request('term') }}</strong></h1>
+    <br/>
+
+    @foreach ($result as $type => $items)
+        <div class="mb-10">
+            <h2 class="mb-4">{{ $mapping[$type]['title'] }}</h2>
+            @include($mapping[$type]['view'], [$mapping[$type]['variable'] => $items])
+        </div>
+    @endforeach
 @endsection
