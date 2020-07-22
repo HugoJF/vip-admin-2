@@ -11,7 +11,6 @@ use Carbon\Carbon;
 use HugoJF\ModelWarnings\Traits\HasWarnings;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Nicolaslopezj\Searchable\SearchableTrait;
 use Spatie\Searchable\Searchable;
 use Spatie\Searchable\SearchResult;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -20,18 +19,6 @@ class User extends Authenticatable implements JWTSubject, Searchable
 {
     use HasWarnings;
     use Notifiable;
-    use SearchableTrait;
-
-    protected $searchable = [
-        'columns' => [
-            'users.steamid'        => 75,
-            'users.email'          => 50,
-            'users.affiliate_code' => 30,
-            'users.name'           => 25,
-            'users.username'       => 25,
-            'users.tradelink'      => 10,
-        ],
-    ];
 
     protected $fillable = [
         'name',
