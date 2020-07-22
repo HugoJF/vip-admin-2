@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ManualServerSynchronization;
 use App\Exceptions\OrderAlreadyActivatedException;
 use App\Exceptions\OrderCanceledException;
 use App\Exceptions\OrderNotActivatedException;
@@ -118,6 +119,8 @@ class OrderController extends Controller
                 return back();
             }
 
+            event(new ManualServerSynchronization);
+
             flash()->success('Pedido retornado para sua conta!');
 
             return redirect()->route('orders.show', $order);
@@ -130,6 +133,8 @@ class OrderController extends Controller
         if (!$service->transferOrder($order, $request->input('steamid'))) {
             return back();
         }
+
+        event(new ManualServerSynchronization);
 
         flash()->success("Pedido transferido para a SteamID <strong>$order->steamid</strong>!");
 
