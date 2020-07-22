@@ -12,10 +12,10 @@ use HugoJF\ModelWarnings\Contracts\Warning;
 
 class MissingAffiliateCode extends Warning
 {
-	public function triggered()
-	{
-		return empty($this->context->affiliate_code) && $this->context->affiliate;
-	}
+    public function triggered()
+    {
+        return empty($this->context->affiliate_code) && $this->context->affiliate;
+    }
 
     /**
      * @inheritDoc

@@ -12,10 +12,10 @@ use HugoJF\ModelWarnings\Contracts\Warning;
 
 class MissingTradeLinkAlert extends Warning
 {
-	public function triggered()
-	{
-		return empty($this->context->tradelink);
-	}
+    public function triggered()
+    {
+        return empty($this->context->tradelink);
+    }
 
     /**
      * @inheritDoc

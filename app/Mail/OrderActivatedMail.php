@@ -6,7 +6,6 @@ use App\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class OrderActivatedMail extends Mailable
 {
@@ -14,14 +13,14 @@ class OrderActivatedMail extends Mailable
 
     private $order;
 
-	/**
+    /**
      * Create a new message instance.
      *
      * @return void
      */
     public function __construct(Order $order)
     {
-    	$this->order = $order;
+        $this->order = $order;
     }
 
     /**
@@ -32,7 +31,7 @@ class OrderActivatedMail extends Mailable
     public function build()
     {
         return $this
-			->subject('Seu pedido acabou de ser ativado!')
-			->markdown('emails.order-activated', ['order' => $this->order]);
+            ->subject('Seu pedido acabou de ser ativado!')
+            ->markdown('emails.order-activated', ['order' => $this->order]);
     }
 }

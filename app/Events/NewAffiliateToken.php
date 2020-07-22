@@ -3,13 +3,10 @@
 namespace App\Events;
 
 use App\Token;
-use Illuminate\Broadcasting\Channel;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
 
 class NewAffiliateToken
 {
@@ -17,14 +14,14 @@ class NewAffiliateToken
 
     public $token;
 
-	/**
-	 * Create a new event instance.
-	 *
-	 * @param Token $token
-	 */
+    /**
+     * Create a new event instance.
+     *
+     * @param Token $token
+     */
     public function __construct(Token $token)
     {
-    	$this->token = $token;
+        $this->token = $token;
     }
 
     /**

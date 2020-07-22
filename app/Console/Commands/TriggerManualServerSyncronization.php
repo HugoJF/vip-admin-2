@@ -38,8 +38,8 @@ class TriggerManualServerSyncronization extends Command
      */
     public function handle()
     {
-		$this->comment('Triggering server synchronization...');
-		event(new ManualServerSynchronization());
-		$this->info('Server synchronized!');
+        $this->comment('Triggering server synchronization...');
+        event(new ManualServerSynchronization());
+        $this->info('Server synchronized!');
     }
 }

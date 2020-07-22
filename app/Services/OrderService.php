@@ -14,7 +14,6 @@ use App\Events\OrderActivated;
 use App\Events\OrderCreated;
 use App\Events\OrderUpdated;
 use App\Exceptions\InvalidCouponException;
-use App\Exceptions\InvalidSteamIdException;
 use App\Order;
 use App\Product;
 use App\User;
@@ -22,7 +21,6 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use InvalidArgumentException;
-use SteamID;
 
 class OrderService
 {

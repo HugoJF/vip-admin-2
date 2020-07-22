@@ -2,8 +2,6 @@
 
 namespace App\Exceptions;
 
-use Exception;
-
 class AffiliateCodeNotSetException extends FlashException
 {
     public function flash()

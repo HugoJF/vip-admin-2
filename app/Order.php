@@ -4,20 +4,16 @@ namespace App;
 
 use App\Classes\PaymentSystem;
 use App\Events\OrderPaid;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Concerns\QueriesRelationships;
 use Illuminate\Database\Eloquent\Model;
-use Nicolaslopezj\Searchable\SearchableTrait;
 use Spatie\Searchable\Searchable;
 use Spatie\Searchable\SearchResult;
 
 class Order extends Model implements Searchable
 {
+    public $incrementing = false;
     protected $fillable = ['duration', 'starts_at', 'ends_at', 'user_id', 'paid', 'canceled', 'steamid'];
-
     protected $with = ['user'];
-
     protected $casts = [
         'created_at'     => 'datetime',
         'updated_at'     => 'datetime',
@@ -26,8 +22,6 @@ class Order extends Model implements Searchable
         'paid'           => 'boolean',
         'auto_activates' => 'boolean',
     ];
-
-    public $incrementing = false;
 
     public function user()
     {

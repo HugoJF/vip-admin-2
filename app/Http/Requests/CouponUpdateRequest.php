@@ -13,10 +13,10 @@ class CouponUpdateRequest extends FormRequest
      */
     public function rules()
     {
-		return [
-			'discount'  => 'required|numeric|min:0|max:1',
-			'starts_at' => 'required|date',
-			'ends_at'   => 'required|date|after:starts_at',
-		];
+        return [
+            'discount'  => 'required|numeric|min:0|max:1',
+            'starts_at' => 'required|date',
+            'ends_at'   => 'required|date|after:starts_at',
+        ];
     }
 }

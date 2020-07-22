@@ -14,10 +14,10 @@ class AdminUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-			'username' => 'required',
-			'steamid'  => 'required|steamid',
-			'flags'    => 'required|sm_flag',
-			'note'     => 'string',
+            'username' => 'required',
+            'steamid'  => 'required|steamid',
+            'flags'    => 'required|sm_flag',
+            'note'     => 'string',
         ];
     }
 }

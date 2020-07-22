@@ -12,11 +12,11 @@ use Kris\LaravelFormBuilder\Form as BaseForm;
 
 class Form extends BaseForm
 {
-	protected function buildHelpBlock($text)
-	{
-		return [
-			'text' => $text,
-			'tag' => 'small',
-		];
-	}
+    protected function buildHelpBlock($text)
+    {
+        return [
+            'text' => $text,
+            'tag'  => 'small',
+        ];
+    }
 }

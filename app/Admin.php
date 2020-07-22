@@ -8,23 +8,23 @@ use Nicolaslopezj\Searchable\SearchableTrait;
 class Admin extends Model
 {
 
-	use SearchableTrait;
+    use SearchableTrait;
 
-	protected $searchable = [
-		/**
-		 * Columns and their priority in search results.
-		 * Columns with higher values are more important.
-		 * Columns with equal values have equal importance.
-		 *
-		 * @var array
-		 */
-		'columns' => [
-			'admins.id'       => 5,
-			'admins.username' => 20,
-			'admins.steamid'  => 40,
-			'admins.note'     => 10,
-		],
-	];
+    protected $searchable = [
+        /**
+         * Columns and their priority in search results.
+         * Columns with higher values are more important.
+         * Columns with equal values have equal importance.
+         *
+         * @var array
+         */
+        'columns' => [
+            'admins.id'       => 5,
+            'admins.username' => 20,
+            'admins.steamid'  => 40,
+            'admins.note'     => 10,
+        ],
+    ];
 
-	protected $fillable = ['username', 'steamid', 'flags', 'note'];
+    protected $fillable = ['username', 'steamid', 'flags', 'note'];
 }

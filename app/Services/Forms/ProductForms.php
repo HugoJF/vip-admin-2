@@ -13,20 +13,20 @@ use App\Product;
 
 class ProductForms extends ServiceForms
 {
-	public function create()
-	{
-		return $this->builder->create(ProductForm::class, [
-			'method' => 'POST',
-			'url'    => route('products.store'),
-		]);
-	}
+    public function create()
+    {
+        return $this->builder->create(ProductForm::class, [
+            'method' => 'POST',
+            'url'    => route('products.store'),
+        ]);
+    }
 
-	public function edit(Product $product)
-	{
-		return $this->builder->create(ProductForm::class, [
-			'method' => 'PATCH',
-			'url'    => route('products.update', $product),
-			'model'  => $product,
-		]);
-	}
+    public function edit(Product $product)
+    {
+        return $this->builder->create(ProductForm::class, [
+            'method' => 'PATCH',
+            'url'    => route('products.update', $product),
+            'model'  => $product,
+        ]);
+    }
 }

@@ -4,13 +4,10 @@ namespace App\Listeners;
 
 use App\Admin;
 use App\Classes\VipSynchronizer;
-use App\Events\OrderExpired;
-use App\Events\OrderSynchronized;
 use App\Order;
 use App\User;
-use Carbon\Carbon;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -36,6 +33,29 @@ class SynchronizeServer implements ShouldQueue
     {
         $this->vipFlag = config('vip-admin.vip-flag', 'a');
         $this->hiddenFlagsFlag = config('vip-admin.hidden-flags-flag', 'o');
+    }
+
+    public function handle($event): void
+    {
+        $this->loadCurrent();
+        $this->loadExpected();
+
+        $current = $this->mapIdToFlags($this->current)->toArray();
+        $expected = $this->mapIdToFlags($this->expected)->toArray();
+
+        $diff = new VipSynchronizer($current, $expected);
+
+        foreach ($diff->getNeedsUpdateList() as $id => $flags) {
+            $data = $this->expected[ $id ];
+            $this->updateAdmin($id, $data['username'], $flags);
+        }
+
+        foreach ($diff->getNeedsAditionList() as $id => $flags) {
+            $data = $this->expected[ $id ];
+            $this->addAdmin($id, $data['username'], $flags);
+        }
+
+        $this->removeAdmins(array_keys($diff->getNeedsRemovalList()));
     }
 
     protected function loadCurrent()
@@ -74,11 +94,11 @@ class SynchronizeServer implements ShouldQueue
     protected function loadExpectedVips(): Collection
     {
         $orders = Order::query()
-            ->paid()
-            ->valid()
-            ->started()
-            ->notExpired()
-            ->get();
+                       ->paid()
+                       ->valid()
+                       ->started()
+                       ->notExpired()
+                       ->get();
 
         // Map with SteamID as key to remove duplicates
         // TODO: merge duplicates (map, groupBy, map)
@@ -122,29 +142,6 @@ class SynchronizeServer implements ShouldQueue
                 'flags'    => $flags,
             ]];
         });
-    }
-
-    public function handle($event): void
-    {
-        $this->loadCurrent();
-        $this->loadExpected();
-
-        $current = $this->mapIdToFlags($this->current)->toArray();
-        $expected = $this->mapIdToFlags($this->expected)->toArray();
-
-        $diff = new VipSynchronizer($current, $expected);
-
-        foreach ($diff->getNeedsUpdateList() as $id => $flags) {
-            $data = $this->expected[ $id ];
-            $this->updateAdmin($id, $data['username'], $flags);
-        }
-
-        foreach ($diff->getNeedsAditionList() as $id => $flags) {
-            $data = $this->expected[ $id ];
-            $this->addAdmin($id, $data['username'], $flags);
-        }
-
-        $this->removeAdmins(array_keys($diff->getNeedsRemovalList()));
     }
 
     protected function mapIdToFlags(Collection $collection): Collection

@@ -14,23 +14,23 @@ use App\Events\AdminUpdated;
 
 class AdminService
 {
-	public function storeAdmin(array $values)
-	{
-		$admin = Admin::create($values);
+    public function storeAdmin(array $values)
+    {
+        $admin = Admin::create($values);
 
-		event(new AdminCreated($admin));
+        event(new AdminCreated($admin));
 
-		return $admin;
-	}
+        return $admin;
+    }
 
-	public function updateAdmin(Admin $admin, array $values)
-	{
-		$admin->fill($values);
+    public function updateAdmin(Admin $admin, array $values)
+    {
+        $admin->fill($values);
 
-		$admin->save();
+        $admin->save();
 
-		event(new AdminUpdated($admin));
+        event(new AdminUpdated($admin));
 
-		return $admin;
-	}
+        return $admin;
+    }
 }

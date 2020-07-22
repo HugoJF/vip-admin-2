@@ -9,12 +9,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-	use Filterable;
+    use Filterable;
 
-	protected $fillable = ['title', 'duration', 'cost', 'original_cost', 'description', 'filter'];
+    protected $fillable = ['title', 'duration', 'cost', 'original_cost', 'description', 'filter'];
 
-	protected $filters = [
-		'HasAtLeast' => MinOrders::class,
-		'MaxOrders' => MaxOrders::class,
-	];
+    protected $filters = [
+        'HasAtLeast' => MinOrders::class,
+        'MaxOrders'  => MaxOrders::class,
+    ];
 }

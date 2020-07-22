@@ -9,6 +9,7 @@ class Token extends Model
 {
     use SearchableTrait;
 
+    public $incrementing = false;
     protected $searchable = [
         /**
          * Columns and their priority in search results.
@@ -36,20 +37,14 @@ class Token extends Model
             'orders' => ['tokens.order_id', 'orders.id'],
         ],
     ];
-
     protected $fillable = ['id', 'duration', 'note', 'expires_at'];
-
     protected $dates = ['expires_at'];
-
     protected $with = ['user'];
-
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'expires_at' => 'datetime',
     ];
-
-    public $incrementing = false;
 
     public function user()
     {

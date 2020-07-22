@@ -2,10 +2,7 @@
 
 namespace Tests\Unit;
 
-use App\Admin;
 use App\Classes\VipSynchronizer;
-use App\Services\AdminService;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class VipSynchronizerTest extends TestCase

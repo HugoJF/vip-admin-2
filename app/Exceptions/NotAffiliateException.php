@@ -2,8 +2,6 @@
 
 namespace App\Exceptions;
 
-use Exception;
-
 class NotAffiliateException extends FlashException
 {
     public function flash()

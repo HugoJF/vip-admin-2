@@ -8,39 +8,12 @@
 
 namespace App\Services;
 
-use App\Classes\PaymentSystem;
-use App\Coupon;
-use App\Events\OrderActivated;
-use App\Events\OrderCreated;
-use App\Events\OrderUpdated;
-use App\Exceptions\InvalidCouponException;
-use App\Exceptions\InvalidSteamIdException;
 use App\Order;
-use App\Product;
 use App\User;
-use Exception;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 
 class OrderRefactoringService
 {
-    public function refactorUser(User $user)
-    {
-        /** @var Collection $ordersByUser */
-        $ordersByUser = $user
-            ->orders()
-            ->paid()
-            ->valid()
-            ->whereNull('steamid')
-            ->whereNotNull('starts_at')
-            ->get();
-        $ordersById = $this->getOrdersBySteamid($user->steamid);
-
-        info("Started refactoring for user $user->steamid");
-        $this->refactorOrders($ordersById->merge($ordersByUser));
-        info("Ended refactoring");
-    }
-
     public function refactorSteamid($steamid)
     {
         $steamid = steamid64($steamid);
@@ -57,6 +30,23 @@ class OrderRefactoringService
 
         info("Started refactoring for user $steamid");
         $this->refactorOrders($orders);
+        info("Ended refactoring");
+    }
+
+    public function refactorUser(User $user)
+    {
+        /** @var Collection $ordersByUser */
+        $ordersByUser = $user
+            ->orders()
+            ->paid()
+            ->valid()
+            ->whereNull('steamid')
+            ->whereNotNull('starts_at')
+            ->get();
+        $ordersById = $this->getOrdersBySteamid($user->steamid);
+
+        info("Started refactoring for user $user->steamid");
+        $this->refactorOrders($ordersById->merge($ordersByUser));
         info("Ended refactoring");
     }
 

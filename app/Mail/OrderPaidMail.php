@@ -6,35 +6,34 @@ use App\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class OrderPaidMail extends Mailable
 {
-	use Queueable, SerializesModels;
+    use Queueable, SerializesModels;
 
-	private $order;
+    private $order;
 
-	/**
-	 * Create a new message instance.
-	 *
-	 * @return void
-	 */
-	public function __construct(Order $order)
-	{
-		$this->order = $order;
-	}
+    /**
+     * Create a new message instance.
+     *
+     * @return void
+     */
+    public function __construct(Order $order)
+    {
+        $this->order = $order;
+    }
 
-	/**
-	 * Build the message.
-	 *
-	 * @return $this
-	 */
-	public function build()
-	{
-		$id = $this->order->id;
+    /**
+     * Build the message.
+     *
+     * @return $this
+     */
+    public function build()
+    {
+        $id = $this->order->id;
 
-		return $this
-			->subject("Seu pedido #$id foi pago!")
-			->markdown('emails.order-paid', ['order' => $this->order]);
-	}
+        return $this
+            ->subject("Seu pedido #$id foi pago!")
+            ->markdown('emails.order-paid', ['order' => $this->order]);
+    }
 }

@@ -14,9 +14,9 @@ class TokenUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-			'id'         => 'required|alpha_num',
-			'duration'   => 'required|numeric',
-			'expires_at' => 'after:now',
+            'id'         => 'required|alpha_num',
+            'duration'   => 'required|numeric',
+            'expires_at' => 'after:now',
         ];
     }
 }

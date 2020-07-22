@@ -13,20 +13,20 @@ use App\AdminForm;
 
 class AdminForms extends ServiceForms
 {
-	public function create()
-	{
-		return $this->builder->create(AdminForm::class, [
-			'method' => 'POST',
-			'url'    => route('admins.store'),
-		]);
-	}
+    public function create()
+    {
+        return $this->builder->create(AdminForm::class, [
+            'method' => 'POST',
+            'url'    => route('admins.store'),
+        ]);
+    }
 
-	public function edit(Admin $admin)
-	{
-		return $this->builder->create(AdminForm::class, [
-			'method' => 'PATCH',
-			'url'    => route('admins.update', $admin),
-			'model'  => $admin,
-		]);
-	}
+    public function edit(Admin $admin)
+    {
+        return $this->builder->create(AdminForm::class, [
+            'method' => 'PATCH',
+            'url'    => route('admins.update', $admin),
+            'model'  => $admin,
+        ]);
+    }
 }

@@ -5,68 +5,68 @@ namespace App\Providers;
 use App\Observers\OrderObserver;
 use App\Order;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Schema;
 
 class AppServiceProvider extends ServiceProvider
 {
-	/**
-	 * Register any application services.
-	 *
-	 * @return void
-	 */
-	public function register()
-	{
-	    //
-	}
+    /**
+     * Register any application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        //
+    }
 
-	/**
-	 * Bootstrap any application services.
-	 *
-	 * @return void
-	 */
-	public function boot()
-	{
-		Schema::defaultStringLength(191);
+    /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        Schema::defaultStringLength(191);
 
-		$this->registerBladeDirectives();
-		$this->registerCustomValidators();
-		$this->setupObservers();
-	}
+        $this->registerBladeDirectives();
+        $this->registerCustomValidators();
+        $this->setupObservers();
+    }
 
-	protected function setupObservers(): void
-	{
-		Order::observe(OrderObserver::class);
-	}
+    protected function registerBladeDirectives()
+    {
+        Blade::if('admin', function () {
+            return auth()->check() && auth()->user()->admin === true;
+        });
 
-	protected function registerCustomValidators()
-	{
-		// Validates SourceMod flags
-		Validator::extend('sm_flag', function ($attribute, $value, $parameters, $validator) {
-			return preg_match('/[a-tz]+/', $value);
-		});
+        Blade::if('affiliate', function () {
+            return auth()->check() && auth()->user()->affiliate === true;
+        });
+    }
 
-		// Validates any type of Steam ID
-		Validator::extend('steamid', function ($attribute, $value, $parameters, $validator) {
-			try {
-				new \SteamID($value);
+    protected function registerCustomValidators()
+    {
+        // Validates SourceMod flags
+        Validator::extend('sm_flag', function ($attribute, $value, $parameters, $validator) {
+            return preg_match('/[a-tz]+/', $value);
+        });
 
-				return true;
-			} catch (\InvalidArgumentException $e) {
-				return false;
-			}
-		});
-	}
+        // Validates any type of Steam ID
+        Validator::extend('steamid', function ($attribute, $value, $parameters, $validator) {
+            try {
+                new \SteamID($value);
 
-	protected function registerBladeDirectives()
-	{
-		Blade::if ('admin', function () {
-			return auth()->check() && auth()->user()->admin === true;
-		});
+                return true;
+            } catch (\InvalidArgumentException $e) {
+                return false;
+            }
+        });
+    }
 
-		Blade::if ('affiliate', function () {
-			return auth()->check() && auth()->user()->affiliate === true;
-		});
-	}
+    protected function setupObservers(): void
+    {
+        Order::observe(OrderObserver::class);
+    }
 }

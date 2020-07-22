@@ -6,36 +6,36 @@ use InvalidArgumentException;
 
 abstract class BaseFilter
 {
-	protected $arguments = [];
+    protected $arguments = [];
 
-	protected abstract function isFiltered(array $options);
+    /**
+     * @param array $options
+     *
+     * @return mixed
+     */
+    public function filtered(array $options)
+    {
+        if (!auth()->check())
+            return false;
 
-	/**
-	 * @param array $options
-	 *
-	 * @return mixed
-	 */
-	public function filtered(array $options)
-	{
-		if(!auth()->check())
-			return false;
+        if ($this->checkArguments($options))
+            return $this->isFiltered($options);
 
-		if ($this->checkArguments($options))
-			return $this->isFiltered($options);
+        return false;
+    }
 
-		return false;
-	}
+    protected function checkArguments(array $options)
+    {
+        foreach ($this->arguments as $argument) {
+            if (!array_key_exists($argument, $options)) {
+                $c = get_class($this);
 
-	protected function checkArguments(array $options)
-	{
-		foreach ($this->arguments as $argument) {
-			if (!array_key_exists($argument, $options)) {
-				$c = get_class($this);
+                throw new InvalidArgumentException("Missing argument $argument for filter {$c}");
+            }
+        }
 
-				throw new InvalidArgumentException("Missing argument $argument for filter {$c}");
-			}
-		}
+        return true;
+    }
 
-		return true;
-	}
+    protected abstract function isFiltered(array $options);
 }

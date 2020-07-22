@@ -8,47 +8,47 @@ use Invisnik\LaravelSteamAuth\SteamAuth;
 
 class AuthController extends Controller
 {
-	protected $steam;
+    protected $steam;
 
-	protected $redirectURL = '/';
+    protected $redirectURL = '/';
 
-	public function __construct(SteamAuth $steam)
-	{
-		$this->steam = $steam;
-	}
+    public function __construct(SteamAuth $steam)
+    {
+        $this->steam = $steam;
+    }
 
-	public function login()
-	{
-		return redirect()->route('auth.redirect');
-	}
+    public function login()
+    {
+        return redirect()->route('auth.redirect');
+    }
 
-	public function redirectToSteam()
-	{
-		return $this->steam->redirect();
-	}
+    public function logout()
+    {
+        Auth::logout();
 
-	public function logout()
-	{
-		Auth::logout();
+        return redirect()->route('home');
+    }
 
-		return redirect()->route('home');
-	}
+    public function handle(AuthService $service)
+    {
+        // TODO: catch 429?
+        if ($this->steam->validate()) {
+            $info = $this->steam->getUserInfo();
 
-	public function handle(AuthService $service)
-	{
-		// TODO: catch 429?
-		if ($this->steam->validate()) {
-			$info = $this->steam->getUserInfo();
+            if (!is_null($info)) {
+                $user = $service->findOrNewUser($info);
 
-			if (!is_null($info)) {
-				$user = $service->findOrNewUser($info);
+                Auth::login($user, true);
 
-				Auth::login($user, true);
+                return redirect($this->redirectURL); // redirect to site
+            }
+        }
 
-				return redirect($this->redirectURL); // redirect to site
-			}
-		}
+        return $this->redirectToSteam();
+    }
 
-		return $this->redirectToSteam();
-	}
+    public function redirectToSteam()
+    {
+        return $this->steam->redirect();
+    }
 }

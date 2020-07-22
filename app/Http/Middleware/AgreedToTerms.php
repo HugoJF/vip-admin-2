@@ -7,24 +7,24 @@ use Illuminate\Support\Facades\Auth;
 
 class AgreedToTerms
 {
-	/**
-	 * Handle an incoming request.
-	 *
-	 * @param  \Illuminate\Http\Request $request
-	 * @param  \Closure                 $next
-	 *
-	 * @return mixed
-	 */
-	public function handle($request, Closure $next)
-	{
-		$enforcing = config('vip-admin.enforce-terms', false);
+    /**
+     * Handle an incoming request.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
+     *
+     * @return mixed
+     */
+    public function handle($request, Closure $next)
+    {
+        $enforcing = config('vip-admin.enforce-terms', false);
 
-		if (!$enforcing || Auth::check() && Auth::user()->terms === true) {
-			return $next($request);
-		} else {
-			flash()->error('Você ainda não revisou e concordou com os termos!');
+        if (!$enforcing || Auth::check() && Auth::user()->terms === true) {
+            return $next($request);
+        } else {
+            flash()->error('Você ainda não revisou e concordou com os termos!');
 
-			return redirect('/settings');
-		}
-	}
+            return redirect('/settings');
+        }
+    }
 }

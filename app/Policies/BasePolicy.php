@@ -12,14 +12,14 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 
 class BasePolicy
 {
-	use HandlesAuthorization;
+    use HandlesAuthorization;
 
-	public function before($user, $ability)
-	{
-		if ($user->banned)
-			return false;
+    public function before($user, $ability)
+    {
+        if ($user->banned)
+            return false;
 
-		if ($user->admin)
-			return true;
-	}
+        if ($user->admin)
+            return true;
+    }
 }

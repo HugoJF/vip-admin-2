@@ -7,57 +7,58 @@ use Exception;
 
 trait Filterable
 {
-	public function filtered()
-	{
-		foreach ($this->getFilters() as $class => $options) {
-			if (!class_exists($class))
-				throw new Exception("Filter $class is not a class");
+    public function filtered()
+    {
+        foreach ($this->getFilters() as $class => $options) {
+            if (!class_exists($class))
+                throw new Exception("Filter $class is not a class");
 
-			/** @var BaseFilter $filter */
-			$filter = new $class;
+            /** @var BaseFilter $filter */
+            $filter = new $class;
 
-			if (!$filter instanceof BaseFilter)
-				throw new Exception("Invalid filter: $class");
+            if (!$filter instanceof BaseFilter)
+                throw new Exception("Invalid filter: $class");
 
-			if ($filter->filtered($options))
-				return true;
-		}
+            if ($filter->filtered($options))
+                return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	private function getFilters()
-	{
-		$split = preg_split('/:/', $this->filter);
+    private function getFilters()
+    {
+        $split = preg_split('/:/', $this->filter);
 
-		if (count($split) === 0)
-			return [];
+        if (count($split) === 0)
+            return [];
 
-		if (empty($split[0]))
-			return [];
+        if (empty($split[0]))
+            return [];
 
-		$key = $split[0];
-		$class = $this->keyToClass($key);
+        $key = $split[0];
+        $class = $this->keyToClass($key);
 
-		if (count($split) === 1)
-			return [$class => null];
+        if (count($split) === 1)
+            return [$class => null];
 
-		$options = preg_split('/,/', $split[1]);
+        $options = preg_split('/,/', $split[1]);
 
-		$options = collect($options)->mapWithKeys(function ($opt) {
-			$opt = preg_split('/=/', $opt);
-			return [$opt[0] => $opt[1]];
-		});
+        $options = collect($options)->mapWithKeys(function ($opt) {
+            $opt = preg_split('/=/', $opt);
 
-		return [$class => $options->toArray()];
-	}
+            return [$opt[0] => $opt[1]];
+        });
 
-	protected function keyToClass($key)
-	{
-		if (array_key_exists($key, $this->filters)) {
-			return $this->filters[ $key ];
-		}
+        return [$class => $options->toArray()];
+    }
 
-		throw new Exception("Could not find filter with key `$key`.");
-	}
+    protected function keyToClass($key)
+    {
+        if (array_key_exists($key, $this->filters)) {
+            return $this->filters[ $key ];
+        }
+
+        throw new Exception("Could not find filter with key `$key`.");
+    }
 }

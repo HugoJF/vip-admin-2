@@ -17,7 +17,7 @@ use Spatie\Searchable\Search;
 class SearchService
 {
     public function search(string $term)
-	{
+    {
         $search = (new Search)
             ->registerModel(Order::class, 'id', 'steamid', 'starts_at', 'ends_at', 'synced_at', 'reference');
 
@@ -40,5 +40,5 @@ class SearchService
         });
 
         return $result;
-	}
+    }
 }

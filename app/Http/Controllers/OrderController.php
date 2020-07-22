@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Classes\PaymentSystem;
-use App\Events\OrderCreated;
 use App\Exceptions\InvalidOrderDurationException;
 use App\Exceptions\OrderAlreadyActivatedException;
 use App\Exceptions\OrderCanceledException;
@@ -40,9 +38,9 @@ class OrderController extends Controller
     }
 
     /**
-     * @param OrderService $service
+     * @param OrderService      $service
      * @param OrderStoreRequest $request
-     * @param Product $product
+     * @param Product           $product
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      * @throws \Exception
@@ -61,8 +59,8 @@ class OrderController extends Controller
         $form = $forms->edit($order);
 
         return view('form', [
-            'title' => 'Atualizando pedido',
-            'form' => $form,
+            'title'       => 'Atualizando pedido',
+            'form'        => $form,
             'submit_text' => 'Atualizar',
         ]);
     }
@@ -72,15 +70,15 @@ class OrderController extends Controller
         $form = $forms->gift($order);
 
         return view('form', [
-            'title' => 'Transferindo pedido',
-            'form' => $form,
+            'title'       => 'Transferindo pedido',
+            'form'        => $form,
             'submit_text' => 'Transferir',
         ]);
     }
 
     /**
      * @param OrderService $service
-     * @param Order $order
+     * @param Order        $order
      *
      * @return \Illuminate\Http\RedirectResponse
      * @throws OrderAlreadyActivatedException
@@ -116,8 +114,8 @@ class OrderController extends Controller
 
     /**
      * @param OrderService $service
-     * @param Request $request
-     * @param Order $order
+     * @param Request      $request
+     * @param Order        $order
      *
      * @return \Illuminate\Http\RedirectResponse
      * @throws \App\Exceptions\InvalidSteamIdException

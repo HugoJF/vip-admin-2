@@ -9,8 +9,8 @@ use App\Warnings\MissingTradeLinkAlert;
 use App\Warnings\OrderPendingActivationAlert;
 use Carbon\Carbon;
 use HugoJF\ModelWarnings\Traits\HasWarnings;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Nicolaslopezj\Searchable\SearchableTrait;
 use Spatie\Searchable\Searchable;
 use Spatie\Searchable\SearchResult;
@@ -71,11 +71,6 @@ class User extends Authenticatable implements JWTSubject, Searchable
         return $this->hasMany(Token::class);
     }
 
-    public function orders()
-    {
-        return $this->hasMany(Order::class);
-    }
-
     public function referrer()
     {
         return $this->belongsTo(User::class);
@@ -114,6 +109,11 @@ class User extends Authenticatable implements JWTSubject, Searchable
         });
 
         return $durations->max();
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
 
     /**

@@ -3,30 +3,27 @@
 namespace App\Events;
 
 use App\Admin;
-use Illuminate\Broadcasting\Channel;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
 
 class AdminUpdated
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-	/**
-	 * @var Admin
-	 */
-	public $admin;
+    /**
+     * @var Admin
+     */
+    public $admin;
 
-	/**
-	 * Create a new event instance.
-	 *
-	 * @param Admin $admin
-	 */
+    /**
+     * Create a new event instance.
+     *
+     * @param Admin $admin
+     */
     public function __construct(Admin $admin)
     {
-    	$this->admin = $admin;
+        $this->admin = $admin;
     }
 
     /**

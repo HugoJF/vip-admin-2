@@ -13,20 +13,20 @@ use App\Forms\CouponForm;
 
 class CouponForms extends ServiceForms
 {
-	public function create()
-	{
-		return $this->builder->create(CouponForm::class, [
-			'method' => 'POST',
-			'url'    => route('coupons.store'),
-		]);
-	}
+    public function create()
+    {
+        return $this->builder->create(CouponForm::class, [
+            'method' => 'POST',
+            'url'    => route('coupons.store'),
+        ]);
+    }
 
-	public function edit(Coupon $coupon)
-	{
-		return $this->builder->create(CouponForm::class, [
-			'method' => 'PATCH',
-			'url'    => route('coupons.update', $coupon),
-			'model'  => $coupon,
-		]);
-	}
+    public function edit(Coupon $coupon)
+    {
+        return $this->builder->create(CouponForm::class, [
+            'method' => 'PATCH',
+            'url'    => route('coupons.update', $coupon),
+            'model'  => $coupon,
+        ]);
+    }
 }

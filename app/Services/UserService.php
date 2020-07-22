@@ -12,27 +12,27 @@ use App\User;
 
 class UserService
 {
-	public function toggleAdmin(User $user)
-	{
-		$user->admin = !$user->admin;
+    public function toggleAdmin(User $user)
+    {
+        $user->admin = !$user->admin;
 
-		$user->save();
+        $user->save();
 
-		return $user;
-	}
+        return $user;
+    }
 
-	public function toggleAffiliate(User $user)
-	{
-		$user->affiliate = !$user->affiliate;
+    public function toggleAffiliate(User $user)
+    {
+        $user->affiliate = !$user->affiliate;
 
-		$user->save();
+        $user->save();
 
-		return $user;
-	}
+        return $user;
+    }
 
-	public function getOrderBasePoint(User $user)
-	{
-		$lastOrder = $user
+    public function getOrderBasePoint(User $user)
+    {
+        $lastOrder = $user
             ->orders()
             ->paid()
             ->valid()
@@ -41,9 +41,9 @@ class UserService
             ->notTransferred()
             ->first();
 
-		if ($lastOrder)
-			return $lastOrder->ends_at;
-		else
-			return now();
-	}
+        if ($lastOrder)
+            return $lastOrder->ends_at;
+        else
+            return now();
+    }
 }

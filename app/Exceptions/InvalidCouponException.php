@@ -6,26 +6,26 @@ use Throwable;
 
 class InvalidCouponException extends FlashException
 {
-	protected $coupon;
+    protected $coupon;
 
-	public function __construct($coupon = null, $message = "", $code = 0, Throwable $previous = null)
-	{
-		parent::__construct($message, $code, $previous);
+    public function __construct($coupon = null, $message = "", $code = 0, Throwable $previous = null)
+    {
+        parent::__construct($message, $code, $previous);
 
-		$this->coupon = $coupon;
-	}
+        $this->coupon = $coupon;
+    }
 
-	public function flash()
-	{
-		if ($this->coupon) {
-			$coupon = e($this->coupon);
-			flash()->error("Cupom <strong>$coupon</strong> não é válido!");
-		} else
-			flash()->error('Cupom inválido!');
-	}
+    public function flash()
+    {
+        if ($this->coupon) {
+            $coupon = e($this->coupon);
+            flash()->error("Cupom <strong>$coupon</strong> não é válido!");
+        } else
+            flash()->error('Cupom inválido!');
+    }
 
-	public function getResponse()
-	{
-		return back();
-	}
+    public function getResponse()
+    {
+        return back();
+    }
 }

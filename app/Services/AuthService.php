@@ -16,42 +16,42 @@ use Illuminate\Support\Facades\Cookie;
 class AuthService
 {
 
-	/**
-	 * @param $info
-	 *
-	 * @return mixed
-	 */
-	public function findOrNewUser($info)
-	{
-		$user = User::where('steamid', steamid64($info->steamID64))->first();
+    /**
+     * @param $info
+     *
+     * @return mixed
+     */
+    public function findOrNewUser($info)
+    {
+        $user = User::where('steamid', steamid64($info->steamID64))->first();
 
-		if (!is_null($user)) {
-			$user->username = $info->personaname;
-			$user->avatar = $info->avatarfull;
-			$user->save();
+        if (!is_null($user)) {
+            $user->username = $info->personaname;
+            $user->avatar = $info->avatarfull;
+            $user->save();
 
-			return $user;
-		}
+            return $user;
+        }
 
-		$user = User::make([
-			'username' => $info->personaname,
-			'avatar'   => $info->avatarfull,
-		]);
-		$user->steamid = steamid64($info->steamID64);
+        $user = User::make([
+            'username' => $info->personaname,
+            'avatar'   => $info->avatarfull,
+        ]);
+        $user->steamid = steamid64($info->steamID64);
 
-		if (Cookie::has('affiliate')) {
-			$affiliate = User::find(Cookie::get('affiliate'));
+        if (Cookie::has('affiliate')) {
+            $affiliate = User::find(Cookie::get('affiliate'));
 
-			if ($affiliate) {
-				$user->referrer_id = $affiliate->id;
-				$user->referred_at = Carbon::now();
-			}
-		}
+            if ($affiliate) {
+                $user->referrer_id = $affiliate->id;
+                $user->referred_at = Carbon::now();
+            }
+        }
 
-		$user->save();
+        $user->save();
 
-		event(new Registered($user));
+        event(new Registered($user));
 
-		return $user;
-	}
+        return $user;
+    }
 }
