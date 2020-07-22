@@ -4,6 +4,7 @@ namespace App;
 
 use App\Classes\PaymentSystem;
 use App\Events\OrderPaid;
+use App\Services\OrderRecheckService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Searchable\Searchable;
@@ -135,37 +136,10 @@ class Order extends Model implements Searchable
 
     public function recheck()
     {
-        $paymentSystem = new PaymentSystem();
+        /** @var OrderRecheckService $service */
+        $service = app(OrderRecheckService::class);
 
-        $this->recheck_attempts = $this->recheck_attempts + 1;
-
-        $this->touch();
-        $this->save();
-
-        if (!$this->reference)
-            return;
-
-        $payment = $paymentSystem->getOrder($this->reference);
-
-        if (!in_array($payment->status, [200, 201]))
-            return;
-
-        $payment = $payment->content;
-
-        if (!isset($payment))
-            return;
-
-        if ($payment->paid_units)
-            $this->duration = $payment->paid_units;
-
-        if ($payment->paid)
-            $this->paid = true;
-
-        if (!$this->getOriginal('paid') && $this->paid)
-            event(new OrderPaid($this));
-
-        $this->touch();
-        $this->save();
+        $service->handle($this);
     }
 
     public function getSearchResult(): SearchResult
