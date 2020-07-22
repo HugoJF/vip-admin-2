@@ -12,6 +12,7 @@
         "davejamesmiller/laravel-breadcrumbs": "5.x",
         "fideloper/proxy": "^4.0",
         "hugojf/eflash": "^0.2.0",
+        "hugojf/model-warnings": "^0.1.0",
         "invisnik/laravel-steam-auth": "4.*",
         "ixudra/curl": "^6.16",
         "kris/laravel-form-builder": "^1.20",

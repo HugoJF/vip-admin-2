@@ -2,12 +2,13 @@
 
 namespace App;
 
-use App\Alerts\AgreedToTerms;
-use App\Alerts\MissingAffiliateCode;
-use App\Alerts\MissingEmailAlert;
-use App\Alerts\MissingTradeLinkAlert;
-use App\Alerts\OrderPendingActivationAlert;
+use App\Warnings\AgreedToTerms;
+use App\Warnings\MissingAffiliateCode;
+use App\Warnings\MissingEmailAlert;
+use App\Warnings\MissingTradeLinkAlert;
+use App\Warnings\OrderPendingActivationAlert;
 use Carbon\Carbon;
+use HugoJF\ModelWarnings\Traits\HasWarnings;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Nicolaslopezj\Searchable\SearchableTrait;
@@ -15,6 +16,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
+    use HasWarnings;
     use Notifiable;
     use SearchableTrait;
 
@@ -54,7 +56,7 @@ class User extends Authenticatable implements JWTSubject
         'updated_at'        => 'datetime:c',
     ];
 
-    protected $alerts = [
+    protected $warnings = [
         AgreedToTerms::class,
         MissingTradeLinkAlert::class,
         MissingEmailAlert::class,
@@ -110,24 +112,6 @@ class User extends Authenticatable implements JWTSubject
         });
 
         return $durations->max();
-    }
-
-    public function getAlerts()
-    {
-        $messages = [];
-
-        foreach ($this->alerts as $alert) {
-            $a = new $alert($this);
-
-            if ($a->triggered())
-                $messages[ $alert ] = [
-                    'message' => $a->getMessage(),
-                    'level'   => $a->getLevel(),
-                    'url'     => $a->getUrl(),
-                ];
-        }
-
-        return collect($messages);
     }
 
     /**

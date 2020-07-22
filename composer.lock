@@ -4,7 +4,11 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
+<<<<<<< HEAD
     "content-hash": "14c903703fc2e77cdc357977eb1a6051",
+=======
+    "content-hash": "dbce2db428fb2d5c34b335b734f0817d",
+>>>>>>> model-warnings
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -776,6 +780,7 @@
             "time": "2018-07-31T19:32:56+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "hugojf/eflash",
             "version": "v0.2",
             "source": {
@@ -787,18 +792,36 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/HugoJF/eflash/zipball/41e14fd18daf42287b298e2e3ae1398325fc8793",
                 "reference": "41e14fd18daf42287b298e2e3ae1398325fc8793",
+=======
+            "name": "hugojf/model-warnings",
+            "version": "v0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/HugoJF/model-warnings.git",
+                "reference": "6c455207de5f1860e2ff1ba11256f7ca5615a38b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/HugoJF/model-warnings/zipball/6c455207de5f1860e2ff1ba11256f7ca5615a38b",
+                "reference": "6c455207de5f1860e2ff1ba11256f7ca5615a38b",
+>>>>>>> model-warnings
                 "shasum": ""
             },
             "require": {
                 "illuminate/support": "~5.8.0|^6.0|^7.0",
+<<<<<<< HEAD
                 "laracasts/flash": "^3.0",
                 "php": "^7.1"
+=======
+                "php": "^7.2"
+>>>>>>> model-warnings
             },
             "require-dev": {
                 "orchestra/testbench": "^4.0",
                 "phpunit/phpunit": "^8.0"
             },
             "type": "library",
+<<<<<<< HEAD
             "extra": {
                 "laravel": {
                     "providers": [
@@ -813,6 +836,12 @@
                 "files": [
                     "helpers.php"
                 ]
+=======
+            "autoload": {
+                "psr-4": {
+                    "HugoJF\\ModelWarnings\\": "src"
+                }
+>>>>>>> model-warnings
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -823,6 +852,7 @@
                     "name": "Hugo Jeller"
                 }
             ],
+<<<<<<< HEAD
             "description": "Laracasts flash messages wrapper with escaping",
             "homepage": "https://github.com/hugojf/eflash",
             "keywords": [
@@ -830,6 +860,15 @@
                 "hugojf"
             ],
             "time": "2020-03-14T21:56:40+00:00"
+=======
+            "description": "Laravel model warnings",
+            "homepage": "https://github.com/hugojf/model-warnings",
+            "keywords": [
+                "hugojf",
+                "model-warnings"
+            ],
+            "time": "2020-04-20T01:05:08+00:00"
+>>>>>>> model-warnings
         },
         {
             "name": "invisnik/laravel-steam-auth",
