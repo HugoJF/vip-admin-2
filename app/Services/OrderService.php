@@ -100,6 +100,7 @@ class OrderService
         $details['cancel_url'] = route('orders.show', $order);
         $details['webhook_url'] = route('api.orders.webhook', $order);
         $details['preset_amount'] = round($product->cost * $ratio);
+        $details['preset_units'] = $product->duration;
         $details['reason'] = 'VIP servidores de_nerdTV';
         $details['product_name_singular'] = 'dia';
         $details['product_name_plural'] = 'dias';

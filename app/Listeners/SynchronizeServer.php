@@ -85,7 +85,7 @@ class SynchronizeServer implements ShouldQueue
 
         // Merge VIP and admin flags
         foreach ($intersect as $id => $flag) {
-            $result[ $id ] = merge_sm_flags($vips[ $id ], $admins[ $id ]);
+            $result[ $id ]['flags'] = merge_sm_flags($vips[ $id ]['flags'], $admins[ $id ]['flags']);
         }
 
         $this->expected = collect($result);
