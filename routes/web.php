@@ -11,13 +11,6 @@
 |
 */
 
-/*
-|--------------------------------------------------------------------------
-| Test routes
-|--------------------------------------------------------------------------
-*/
-
-//
 
 /*
 |--------------------------------------------------------------------------
@@ -28,12 +21,12 @@
 |
 */
 
+
 Route::get('/', 'HomeController@home')->name('home');
 Route::get('faq', 'HomeController@faq')->name('faq');
 Route::get('terms', 'HomeController@terms')->name('terms');
 Route::get('a/{code}', 'UserController@affiliate')->name('affiliate');
 
-Route::middleware(['admin'])->get('clients', 'HomeController@clients')->name('clients');
 
 /*
 |--------------------------------------------------------------------------
@@ -44,11 +37,13 @@ Route::middleware(['admin'])->get('clients', 'HomeController@clients')->name('cl
 |
 */
 
+
 Route::get('login', 'AuthController@login')->name('login');
 
 Route::get('auth/redirect', 'AuthController@redirectToSteam')->name('auth.redirect');
 Route::get('auth/handle', 'AuthController@handle')->name('auth.handle');
 Route::get('auth/logout', 'AuthController@logout')->name('auth.logout');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -56,10 +51,12 @@ Route::get('auth/logout', 'AuthController@logout')->name('auth.logout');
 |--------------------------------------------------------------------------
 */
 
+
 Route::middleware(['auth'])->group(function () {
     Route::get('settings', 'UserSettingController@edit')->name('settings');
     Route::patch('settings', 'UserSettingController@update')->name('settings');
 });
+
 
 /*
 |--------------------------------------------------------------------------
@@ -67,15 +64,18 @@ Route::middleware(['auth'])->group(function () {
 |--------------------------------------------------------------------------
 */
 
+
 Route::middleware(['auth'])->group(function () {
     Route::get('search', 'SearchController@search')->name('search');
 });
+
 
 /*
 |--------------------------------------------------------------------------
 | Products
 |--------------------------------------------------------------------------
 */
+
 
 Route::middleware(['admin'])->group(function () {
     Route::get('products', 'ProductController@index')->name('products.index')->middleware('can:list,App\Product');
@@ -89,11 +89,13 @@ Route::middleware(['admin'])->group(function () {
     Route::delete('products/{product}', 'ProductController@destroy')->name('products.destroy')->middleware('can:destroy,product');
 });
 
+
 /*
 |--------------------------------------------------------------------------
 | Orders
 |--------------------------------------------------------------------------
 */
+
 
 Route::middleware(['auth', 'terms'])->group(function () {
     Route::get('orders', 'OrderController@index')->name('orders.index')->middleware('can:list,App\Order');
@@ -109,21 +111,25 @@ Route::middleware(['auth', 'terms'])->group(function () {
     Route::patch('orders/{order}', 'OrderController@update')->name('orders.update')->middleware('can:update,order');
 });
 
+
 /*
 |--------------------------------------------------------------------------
 | Affiliates
 |--------------------------------------------------------------------------
 */
 
+
 Route::middleware(['auth', 'affiliate', 'affiliate.code', 'terms'])->group(function () {
     Route::get('affiliates', 'AffiliateController@index')->name('affiliates.index');
 });
+
 
 /*
 |--------------------------------------------------------------------------
 | SourceMod admins
 |--------------------------------------------------------------------------
 */
+
 
 Route::middleware(['admin'])->group(function () {
     Route::get('admins', 'AdminController@index')->name('admins.index')->middleware('can:list,App\Admin');
@@ -137,11 +143,13 @@ Route::middleware(['admin'])->group(function () {
     Route::delete('admins/{admin}', 'AdminController@destroy')->name('admins.destroy')->middleware('can:destroy,admin');
 });
 
+
 /*
 |--------------------------------------------------------------------------
 | Tokens
 |--------------------------------------------------------------------------
 */
+
 
 Route::middleware(['auth', 'terms'])->group(function () {
     Route::get('tokens', 'TokenController@index')->name('tokens.index')->middleware('can:list,App\Token');
@@ -152,11 +160,13 @@ Route::middleware(['auth', 'terms'])->group(function () {
     Route::post('tokens', 'TokenController@store')->name('tokens.store')->middleware('can:store,App\Token');
 });
 
+
 /*
 |--------------------------------------------------------------------------
 | Users
 |--------------------------------------------------------------------------
 */
+
 
 Route::middleware(['admin'])->group(function () {
     Route::get('users', 'UserController@index')->name('users.index')->middleware('can:list,App\User');
@@ -167,11 +177,13 @@ Route::middleware(['admin'])->group(function () {
     Route::patch('users/{user}/refactor', 'UserController@refactor')->name('users.refactor')->middleware('can:refactor,user');
 });
 
+
 /*
 |--------------------------------------------------------------------------
 | Coupon
 |--------------------------------------------------------------------------
 */
+
 
 Route::middleware(['admin'])->group(function () {
     Route::get('index', 'CouponController@index')->name('coupons.index')->middleware('can:list,App\Coupon');
