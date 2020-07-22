@@ -2,10 +2,8 @@
 
 namespace App\Providers;
 
-use App\Classes\EFlash;
 use App\Observers\OrderObserver;
 use App\Order;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
@@ -20,9 +18,7 @@ class AppServiceProvider extends ServiceProvider
 	 */
 	public function register()
 	{
-        $this->app->singleton('eflash', function () {
-            return $this->app->make(EFlash::class);
-        });
+	    //
 	}
 
 	/**
