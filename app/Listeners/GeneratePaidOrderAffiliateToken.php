@@ -26,7 +26,7 @@ class GeneratePaidOrderAffiliateToken
         $fromToken = Token::whereOrderId($order)->exists();
 
         if ($affiliate && !$fromToken) {
-            $token = Token::make();
+            $token = new Token;
 
             $token->id = random_id(20);
             $token->duration = round($order->duration * $affiliate->affiliate_order_ratio);

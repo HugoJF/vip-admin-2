@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Order;
+use App\Services\OrderRecheckService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -29,24 +30,27 @@ class RecheckPendingOrders implements ShouldQueue
     /**
      * Execute the job.
      *
+     * @param OrderRecheckService $service
+     *
      * @return void
      */
-    public function handle()
+    public function handle(OrderRecheckService $service)
     {
         $pendingOrders = Order::wherePaid(false)->valid()->get();
 
-        Log::info("Found {$pendingOrders->count()} pending orders...");
+        info("Found {$pendingOrders->count()} pending orders...");
 
         foreach ($pendingOrders as $order) {
             // Check if order is old enough to be rechecked
             if ($this->shouldRecheck($order)) {
-                Log::info("Rechecking order {$order->id}");
-                $order->recheck();
+                info("Rechecking order {$order->id}");
+                $service->handle($order);
             }
 
             // Log if state changed
-            if ($order->paid)
-                Log::info("Order $order->id was detected as paid.");
+            if ($order->paid) {
+                info("Order $order->id was detected as paid.");
+            }
         }
     }
 

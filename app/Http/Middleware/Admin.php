@@ -17,7 +17,7 @@ class Admin
      */
     public function handle($request, Closure $next)
     {
-        if (!Auth::check() || !Auth::user()->admin) {
+        if (!auth()->check() || !auth()->user()->admin) {
             $url = $request->url();
             flash()->error("Você não possui permissões para acessar <strong>$url</strong>!");
 

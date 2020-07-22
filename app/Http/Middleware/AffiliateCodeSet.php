@@ -19,8 +19,9 @@ class AffiliateCodeSet
     public function handle($request, Closure $next)
     {
         // TODO split into 3: logged, affiliate and code
-        if (!auth()->check() || !auth()->user()->affiliate_code)
+        if (!auth()->check() || !auth()->user()->affiliate_code) {
             throw new AffiliateCodeNotSetException();
+        }
 
         return $next($request);
     }

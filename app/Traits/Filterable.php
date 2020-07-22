@@ -10,17 +10,20 @@ trait Filterable
     public function filtered()
     {
         foreach ($this->getFilters() as $class => $options) {
-            if (!class_exists($class))
+            if (!class_exists($class)) {
                 throw new Exception("Filter $class is not a class");
+            }
 
             /** @var BaseFilter $filter */
             $filter = new $class;
 
-            if (!$filter instanceof BaseFilter)
+            if (!$filter instanceof BaseFilter) {
                 throw new Exception("Invalid filter: $class");
+            }
 
-            if ($filter->filtered($options))
+            if ($filter->filtered($options)) {
                 return true;
+            }
         }
 
         return false;
@@ -30,17 +33,20 @@ trait Filterable
     {
         $split = preg_split('/:/', $this->filter);
 
-        if (count($split) === 0)
+        if (count($split) === 0) {
             return [];
+        }
 
-        if (empty($split[0]))
+        if (empty($split[0])) {
             return [];
+        }
 
         $key = $split[0];
         $class = $this->keyToClass($key);
 
-        if (count($split) === 1)
+        if (count($split) === 1) {
             return [$class => null];
+        }
 
         $options = preg_split('/,/', $split[1]);
 

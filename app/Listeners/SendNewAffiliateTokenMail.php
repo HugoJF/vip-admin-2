@@ -20,7 +20,8 @@ class SendNewAffiliateTokenMail
         $order = $event->token;
         $user = $order->user;
 
-        if ($user->email)
+        if ($user->email) {
             Mail::to($user->email)->send(new NewAffiliateTokenMail($order));
+        }
     }
 }

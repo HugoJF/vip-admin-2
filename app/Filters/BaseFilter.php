@@ -15,11 +15,13 @@ abstract class BaseFilter
      */
     public function filtered(array $options)
     {
-        if (!auth()->check())
+        if (!auth()->check()) {
             return false;
+        }
 
-        if ($this->checkArguments($options))
+        if ($this->checkArguments($options)) {
             return $this->isFiltered($options);
+        }
 
         return false;
     }

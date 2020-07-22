@@ -20,7 +20,8 @@ class SendOrderPaidMail
         $order = $event->order;
         $user = $order->user;
 
-        if ($user->email)
+        if ($user->email) {
             Mail::to($user->email)->send(new OrderPaidMail($order));
+        }
     }
 }

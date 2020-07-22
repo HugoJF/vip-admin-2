@@ -19,8 +19,9 @@ class Affiliate
     public function handle($request, Closure $next)
     {
         // TODO: split in 2 exceptions: NotLoggedIn?
-        if (!auth()->check() || !auth()->user()->affiliate)
+        if (!auth()->check() || !auth()->user()->affiliate) {
             throw new NotAffiliateException();
+        }
 
         return $next($request);
     }

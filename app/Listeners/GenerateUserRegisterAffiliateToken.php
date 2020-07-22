@@ -22,7 +22,7 @@ class GenerateUserRegisterAffiliateToken
         $affiliate = $client->referrer;
 
         if ($affiliate) {
-            $token = Token::make();
+            $token = new Token;
 
             $token->id = random_id(5);
             $token->duration = $affiliate->affiliate_register_duration;

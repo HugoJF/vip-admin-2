@@ -10,8 +10,9 @@ class OrderObserver
     public function creating(Order $order)
     {
         // Do nothing if an ID was already assigned
-        if ($order->id)
+        if ($order->id) {
             return;
+        }
 
         $id = null;
         $attempts = 0;
@@ -27,9 +28,9 @@ class OrderObserver
                 break;
         }
 
-        if ($attempts >= $maxAttempts)
+        if ($attempts >= $maxAttempts) {
             throw new Exception("Failed to find an ID after $attempts tries.");
-
+        }
         $order->id = $id;
     }
 }

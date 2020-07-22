@@ -13,6 +13,9 @@ class GenerateOrderActivation
      * @param OrderPaid $event
      *
      * @return void
+     * @throws \App\Exceptions\OrderAlreadyActivatedException
+     * @throws \App\Exceptions\OrderCanceledException
+     * @throws \App\Exceptions\OrderNotPaidException
      */
     public function handle(OrderPaid $event)
     {

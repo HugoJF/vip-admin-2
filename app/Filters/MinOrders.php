@@ -12,6 +12,6 @@ class MinOrders extends BaseFilter
     {
         $count = $options['count'];
 
-        return Auth::user()->orders()->where('paid', true)->count() < $count;
+        return auth()->user()->orders()->where('paid', true)->count() < $count;
     }
 }
