@@ -136,6 +136,7 @@ class Order extends Model implements Searchable
             ->synced();
     }
 
+    /** @deprecated */
     public function recheck()
     {
         /** @var OrderRecheckService $service */

@@ -17,6 +17,7 @@ class OrderRefactoringService
     public function refactorSteamid($steamid)
     {
         $steamid = steamid64($steamid);
+
         // If SteamID is present in database, refactor as User
         $user = User::query()->where('steamid', $steamid)->first();
         if ($user) {
@@ -47,6 +48,7 @@ class OrderRefactoringService
 
         info("Started refactoring for user $user->steamid");
         $this->refactorOrders($ordersById->merge($ordersByUser));
+
         info("Ended refactoring");
     }
 
@@ -58,13 +60,14 @@ class OrderRefactoringService
     protected function refactorOrders($orders)
     {
         $orders = collect($orders)->sortBy('created_at');
-
         $base = now();
+
         /** @var Order $order */
         foreach ($orders as $order) {
             // If order is expired, don't touch it
-            if ($order->ends_at->isPast())
+            if ($order->ends_at->isPast()) {
                 continue;
+            }
 
             // Check if order has already been started. If it's compute only the remaining period
             if ($order->starts_at->isPast()) {
@@ -73,9 +76,8 @@ class OrderRefactoringService
                 $duration = $order->starts_at->diff($order->ends_at);
             }
 
-            $order->starts_at = $base;
-            $base->add($duration);
-            $order->ends_at = $base;
+            $order->starts_at = $base->clone();
+            $order->ends_at = $base->clone()->add($duration);
 
             info(sprintf("Refactored order %s from %s<=>%s to %s<=>%s",
                 $order->id,

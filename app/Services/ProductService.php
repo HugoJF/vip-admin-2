@@ -12,14 +12,16 @@ use App\Product;
 
 class ProductService
 {
-    public function storeProduct(array $values)
+    public function store(array $values)
     {
-        $product = Product::create($values);
+        ($product = new Product)->fill($values);
+
+        $product->save();
 
         return $product;
     }
 
-    public function updateProduct(Product $product, array $values)
+    public function update(Product $product, array $values)
     {
         $product->fill($values);
 

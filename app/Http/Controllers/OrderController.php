@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\InvalidOrderDurationException;
 use App\Exceptions\OrderAlreadyActivatedException;
 use App\Exceptions\OrderCanceledException;
+use App\Exceptions\OrderNotActivatedException;
 use App\Exceptions\OrderNotPaidException;
 use App\Http\Requests\OrderStoreRequest;
 use App\Order;
 use App\Product;
 use App\Services\Forms\OrderForms;
+use App\Services\OrderRecheckService;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -48,7 +49,7 @@ class OrderController extends Controller
     public function store(OrderService $service, OrderStoreRequest $request, Product $product)
     {
         $user = Auth::user();
-        $response = $service->createOrder($user, $request->validated(), $product);
+        $response = $service->create($user, $request->validated(), $product);
         // TODO: move flashexceptions to flash directory
         // TODO: throw flash on payment system
         return redirect($response->init_point);
@@ -87,18 +88,6 @@ class OrderController extends Controller
      */
     public function activate(OrderService $service, Order $order)
     {
-        if ($order->canceled) {
-            throw new OrderCanceledException;
-        }
-
-        if ($order->activated) {
-            throw new OrderAlreadyActivatedException;
-        }
-
-        if (!$order->paid) {
-            throw new OrderNotPaidException;
-        }
-
         $service->activateOrder($order);
 
         flash()->success('Pedido ativado com sucesso!');
@@ -106,11 +95,9 @@ class OrderController extends Controller
         return redirect()->route('orders.show', $order);
     }
 
-    public function show(Order $order)
+    public function show(OrderRecheckService $service, Order $order)
     {
-        $order->recheck();
-
-        $order->save();
+        $service->handle($order);
 
         return view('orders.show', compact('order'));
     }
@@ -122,6 +109,7 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      * @throws \App\Exceptions\InvalidSteamIdException
+     * @throws OrderNotActivatedException
      */
     public function transfer(OrderService $service, Request $request, Order $order)
     {
@@ -131,12 +119,12 @@ class OrderController extends Controller
             }
 
             flash()->success('Pedido retornado para sua conta!');
+
+            return redirect()->route('orders.show', $order);
         }
 
         if (!$order->activated) {
-            flash()->error('Você precisa ativar o pedido antes de realizar uma transferência!');
-
-            return back();
+            throw new OrderNotActivatedException;
         }
 
         if (!$service->transferOrder($order, $request->input('steamid'))) {

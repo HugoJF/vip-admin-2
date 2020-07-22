@@ -14,6 +14,9 @@ use App\Events\OrderActivated;
 use App\Events\OrderCreated;
 use App\Events\OrderUpdated;
 use App\Exceptions\InvalidCouponException;
+use App\Exceptions\OrderAlreadyActivatedException;
+use App\Exceptions\OrderCanceledException;
+use App\Exceptions\OrderNotPaidException;
 use App\Order;
 use App\Product;
 use App\User;
@@ -24,7 +27,7 @@ use InvalidArgumentException;
 
 class OrderService
 {
-    public function createOrder($user, $data, Product $product)
+    public function create($user, $data, Product $product)
     {
         /** @var PaymentSystem $paymentSystem */
         $paymentSystem = app(PaymentSystem::class);
@@ -32,28 +35,29 @@ class OrderService
         /** @var CouponService $couponService */
         $couponService = app(CouponService::class);
 
-        $order = $this->createEmptyOrder($user, $product->duration);
+        $order = $this->createEmpty($user, $product->duration);
 
         $coupon = false;
 
         if ($data['coupon'] ?? false) {
             $coupon = $couponService->findCoupon($data['coupon']);
+
             if (!$coupon) {
                 throw new InvalidCouponException($data['coupon']);
-            } else {
-                $coupon->order_id = $order->id;
-                $coupon->save();
             }
+
+            $coupon->order_id = $order->id;
+            $coupon->save();
         }
 
         $details = $this->buildOrderDetails($order, $user, $product, $coupon);
 
         $response = $paymentSystem->createOrder($details);
 
-        if ($response->status !== 201) {
-            Log::error('Invalid PaymentSystem response', compact('response'));
-            $e = new Exception('Invalid PaymentSystem response');
-            report($e);
+        if (!in_array($response->status, [200, 201])) {
+            logger()->error('Invalid PaymentSystem response', compact('response'));
+
+            report(new Exception('Invalid PaymentSystem response'));
 
             return null;
         }
@@ -71,9 +75,9 @@ class OrderService
         return $response;
     }
 
-    public function createEmptyOrder(User $user, $duration)
+    public function createEmpty(User $user, $duration)
     {
-        $order = Order::make();
+        $order = new Order;
 
         $order->duration = $duration;
         $order->user()->associate($user);
@@ -128,6 +132,18 @@ class OrderService
 
     public function activateOrder(Order $order)
     {
+        if ($order->canceled) {
+            throw new OrderCanceledException;
+        }
+
+        if ($order->activated) {
+            throw new OrderAlreadyActivatedException;
+        }
+
+        if (!$order->paid) {
+            throw new OrderNotPaidException;
+        }
+
         // TODO: Check if order was actually activated?
         /** @var UserService $service */
         $service = app(UserService::class);
@@ -155,15 +171,13 @@ class OrderService
         try {
             $steamid = steamid64($steamid);
         } catch (InvalidArgumentException $e) {
-            $i = ($steamid);
-            flash()->error("<strong>$i</strong> não é uma SteamID válida!");
+            eflash()->error("<strong>%s</strong> não é uma SteamID válida!", $steamid);
 
             return false;
         }
 
-        DB::beginTransaction();
-
         try {
+            DB::beginTransaction();
 
             $old = $order->steamid;
             $order->steamid = $steamid;
@@ -174,8 +188,13 @@ class OrderService
 
             $service->refactorUser($order->user);
             $service->refactorSteamid($steamid);
-            if ($old)
+            if ($old) {
                 $service->refactorSteamid($old);
+            }
+
+            DB::commit();
+
+            return true;
         } catch (Exception $e) {
             DB::rollBack();
 
@@ -183,16 +202,13 @@ class OrderService
 
             return false;
         }
-
-        DB::commit();
-
-        return true;
     }
 
     public function returnOrder(Order $order)
     {
-        DB::beginTransaction();
         try {
+            DB::beginTransaction();
+
             $old = $order->steamid;
             $order->steamid = null;
             $order->save();
@@ -201,6 +217,10 @@ class OrderService
             $service = app(OrderRefactoringService::class);
             $service->refactorSteamid($old);
             $service->refactorUser($order->user);
+
+            DB::commit();
+
+            return true;
         } catch (Exception $e) {
             DB::rollBack();
 
@@ -208,8 +228,5 @@ class OrderService
 
             return false;
         }
-        DB::commit();
-
-        return true;
     }
 }

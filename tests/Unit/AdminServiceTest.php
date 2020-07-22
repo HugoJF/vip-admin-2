@@ -30,13 +30,13 @@ class AdminServiceTest extends TestCase
 		/** @var AdminService $service */
 		$service = app(AdminService::class);
 
-		$admin = $service->storeAdmin($this->original);
+		$admin = $service->store($this->original);
 
 		$this->assertInstanceOf(Admin::class, $admin);
 		$this->assertDatabaseHas('admins', $this->original);
 		$this->assertTrue(array_diff($this->original, $admin->toArray()) === []);
 
-		$admin = $service->updateAdmin($admin, $this->updated);
+		$admin = $service->update($admin, $this->updated);
 
 		$this->assertInstanceOf(Admin::class, $admin);
 		$this->assertDatabaseHas('admins', $this->updated);

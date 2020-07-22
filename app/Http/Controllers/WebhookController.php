@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Order;
+use App\Services\OrderRecheckService;
 
 class WebhookController extends Controller
 {
-    public function webhook(Order $order)
+    public function webhook(OrderRecheckService $service, Order $order)
     {
-        $order->recheck();
+        $service->handle($order);
 
         return response()->json([
             'status' => 200,

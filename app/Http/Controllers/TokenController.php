@@ -45,10 +45,11 @@ class TokenController extends Controller
 
         $order = $service->use($token);
 
-        if ($order)
+        if ($order) {
             return redirect()->route('orders.show', $order);
-        else
+        } else {
             return back();
+        }
     }
 
     public function create(FormBuilder $builder)

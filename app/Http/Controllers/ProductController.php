@@ -41,7 +41,7 @@ class ProductController extends Controller
 
     public function store(ProductService $service, ProductStoreRequest $request)
     {
-        $product = $service->storeProduct($request->validated());
+        $product = $service->store($request->validated());
 
         eflash()->success("Produto <strong>%s</strong> criado com sucesso!", $product->title);
 
@@ -50,7 +50,7 @@ class ProductController extends Controller
 
     public function update(ProductService $service, ProductUpdateRequest $request, Product $product)
     {
-        $service->updateProduct($product, $request->validated());
+        $service->update($product, $request->validated());
 
         eflash()->success("Produto <strong>%s</strong> atualizado com sucesso!", $product->title);
 

@@ -14,16 +14,16 @@ use App\Events\AdminUpdated;
 
 class AdminService
 {
-    public function storeAdmin(array $values)
+    public function store(array $values)
     {
-        $admin = Admin::create($values);
+        ($admin = new Admin)->fill($values);
 
         event(new AdminCreated($admin));
 
         return $admin;
     }
 
-    public function updateAdmin(Admin $admin, array $values)
+    public function update(Admin $admin, array $values)
     {
         $admin->fill($values);
 

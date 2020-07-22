@@ -41,9 +41,10 @@ class UserService
             ->notTransferred()
             ->first();
 
-        if ($lastOrder)
+        if ($lastOrder) {
             return $lastOrder->ends_at;
-        else
+        } else {
             return now();
+        }
     }
 }

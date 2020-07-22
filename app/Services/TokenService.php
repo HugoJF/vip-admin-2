@@ -11,11 +11,11 @@ class TokenService
 {
     public function use(Token $token)
     {
-        DB::beginTransaction();
-
-        $order = new Order();
-
         try {
+            DB::beginTransaction();
+
+            $order = new Order;
+
             $order->id = "to$token->id";
             $order->duration = $token->duration;
 
@@ -27,28 +27,25 @@ class TokenService
 
             $order->save();
             $token->save();
+
+            DB::commit();
+
+            flash()->success('Token registrado com sucesso!');
+
+            return $order;
         } catch (Exception $e) {
             DB::rollBack();
             report($e);
-            $message = e($e->getMessage());
 
-            flash()->error("Erro ao registrar uso do token: $message");
+            eflash()->error('Erro ao registrar uso do token: %s', $e->getMessage());
 
             return null;
         }
-
-        DB::commit();
-
-        flash()->success('Token registrado com sucesso!');
-
-        return $order;
     }
 
     public function create(array $data)
     {
-        $token = new Token();
-
-        $token->fill($data);
+        ($token = new Token)->fill($data);
         $token->reason()->associate(auth()->user());
 
         $token->save();

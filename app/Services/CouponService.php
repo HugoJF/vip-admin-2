@@ -12,14 +12,14 @@ use App\Coupon;
 
 class CouponService
 {
-    public function createCoupon(array $data)
+    public function create(array $data)
     {
-        $coupon = Coupon::create($data);
+        ($coupon = new Coupon)->fill($data);
 
         return $coupon;
     }
 
-    public function updateCoupon(Coupon $coupon, array $data)
+    public function update(Coupon $coupon, array $data)
     {
         $coupon->update($data);
         $coupon->save();

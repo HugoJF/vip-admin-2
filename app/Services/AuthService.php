@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Cookie;
 
 class AuthService
 {
-
     /**
      * @param $info
      *

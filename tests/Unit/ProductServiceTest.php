@@ -28,13 +28,13 @@ class ProductServiceTest extends TestCase
 		/** @var ProductService $service */
 		$service = app(ProductService::class);
 
-		$product = $service->storeProduct($this->original);
+		$product = $service->store($this->original);
 
 		$this->assertInstanceOf(Product::class, $product);
 		$this->assertTrue(array_diff($this->original, $product->toArray()) === []);
 		$this->assertDatabaseHas('products', $this->original);
 
-		$product = $service->updateProduct($product, $this->updated);
+		$product = $service->update($product, $this->updated);
 
 		$this->assertInstanceOf(Product::class, $product);
 		$this->assertTrue(array_diff($this->updated, $product->toArray()) === []);

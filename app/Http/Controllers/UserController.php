@@ -36,7 +36,7 @@ class UserController extends Controller
         $service->toggleAffiliate($user);
 
         if ($user->affiliate) {
-            eeflash()->success("<strong>%s</strong> adicionado para lista de afiliados", $user->username);
+            eflash()->success("<strong>%s</strong> adicionado para lista de afiliados", $user->username);
         } else {
             flash()->success("<strong>%s</strong> removido da lista de afiliados", $user->username);
         }

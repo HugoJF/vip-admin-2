@@ -41,7 +41,7 @@ class AdminController extends Controller
 
     public function store(AdminService $service, AdminStoreRequest $request)
     {
-        $admin = $service->storeAdmin($request->validated());
+        $admin = $service->store($request->validated());
 
         eflash()->success("Admin <strong>%s</strong> criado com sucesso!", $admin->username);
 
@@ -50,7 +50,7 @@ class AdminController extends Controller
 
     public function update(AdminService $service, AdminUpdateRequest $request, Admin $admin)
     {
-        $admin = $service->updateAdmin($admin, $request->validated());
+        $admin = $service->update($admin, $request->validated());
 
         eflash()->success("Admin <strong>%s</strong> atualizado!", $admin->username);
 

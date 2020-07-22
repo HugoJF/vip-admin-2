@@ -17,7 +17,7 @@ class OrderServiceTest extends TestCase
 		$service = app(OrderService::class);
 		$user = factory(User::class)->create();
 
-		$order = $service->createEmptyOrder($user, 30);
+		$order = $service->createEmpty($user, 30);
 
 		$this->assertInstanceOf(Order::class, $order);
 		$this->assertDatabaseHas('orders', [
