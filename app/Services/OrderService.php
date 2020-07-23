@@ -95,6 +95,8 @@ class OrderService
             $ratio = 1;
         }
 
+        $details['email'] = $user->email;
+        $details['view_url'] = route('orders.show', $order);
         $details['reason'] = "VIP de $product->duration dias nos servidores de_nerdTV";
         $details['return_url'] = route('orders.show', $order);
         $details['cancel_url'] = route('orders.show', $order);
