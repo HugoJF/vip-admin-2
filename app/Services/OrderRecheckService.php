@@ -8,21 +8,31 @@ use App\Order;
 
 class OrderRecheckService
 {
+    /**
+     * @var PaymentSystem
+     */
+    protected $paymentSystem;
+
+    /**
+     * @var OrderDurationCorrection
+     */
+    protected $durationCorrection;
+
+    public function __construct(PaymentSystem $paymentSystem, OrderDurationCorrection $durationCorrection)
+    {
+        $this->paymentSystem = $paymentSystem;
+        $this->durationCorrection = $durationCorrection;
+    }
+
     public function handle(Order $order)
     {
-        /** @var $paymentSystem */
-        $paymentSystem = app(PaymentSystem::class);
-
-        $order->recheck_attempts = $order->recheck_attempts + 1;
-
-        $order->touch();
-        $order->save();
+        $order->query()->increment('recheck_attempts');
 
         if (!$order->reference) {
             return;
         }
 
-        $payment = $paymentSystem->getOrder($order->reference);
+        $payment = $this->paymentSystem->getOrder($order->reference);
 
         if (!in_array($payment->status, [200, 201])) {
             return;
@@ -34,8 +44,9 @@ class OrderRecheckService
             return;
         }
 
-        if ($payment->paid_units) {
-            $order->duration = $payment->paid_units;
+        // Apply correction if duration has changed
+        if ($order->duration !== intval($payment->paid_units)) {
+            $this->durationCorrection->handle($order, $payment->paid_units);
         }
 
         if ($payment->paid) {
