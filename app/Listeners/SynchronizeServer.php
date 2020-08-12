@@ -18,25 +18,34 @@ class SynchronizeServer implements ShouldQueue
     /**
      * @var string
      */
-    private $vipFlag;
+    protected $vipFlag;
 
     /**
      * @var string
      */
-    private $hiddenFlagsFlag;
+    protected $hiddenFlagsFlag;
 
-    private $current;
+    protected $current;
 
-    private $expected;
+    protected $expected;
+    /**
+     * @var boolean
+     */
+    protected $enabled;
 
     public function __construct()
     {
         $this->vipFlag = config('vip-admin.vip-flag', 'a');
         $this->hiddenFlagsFlag = config('vip-admin.hidden-flags-flag', 'o');
+        $this->enabled = config('vip-admin.synchronize-admins', false);
     }
 
     public function handle($event): void
     {
+        if (!$this->enabled) {
+            return;
+        }
+
         $this->loadCurrent();
         $this->loadExpected();
 
