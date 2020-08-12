@@ -79,6 +79,8 @@ class OrderRefactoringService
             $order->starts_at = $base->clone();
             $order->ends_at = $base->clone()->add($duration);
 
+            $base->add($duration);
+
             info(sprintf("Refactored order %s from %s<=>%s to %s<=>%s",
                 $order->id,
                 $order->getOriginal('starts_at'),

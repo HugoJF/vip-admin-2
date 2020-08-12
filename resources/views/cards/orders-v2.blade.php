@@ -23,7 +23,22 @@
                         @include('orders.status-badge-v2')
                     </div>
 
-                    <!-- Duration -->
+                    <!-- Gifted -->
+                    @if($order->steamid)
+                        <div class="mb-5 text-center">
+                            <span
+                                data-toggle="tooltip"
+                                data-placement="bottom"
+                                title="Pedido transferido"
+                                class="px-2 py-1 text-white font-mono font-bold bg-blue-600 rounded tracking-tight"
+                            >
+                                📩 {{ $order->steamid }}
+                            </span>
+                        </div>
+                    @endif
+
+
+                <!-- Duration -->
                     <div class="flex justify-between">
                         <!-- Left -->
                         <div class="flex items-center">
