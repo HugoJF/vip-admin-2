@@ -18,6 +18,8 @@ class AdminService
     {
         ($admin = new Admin)->fill($values);
 
+        $admin->save();
+
         event(new AdminCreated($admin));
 
         return $admin;
